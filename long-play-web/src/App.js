@@ -1,7 +1,7 @@
-import "./App.css";
+import "./sass/App.sass";
 
 function App() {
-  return <div className="App"></div>;
+  return <div className="App">Szakalaka</div>;
 }
 
 export default App;
