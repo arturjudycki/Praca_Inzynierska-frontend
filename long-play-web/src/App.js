@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <Routes>{/* <Page /> */}</Routes>
+      <Page />
       <Footer />
     </BrowserRouter>
   );
