@@ -1,12 +1,24 @@
 import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, useNavigate, Route, Routes } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { loginAuth } from "../API-utils/endpoints";
 
 const LoginSchemat = Yup.object().shape({});
 
 const Login = () => {
+  const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
+
+  const login = useMutation(loginAuth, {
+    onSuccess: () => {
+      navigate("/");
+      navigate(0);
+    },
+  });
+
   return (
     <div className="sign-wrapper">
       <section className="sign-choose">
@@ -35,11 +47,9 @@ const Login = () => {
           password: "",
         }}
         validationSchema={LoginSchemat}
-        onSubmit={
-          {
-            // useMutation
-          }
-        }
+        onSubmit={(values) => {
+          login.mutate(values);
+        }}
       >
         {({ handleSubmit }) => (
           <Form onSubmit={handleSubmit} className="sign-form">

@@ -6,19 +6,34 @@ import {
   faArrowRightToBracket,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { base_url, userAuth } from "../API-utils/endpoints";
-import { NavLink } from "react-router-dom";
+import { base_url, userAuth, logoutAuth } from "../API-utils/endpoints";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Logged = () => {
-  const [username, setUsername] = useState();
+  const navigate = useNavigate();
 
-  const queryClient = useQueryClient();
+  const { status, error, data } = useQuery("user", userAuth, {
+    retry: 0,
+  });
 
-  const { isLoading, isError, error, data: user } = useQuery("user", userAuth);
+  const logout = useMutation(logoutAuth, {
+    onSuccess: () => {
+      navigate("/");
+      navigate(0);
+    },
+  });
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
 
   let content;
 
-  if (!isError) {
+  // console.log(error, status);
+  if (status === "loading") {
+    content = <div></div>;
+  }
+  if (status === "error") {
     content = (
       <div className="header__logged">
         <FontAwesomeIcon
@@ -31,16 +46,17 @@ const Logged = () => {
         </NavLink>
       </div>
     );
-  } else {
-    setUsername(user);
+  }
+  if (status === "success") {
     content = (
       <div className="header__logged">
         <div className="header__logged-box">
           <div className="header__logged-account">
             <FontAwesomeIcon icon={faUser} className="faRightToBracket" />
-            <p className="logged-data">{username} </p>
+            <p className="logged-data">{data.user.username}</p>
           </div>
-          <div className="header__loggedOut">
+
+          <div onClick={handleLogout} className="header__loggedOut">
             <FontAwesomeIcon
               icon={faArrowRightFromBracket}
               className="faArrowRightFromBracket"

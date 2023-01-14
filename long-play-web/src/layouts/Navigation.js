@@ -8,12 +8,14 @@ const Navigation = () => {
     <header className="header">
       <div className="header__wrapper">
         <div className="header__container">
-          <NavLink to="/" exact="true" className="header__logo">
-            <img src={img} alt="logo" />
-          </NavLink>
-          <form className="header__form" action="">
-            <input className="header__search-input" type="text" />
-          </form>
+          <div className="header__box">
+            <NavLink to="/" exact="true" className="header__logo">
+              <img src={img} alt="logo" />
+            </NavLink>
+            <form className="header__form" action="">
+              <input className="header__search-input" type="text" />
+            </form>
+          </div>
           <Logged />
         </div>
         <nav className="header__menu">
