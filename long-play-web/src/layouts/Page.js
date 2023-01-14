@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import EmailReset from "../pages/EmailReset";
 import ResetPassword from "../pages/ResetPassword";
+import ErrorPage from "../pages/ErrorPage";
 
 const Page = () => {
   return (
@@ -19,7 +20,7 @@ const Page = () => {
           element={<EmailReset />}
         />
         <Route path="/reset-password" exact element={<ResetPassword />} />
-        {/* <Route path="/" exact element={<HomePage />} /> */}
+        <Route path="*" exact element={<ErrorPage />} />
       </Routes>
     </div>
   );
