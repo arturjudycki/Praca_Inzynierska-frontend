@@ -19,11 +19,48 @@ const Navigation = () => {
           <Logged />
         </div>
         <nav className="header__menu">
-          <li>Teksty</li>
-          <li>Albumy muzyczne</li>
-          <li>Wykonawcy</li>
-          <li>Piosenki</li>
-          <li>Oceny</li>
+          <section className="subpage-choose">
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "subpage-choose__type texts_selected"
+                  : "subpage-choose__type"
+              }
+              to="/texts"
+            >
+              artykuły
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "subpage-choose__type albums_selected"
+                  : "subpage-choose__type"
+              }
+              to="/music-albums"
+            >
+              albumy
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "subpage-choose__type songs_selected"
+                  : "subpage-choose__type"
+              }
+              to="/songs"
+            >
+              utwory
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "subpage-choose__type artists_selected"
+                  : "subpage-choose__type"
+              }
+              to="/artists"
+            >
+              wykonawcy
+            </NavLink>
+          </section>
         </nav>
       </div>
     </header>

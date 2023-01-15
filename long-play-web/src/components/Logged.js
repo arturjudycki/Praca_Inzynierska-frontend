@@ -1,20 +1,18 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import React from "react";
+import { useQuery, useMutation } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
   faArrowRightToBracket,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { base_url, userAuth, logoutAuth } from "../API-utils/endpoints";
+import { userAuth, logoutAuth } from "../API-utils/endpoints";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Logged = () => {
   const navigate = useNavigate();
 
-  const { status, error, data } = useQuery("user", userAuth, {
-    retry: 0,
-  });
+  const { status, error, data } = useQuery("user", userAuth, { retry: 0 });
 
   const logout = useMutation(logoutAuth, {
     onSuccess: () => {
@@ -29,7 +27,6 @@ const Logged = () => {
 
   let content;
 
-  // console.log(error, status);
   if (status === "loading") {
     content = <div></div>;
   }
@@ -48,12 +45,21 @@ const Logged = () => {
     );
   }
   if (status === "success") {
+    const urlUser = "/user/".concat(`${data.user.username}`);
+
     content = (
       <div className="header__logged">
         <div className="header__logged-box">
           <div className="header__logged-account">
             <FontAwesomeIcon icon={faUser} className="faRightToBracket" />
-            <p className="logged-data">{data.user.username}</p>
+            <NavLink
+              to={{
+                pathname: urlUser,
+              }}
+              className="header__logged-account-name"
+            >
+              {data.user.username}
+            </NavLink>
           </div>
 
           <div onClick={handleLogout} className="header__loggedOut">

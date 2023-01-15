@@ -6,6 +6,11 @@ import Register from "../pages/Register";
 import EmailReset from "../pages/EmailReset";
 import ResetPassword from "../pages/ResetPassword";
 import ErrorPage from "../pages/ErrorPage";
+import Texts from "../pages/Texts";
+import MusicAlbums from "../pages/MusicAlbums";
+import Songs from "../pages/Songs";
+import Artists from "../pages/Artists";
+import UserPage from "../pages/UserPage";
 
 const Page = () => {
   return (
@@ -20,6 +25,12 @@ const Page = () => {
           element={<EmailReset />}
         />
         <Route path="/reset-password" exact element={<ResetPassword />} />
+        <Route path="/user/:username" exact element={<UserPage />} />
+        <Route path="/texts" exact element={<Texts />} />
+        <Route path="/music-albums" exact element={<MusicAlbums />} />
+        <Route path="/songs" exact element={<Songs />} />
+        <Route path="/artists" exact element={<Artists />} />
+
         <Route path="*" exact element={<ErrorPage />} />
       </Routes>
     </div>

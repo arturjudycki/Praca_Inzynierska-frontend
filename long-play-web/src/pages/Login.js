@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { loginAuth } from "../API-utils/endpoints";
 
 const LoginSchemat = Yup.object().shape({
-  username: Yup.string().required("E-mail jest wymagany!"),
+  username: Yup.string().required("Nazwa użytkownika jest wymagana!"),
   password: Yup.string().required("Hasło jest wymagane!"),
 });
 
