@@ -1,23 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate, Route, Routes } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { loginAuth } from "../API-utils/endpoints";
 
-const LoginSchemat = Yup.object().shape({});
+const LoginSchemat = Yup.object().shape({
+  username: Yup.string().required("E-mail jest wymagany!"),
+  password: Yup.string().required("Hasło jest wymagane!"),
+});
 
 const Login = () => {
-  const queryClient = useQueryClient();
-
   const navigate = useNavigate();
 
-  const login = useMutation(loginAuth, {
+  let content;
+
+  const { isError, mutate } = useMutation(loginAuth, {
     onSuccess: () => {
       navigate("/");
       navigate(0);
     },
   });
+
+  if (isError) {
+    content = (
+      <p className="loginError">Twoje dane logowania są nieprawidłowe</p>
+    );
+  }
 
   return (
     <div className="sign-wrapper">
@@ -41,6 +50,7 @@ const Login = () => {
           Załóż konto
         </NavLink>
       </section>
+      {content}
       <Formik
         initialValues={{
           username: "",
@@ -48,7 +58,7 @@ const Login = () => {
         }}
         validationSchema={LoginSchemat}
         onSubmit={(values) => {
-          login.mutate(values);
+          mutate(values);
         }}
       >
         {({ handleSubmit }) => (
@@ -60,7 +70,10 @@ const Login = () => {
               type="text"
               className="sign-form__input"
             />
-            <ErrorMessage name="username" />
+
+            <div className="errors">
+              <ErrorMessage name="username" />
+            </div>
 
             <Field
               id="password"
@@ -69,7 +82,10 @@ const Login = () => {
               type="password"
               className="sign-form__input"
             />
-            <ErrorMessage name="password" />
+
+            <div className="errors">
+              <ErrorMessage name="password" />
+            </div>
 
             <NavLink
               to="/send-link-to-reset-password"

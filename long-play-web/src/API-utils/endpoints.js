@@ -7,14 +7,18 @@ export const userAuth = async () => {
     },
     credentials: "include",
   });
+
   if (response.ok) {
     return response.json();
   }
-  throw new Error();
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
 };
 
 export const loginAuth = async (values) => {
-  await fetch("".concat(`${base_url}`, "/auth/login"), {
+  const response = await fetch("".concat(`${base_url}`, "/auth/login"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,6 +26,13 @@ export const loginAuth = async (values) => {
     credentials: "include",
     body: JSON.stringify(values, null, 2),
   });
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
 };
 
 export const logoutAuth = async (values) => {
