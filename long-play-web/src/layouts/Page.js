@@ -11,6 +11,7 @@ import MusicAlbums from "../pages/MusicAlbums";
 import Songs from "../pages/Songs";
 import Artists from "../pages/Artists";
 import UserPage from "../pages/UserPage";
+import SettingPage from "../pages/SettingPage";
 
 const Page = () => {
   return (
@@ -34,7 +35,7 @@ const Page = () => {
         <Route path="/music-albums" exact element={<MusicAlbums />} />
         <Route path="/songs" exact element={<Songs />} />
         <Route path="/artists" exact element={<Artists />} />
-
+        <Route path="/settings-user" exact element={<SettingPage />} />
         <Route path="*" exact element={<ErrorPage />} />
       </Routes>
     </div>
