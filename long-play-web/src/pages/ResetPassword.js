@@ -1,6 +1,9 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { resetPassword } from "../API-utils/endpoints";
 
 const LoginSchemat = Yup.object().shape({
   password: Yup.string()
@@ -18,22 +21,39 @@ const LoginSchemat = Yup.object().shape({
 });
 
 const ResetPassword = () => {
+  const { token, email } = useParams();
+
+  let content;
+
+  const { isSuccess, mutate } = useMutation(resetPassword, {});
+
+  if (isSuccess) {
+    content = (
+      <section className="popUpPassword">
+        <div className="popUpPassword__200">
+          <p>Zmiana hasła została pomyślnie dokonana</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="sign-wrapper sign-wrapper--wider">
       <p className="sign-change-password">
         Ustal nowe hasło dla Twojego konta.
       </p>
+      {content}
       <Formik
         initialValues={{
+          token,
+          email,
           password: "",
           passwordConfirmation: "",
         }}
         validationSchema={LoginSchemat}
-        onSubmit={
-          {
-            // useMutation
-          }
-        }
+        onSubmit={(values) => {
+          mutate(values);
+        }}
       >
         {({ handleSubmit }) => (
           <Form onSubmit={handleSubmit} className="sign-form">

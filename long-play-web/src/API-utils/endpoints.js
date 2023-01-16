@@ -42,6 +42,65 @@ export const logoutAuth = async (values) => {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    // body: JSON.stringify(values, null, 2),
   });
+};
+
+export const registerAuth = async (values) => {
+  const response = await fetch("".concat(`${base_url}`, "/auth/register"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(values, null, 2),
+  });
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const sendLinkToEmail = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/auth/sendEmailLink"),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const resetPassword = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/auth/resetPassword"),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
 };

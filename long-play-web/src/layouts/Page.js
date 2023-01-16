@@ -24,7 +24,11 @@ const Page = () => {
           exact
           element={<EmailReset />}
         />
-        <Route path="/reset-password" exact element={<ResetPassword />} />
+        <Route
+          path="/reset-password/:token/:email"
+          exact
+          element={<ResetPassword />}
+        />
         <Route path="/user/:username" exact element={<UserPage />} />
         <Route path="/texts" exact element={<Texts />} />
         <Route path="/music-albums" exact element={<MusicAlbums />} />

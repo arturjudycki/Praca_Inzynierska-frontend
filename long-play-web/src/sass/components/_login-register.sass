@@ -75,7 +75,8 @@
     font-weight: 600
     color: #1c2e53
 
-.loginError
+.loginError,
+.registerError
     margin: 20px 0 -20px
     font-size: 1.4rem
     color: #9b0606
@@ -86,3 +87,88 @@
     font-size: 1.3rem
     color: #9b0606
     font-weight: 500
+
+.popUp
+    display: block
+    position: absolute
+    width: 510px
+    height: 600px
+    background-color: #fff
+    &__register201
+        z-index: 1000
+        position: absolute
+        top: 30%
+        left: 50%
+        transform: translate(-50%, -60%)
+        height: 200px
+        width: 500px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        background-color: #eee
+        border: 1px solid #1c2e53
+        border-radius: 30px
+        font-size: 1.8rem
+        &>p
+            padding: 5px 0
+    &__button
+        font-size: 1.8rem
+        font-weight: 500
+        color: #1c2e53
+        padding: 10px 20px
+        margin-top: 20px
+        background-color: #fff
+        border: 1px solid #1c2e53
+        border-radius: 5px
+        cursor: pointer
+        transition: .2s
+    &__button:hover
+        background-color: #1c2e53
+        color: #fff
+.popUpEmail
+    display: block
+    position: absolute
+    width: 900px
+    height: 300px
+    background-color: #fff
+    &__200
+        z-index: 1000
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        height: 200px
+        width: 500px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        background-color: #eee
+        border: 1px solid #1c2e53
+        border-radius: 30px
+        font-size: 1.8rem
+    &__200>p
+        padding: 10px 0
+.popUpPassword
+    display: block
+    position: absolute
+    width: 1000px
+    height: 450px
+    background-color: #fff
+    &__200
+        z-index: 1000
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        height: 200px
+        width: 500px
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        background-color: #eee
+        border: 1px solid #1c2e53
+        border-radius: 30px
+        font-size: 1.8rem

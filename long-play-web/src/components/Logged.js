@@ -12,7 +12,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 const Logged = () => {
   const navigate = useNavigate();
 
-  const { status, error, data } = useQuery("user", userAuth, { retry: 0 });
+  const { status, data } = useQuery("user", userAuth, { retry: 0 });
 
   const logout = useMutation(logoutAuth, {
     onSuccess: () => {

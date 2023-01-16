@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import img from "../images/lpw-logo.png";
 import Logged from "../components/Logged";
 

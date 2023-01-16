@@ -1,7 +1,9 @@
 import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { registerAuth } from "../API-utils/endpoints";
 
 const LoginSchemat = Yup.object().shape({
   username: Yup.string()
@@ -28,6 +30,28 @@ const LoginSchemat = Yup.object().shape({
 });
 
 const Register = () => {
+  let content;
+
+  const { isSuccess, isError, mutate } = useMutation(registerAuth, {});
+
+  if (isSuccess) {
+    content = (
+      <section className="popUp">
+        <div class="popUp__register201">
+          <p>Twoje konto zostało pomyślnie utworzone.</p>
+          <p>Możesz się teraz zalogować.</p>
+          <NavLink to="/login">
+            <button className="popUp__button">Zaloguj się</button>
+          </NavLink>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    content = <p className="registerError">Konto z tymi danymi już istnieje</p>;
+  }
+
   return (
     <div className="sign-wrapper">
       <section className="sign-choose">
@@ -50,6 +74,7 @@ const Register = () => {
           Załóż konto
         </NavLink>
       </section>
+      {content}
       <Formik
         initialValues={{
           username: "",
@@ -58,11 +83,9 @@ const Register = () => {
           passwordConfirmation: "",
         }}
         validationSchema={LoginSchemat}
-        onSubmit={
-          {
-            // useMutation
-          }
-        }
+        onSubmit={(values) => {
+          mutate(values);
+        }}
       >
         {({ handleSubmit }) => (
           <Form onSubmit={handleSubmit} className="sign-form">
