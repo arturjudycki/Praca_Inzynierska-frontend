@@ -2,7 +2,20 @@ import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const LoginSchemat = Yup.object().shape({});
+const LoginSchemat = Yup.object().shape({
+  password: Yup.string()
+    .required("Hasło jest wymagane!")
+    .min(8, "Hasło musi zawierać minimum 8 znaków.")
+    .matches(/^.*(?=.*\d).*$/, "Hasło musi zawierać przynajmniej jedną cyfrę.")
+    .matches(
+      /^.*((?=.*[a-z,A-Z])).*$/,
+      "Hasło musi zawierać przynajmniej jedną literę."
+    ),
+
+  passwordConfirmation: Yup.string()
+    .required("Pole jest wymagane!")
+    .oneOf([Yup.ref("password")], "Podane hasła nie są identyczne"),
+});
 
 const ResetPassword = () => {
   return (
@@ -31,7 +44,10 @@ const ResetPassword = () => {
               type="password"
               className="sign-form__input"
             />
-            <ErrorMessage name="password" />
+
+            <div className="errors">
+              <ErrorMessage name="password" />
+            </div>
 
             <div className="password-info">
               <p className="password-info__text">
@@ -55,7 +71,10 @@ const ResetPassword = () => {
               type="password"
               className="sign-form__input"
             />
-            <ErrorMessage name="passwordConfirmation" />
+
+            <div className="errors">
+              <ErrorMessage name="passwordConfirmation" />
+            </div>
 
             <button type="submit" className="sign-form__button">
               Zmień hasło

@@ -3,7 +3,29 @@ import { NavLink, Route, Routes } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const LoginSchemat = Yup.object().shape({});
+const LoginSchemat = Yup.object().shape({
+  username: Yup.string()
+    .required("Nazwa użytkownika jest wymagana!")
+    .min(5, "Nazwa użytkownika musi składać się z conajmniej 5 znaków.")
+    .max(20, "Nazwa użytkownika może składać się maksymalnie z 20 znaków"),
+
+  email: Yup.string()
+    .email("Niepoprawny e-mail!")
+    .required("E-mail jest wymagany!"),
+
+  password: Yup.string()
+    .required("Hasło jest wymagane!")
+    .min(8, "Hasło musi zawierać minimum 8 znaków.")
+    .matches(/^.*(?=.*\d).*$/, "Hasło musi zawierać przynajmniej jedną cyfrę.")
+    .matches(
+      /^.*((?=.*[a-z,A-Z])).*$/,
+      "Hasło musi zawierać przynajmniej jedną literę."
+    ),
+
+  passwordConfirmation: Yup.string()
+    .required("Pole jest wymagane!")
+    .oneOf([Yup.ref("password")], "Podane hasła nie są identyczne"),
+});
 
 const Register = () => {
   return (
@@ -51,7 +73,10 @@ const Register = () => {
               type="text"
               className="sign-form__input"
             />
-            <ErrorMessage name="username" />
+            <div className="errors">
+              <ErrorMessage name="username" />
+            </div>
+
             <Field
               id="email"
               name="email"
@@ -59,7 +84,10 @@ const Register = () => {
               type="email"
               className="sign-form__input"
             />
-            <ErrorMessage name="email" />
+            <div className="errors">
+              <ErrorMessage name="email" />
+            </div>
+
             <Field
               id="password"
               name="password"
@@ -67,7 +95,10 @@ const Register = () => {
               type="password"
               className="sign-form__input"
             />
-            <ErrorMessage name="password" />
+            <div className="errors">
+              <ErrorMessage name="password" />
+            </div>
+
             <div className="password-info">
               <p className="password-info__text">
                 Pamiętaj by hasło zawierało:
@@ -82,6 +113,7 @@ const Register = () => {
                 </li>
               </ul>
             </div>
+
             <Field
               id="passwordConfirmation"
               name="passwordConfirmation"
@@ -89,7 +121,10 @@ const Register = () => {
               type="password"
               className="sign-form__input"
             />
-            <ErrorMessage name="passwordConfirmation" />
+            <div className="errors">
+              <ErrorMessage name="passwordConfirmation" />
+            </div>
+
             <button type="submit" className="sign-form__button">
               Załóż konto
             </button>

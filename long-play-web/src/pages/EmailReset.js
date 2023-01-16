@@ -2,7 +2,11 @@ import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const LoginSchemat = Yup.object().shape({});
+const LoginSchemat = Yup.object().shape({
+  email: Yup.string()
+    .email("Niepoprawny e-mail!")
+    .required("E-mail jest wymagany!"),
+});
 
 const EmailReset = () => {
   return (
@@ -30,7 +34,10 @@ const EmailReset = () => {
               type="email"
               className="sign-form__input"
             />
-            <ErrorMessage name="email" />
+
+            <div className="errors">
+              <ErrorMessage name="email" />
+            </div>
 
             <button type="submit" className="sign-form__button">
               Wyślij
