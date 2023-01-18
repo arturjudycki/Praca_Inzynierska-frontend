@@ -17,6 +17,26 @@ export const userAuth = async () => {
   });
 };
 
+export const userData = async (username) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/user/".concat(`${username}`)),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (response.ok) {
+    // console.log(response.json());
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
 export const loginAuth = async (values) => {
   const response = await fetch("".concat(`${base_url}`, "/auth/login"), {
     method: "POST",

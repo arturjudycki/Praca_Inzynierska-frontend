@@ -12,6 +12,7 @@ import Songs from "../pages/Songs";
 import Artists from "../pages/Artists";
 import UserPage from "../pages/UserPage";
 import SettingPage from "../pages/SettingPage";
+import CreateAccounts from "../pages/CreateAccounts";
 
 const Page = () => {
   return (
@@ -36,7 +37,9 @@ const Page = () => {
         <Route path="/songs" exact element={<Songs />} />
         <Route path="/artists" exact element={<Artists />} />
         <Route path="/settings-user" exact element={<SettingPage />} />
+        <Route path="/create-accounts" exact element={<CreateAccounts />} />
         <Route path="*" exact element={<ErrorPage />} />
+        <Route path="/404" exact element={<ErrorPage />} />
       </Routes>
     </div>
   );
