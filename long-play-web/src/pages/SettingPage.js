@@ -1,7 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
-import { userAuth, changeEmail, changePassword } from "../API-utils/endpoints";
+import {
+  userAuth,
+  changeEmail,
+  changePassword,
+} from "../API-utils/endpointsAuthUser";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

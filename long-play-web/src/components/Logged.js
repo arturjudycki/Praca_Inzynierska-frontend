@@ -6,7 +6,7 @@ import {
   faArrowRightToBracket,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { userAuth, logoutAuth } from "../API-utils/endpoints";
+import { userAuth, logoutAuth } from "../API-utils/endpointsAuthUser";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Logged = () => {

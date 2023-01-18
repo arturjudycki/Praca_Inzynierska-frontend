@@ -1,7 +1,7 @@
 import React from "react";
 import { useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { sendLinkToEmail } from "../API-utils/endpoints";
+import { sendLinkToEmail } from "../API-utils/endpointsAuthUser";
 
 import * as Yup from "yup";
 

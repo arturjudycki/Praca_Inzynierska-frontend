@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
-import { userAuth, logoutAuth } from "../API-utils/endpoints";
+import { userAuth, logoutAuth } from "../API-utils/endpointsAuthUser";
 import { useQuery, useMutation } from "react-query";
 
 const UserPage = () => {

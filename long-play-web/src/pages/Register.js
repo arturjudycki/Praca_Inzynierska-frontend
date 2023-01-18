@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { registerAuth } from "../API-utils/endpoints";
+import { registerAuth } from "../API-utils/endpointsAuthUser";
 
 const LoginSchemat = Yup.object().shape({
   username: Yup.string()

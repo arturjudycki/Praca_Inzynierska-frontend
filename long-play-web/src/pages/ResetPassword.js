@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { resetPassword } from "../API-utils/endpoints";
+import { resetPassword } from "../API-utils/endpointsAuthUser";
 
 const LoginSchemat = Yup.object().shape({
   password: Yup.string()
