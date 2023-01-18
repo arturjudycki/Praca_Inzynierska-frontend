@@ -104,3 +104,43 @@ export const resetPassword = async (values) => {
     });
   }
 };
+
+export const changeEmail = async (values) => {
+  const response = await fetch("".concat(`${base_url}`, "/user/changeEmail"), {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(values, null, 2),
+  });
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const changePassword = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/user/changePassword"),
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
