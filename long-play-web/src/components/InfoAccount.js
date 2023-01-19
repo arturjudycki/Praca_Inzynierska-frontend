@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faPerson } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faPerson, faHammer } from "@fortawesome/free-solid-svg-icons";
 
 const InfoAccount = ({ person }) => {
   const { user } = person.user_info;
@@ -24,13 +24,22 @@ const InfoAccount = ({ person }) => {
   return (
     <section className="heroUser">
       {user.user_type === "admin" && person.userIsLogged ? (
-        <NavLink
-          to="/create-accounts-editor"
-          className="heroUser__createAccounts heroUser__createAccounts--flexStart"
-        >
-          <FontAwesomeIcon icon={faPerson} className="faPerson" />
-          <p className="heroUser__settings-link">Utwórz konta</p>
-        </NavLink>
+        <div className="heroUser__admin-links">
+          <NavLink
+            to="/create-accounts-editor"
+            className="heroUser__createAccounts heroUser__createAccounts--flexStart"
+          >
+            <FontAwesomeIcon icon={faPerson} className="faPerson" />
+            <p className="heroUser__settings-link">Utwórz konta</p>
+          </NavLink>
+          <NavLink
+            to="/grant-permission"
+            className="heroUser__createAccounts heroUser__createAccounts--flexStart"
+          >
+            <FontAwesomeIcon icon={faHammer} className="faHammer" />
+            <p className="heroUser__settings-link">Nadaj prawo admina</p>
+          </NavLink>
+        </div>
       ) : (
         ""
       )}

@@ -14,6 +14,7 @@ import UserPage from "../pages/UserPage";
 import SettingPage from "../pages/SettingPage";
 import CreateAccountsEditor from "../pages/CreateAccountsEditor";
 import CreateAccountsAdmin from "../pages/CreateAccountsAdmin.js";
+import GrantPermissionPage from "../pages/GrantPermission.js";
 
 const Page = () => {
   return (
@@ -47,6 +48,11 @@ const Page = () => {
           path="/create-accounts-admin"
           exact
           element={<CreateAccountsAdmin />}
+        />
+        <Route
+          path="/grant-permission"
+          exact
+          element={<GrantPermissionPage />}
         />
 
         <Route path="*" exact element={<ErrorPage />} />
