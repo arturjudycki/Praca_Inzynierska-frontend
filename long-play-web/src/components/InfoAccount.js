@@ -25,7 +25,7 @@ const InfoAccount = ({ person }) => {
     <section className="heroUser">
       {user.user_type === "admin" && person.userIsLogged ? (
         <NavLink
-          to="/create-accounts"
+          to="/create-accounts-editor"
           className="heroUser__createAccounts heroUser__createAccounts--flexStart"
         >
           <FontAwesomeIcon icon={faPerson} className="faPerson" />
