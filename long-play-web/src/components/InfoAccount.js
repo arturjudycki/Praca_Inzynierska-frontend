@@ -2,7 +2,16 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faPerson, faHammer } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faPerson,
+  faHammer,
+  faNewspaper,
+  faMusic,
+  faRecordVinyl,
+  faFileAudio,
+  faGuitar,
+} from "@fortawesome/free-solid-svg-icons";
 
 const InfoAccount = ({ person }) => {
   const { user } = person.user_info;
@@ -24,20 +33,75 @@ const InfoAccount = ({ person }) => {
   return (
     <section className="heroUser">
       {user.user_type === "admin" && person.userIsLogged ? (
-        <div className="heroUser__admin-links">
+        <div className="heroUser__links">
           <NavLink
             to="/create-accounts-editor"
-            className="heroUser__createAccounts heroUser__createAccounts--flexStart"
+            className="heroUser__link heroUser__link--flexStart"
           >
             <FontAwesomeIcon icon={faPerson} className="faPerson" />
             <p className="heroUser__settings-link">Utwórz konta</p>
           </NavLink>
           <NavLink
             to="/grant-permission"
-            className="heroUser__createAccounts heroUser__createAccounts--flexStart"
+            className="heroUser__link heroUser__link--flexStart"
           >
             <FontAwesomeIcon icon={faHammer} className="faHammer" />
             <p className="heroUser__settings-link">Nadaj prawo admina</p>
+          </NavLink>
+          <NavLink
+            to="/managing-texts"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faNewspaper} className="faNewspaper" />
+            <p className="heroUser__settings-link">
+              Panel do administrowania tekstów
+            </p>
+          </NavLink>
+          <NavLink
+            to="/managing-music"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faMusic} className="faMusic" />
+            <p className="heroUser__settings-link">
+              Panel do administrowania pozycjami muzycznymi
+            </p>
+          </NavLink>
+          {/* <NavLink
+            to="/"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faRecordVinyl} className="faRecordVinyl" />
+            <p className="heroUser__settings-link">Albumy muzyczne</p>
+          </NavLink>
+          <NavLink
+            to="/"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
+            <p className="heroUser__settings-link">Piosenki</p>
+          </NavLink>
+          <NavLink
+            to="/"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faGuitar} className="faGuitar" />
+            <p className="heroUser__settings-link">Wykonawcy</p>
+          </NavLink> */}
+        </div>
+      ) : (
+        ""
+      )}
+
+      {user.user_type === "editor" && person.userIsLogged ? (
+        <div className="heroUser__links">
+          <NavLink
+            to="/managing-texts"
+            className="heroUser__link heroUser__link--flexStart"
+          >
+            <FontAwesomeIcon icon={faNewspaper} className="faNewspaper" />
+            <p className="heroUser__settings-link">
+              Panel do administrowania tekstów
+            </p>
           </NavLink>
         </div>
       ) : (

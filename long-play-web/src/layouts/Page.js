@@ -15,6 +15,8 @@ import SettingPage from "../pages/SettingPage";
 import CreateAccountsEditor from "../pages/CreateAccountsEditor";
 import CreateAccountsAdmin from "../pages/CreateAccountsAdmin.js";
 import GrantPermissionPage from "../pages/GrantPermission.js";
+import ManagingTexts from "../pages/ManagingTexts.js";
+import ManagingMusic from "../pages/ManagingMusic.js";
 
 const Page = () => {
   return (
@@ -54,7 +56,8 @@ const Page = () => {
           exact
           element={<GrantPermissionPage />}
         />
-
+        <Route path="/managing-texts" exact element={<ManagingTexts />} />
+        <Route path="/managing-music" exact element={<ManagingMusic />} />
         <Route path="*" exact element={<ErrorPage />} />
         <Route path="/404" exact element={<ErrorPage />} />
       </Routes>
