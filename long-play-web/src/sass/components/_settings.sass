@@ -1,3 +1,5 @@
+@use '../variables.sass' as *
+
 .settings
     &__title
         font-size: 3rem
@@ -21,17 +23,19 @@
         margin: 0 10px
         &:hover
             color: #444
-    .boxToChange
-        position: relative
-        width: 100%
-        margin: 15px 0
-        background-color: #f8f8f8
-        padding: 10px
-        &--email,
-        &--password
-            display: none
-        &--none
-            display: block
+
+.boxToChange
+    position: relative
+    width: 100%
+    margin: 15px 0
+    background-color: #f8f8f8
+    padding: 10px
+    &--email,
+    &--password,
+    &--text
+        display: none
+    &--none
+        display: block
 
 .sign-change
     &__input
@@ -40,6 +44,15 @@
         margin-top: 10px
         padding: 10px 10px
         width: 300px
+        // &-text
+        //     width: 500px
+        // &-text-area
+        //     width: 900px
+        //     max-width: 900px
+        //     height: 150px
+        //     font-size: 1.4rem
+        //     font-family: $font
+
     &__button
         margin-top: 20px
         padding: 10px 0
@@ -60,6 +73,7 @@
             &:hover
                 background-color: #1c2e53
                 color: #fff
+            
 
 .successEmail,
 .successPassword,

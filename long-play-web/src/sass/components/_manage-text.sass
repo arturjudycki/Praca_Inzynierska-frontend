@@ -1,0 +1,98 @@
+@use '../variables.sass' as *
+
+.managing-text
+    &__box
+        margin: 20px 0
+
+    &__title
+        font-size: 2.4rem
+        font-weight: 500
+
+.open-add-text
+    display: inline
+    color: #0062af
+    cursor: pointer
+
+.radio-box__choose
+    margin: 15px 0
+    &>label
+        font-size: 1.6rem
+        padding: 0 10px
+    &-item
+        margin-right: 5px
+
+.sign-change
+    &__input
+        &-text
+            width: 900px
+        &-text-area
+            width: 900px
+            max-width: 900px
+            height: 150px
+            font-size: 1.4rem
+            font-family: $font
+
+.popUp--createText
+    margin-top: 5px
+    height: 325px
+    width: 980px
+    >.popUp__register201
+        margin-top: 80px
+
+.managing-text__error
+    font-size: 1.6rem
+    font-weight: 600
+    color: #b22e2e
+    width: 100%
+    text-align: center
+    padding: 10px 0
+
+.line
+    background-color: #1c2e53
+    width: 100%
+    height: 4px
+
+.last-texts
+    margin-top: 20px
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-around
+
+.text-box
+    width: 33%
+    margin: 5px 0
+
+.text-item
+    font-size: 1.6rem
+    padding: 2px 0
+    text-align: center
+
+    &__type-of-text
+        color: #0062af
+        font-size: 1.4rem
+        text-transform: uppercase
+    &__title
+    &__imgBox
+        cursor: pointer
+    &__img
+        cursor: pointer
+        border: 4px solid transparent
+    &__img:hover
+        border: 4px solid #0062af
+    &__icon
+        cursor: pointer
+        padding-top: 5px
+        margin-left: -180px
+
+.link-to-text
+    text-decoration: none
+    color: #000
+
+.text-item__content
+    width: 950px
+pre
+    white-space: pre-wrap
+    text-align: justify
+    text-justify: inter-word
+    font-family: $font
+    font-size: 1.8rem
