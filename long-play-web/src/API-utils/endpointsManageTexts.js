@@ -20,7 +20,7 @@ export const createText = async (values) => {
 
 export const updateText = async (values) => {
   const response = await fetch("".concat(`${base_url}`, "/text/updateText"), {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
@@ -66,6 +66,23 @@ export const getTextByIdText = async (id_text) => {
       },
     }
   );
+
+  if (response.ok) {
+    // console.log(response.json());
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getTextsByArticle = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/article"), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   if (response.ok) {
     // console.log(response.json());

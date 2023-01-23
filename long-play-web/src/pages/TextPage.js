@@ -32,22 +32,46 @@ const TextPage = () => {
     } else return type;
   };
 
-  if (isText === "error") {
-    navigate("/404");
-  }
+  const displayPublicationDate = (publicationDate) => {
+    let time = new Date(publicationDate);
+    let day = time.getDate();
+    let month = time.getMonth() + 1;
+    let year = time.getFullYear();
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+  };
+
+  // if (isText === "error") {
+  //   navigate("/404");
+  // }
 
   if (isText === "success") {
-    console.log(text);
     content = (
       <>
         <p className="text-item text-item__type-of-text">
           {displayCorrectTypeOfText(text.text.type_of_text)}
         </p>
-        <p className="text-item text-item__title">{text.text.title}</p>
+        <div className="text-item text-item__info">
+          <p>
+            Autor:{" "}
+            <em>
+              {text.text.first_name} {text.text.last_name}
+            </em>
+          </p>
+          <p className="">
+            Data dodania:{" "}
+            <em>{displayPublicationDate(text.text.publication_date)}</em>
+          </p>
+        </div>
+        <p className="text-item text-item__title-page">{text.text.title}</p>
 
-        <p className="text-item text-item__content">
-          <pre>{text.text.content}</pre>
-        </p>
+        <pre className="text-item text-item__content">{text.text.content}</pre>
       </>
     );
   }
@@ -55,7 +79,7 @@ const TextPage = () => {
   return (
     <>
       {content}
-      <p>Komentarze</p>
+      <p className="text__comment">Komentarze</p>
       {contentComments}
     </>
   );

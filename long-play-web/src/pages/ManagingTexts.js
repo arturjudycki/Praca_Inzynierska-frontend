@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   createText,
@@ -26,6 +26,7 @@ const ManagingTexts = () => {
   let contentUpdateText;
   let contentUserTexts;
   let TextsArray;
+  const [idClick, setIdClick] = useState();
 
   const { status: isLogged, data } = useQuery("user", userAuth, {
     retry: 0,
@@ -38,6 +39,41 @@ const ManagingTexts = () => {
       retry: 0,
     }
   );
+
+  const {
+    isError: errorUpdate,
+    isSuccess: successUpdate,
+    mutate: update_text,
+  } = useMutation(updateText, {});
+
+  if (successUpdate) {
+    contentUpdateText = (
+      <section className="popUp popUp--updateText">
+        <div class="popUp__register201">
+          <p>Tekst został pomyślnie edytowany</p>
+          <NavLink>
+            <button
+              onClick={() => {
+                navigate("/managing-texts");
+                navigate(0);
+              }}
+              className="popUp__button"
+            >
+              Zamknij
+            </button>
+          </NavLink>
+        </div>
+      </section>
+    );
+  }
+
+  if (errorUpdate) {
+    contentUpdateText = (
+      <p className="managing-text__error">
+        Operacja się nie powiodła. Spróbuj ponownie.
+      </p>
+    );
+  }
 
   if (isLogged === "error") {
     navigate("/");
@@ -57,36 +93,97 @@ const ManagingTexts = () => {
     contentUserTexts = TextsArray[0]
       .sort((a, b) => b.id_text - a.id_text)
       .map((userText) => (
-        <div className="text-box" key={userText.id_text}>
-          <NavLink
-            to={{
-              pathname: "/text/".concat(`${userText.id_text}`),
-            }}
-            className="link-to-text"
-          >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
-            </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(userText.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{userText.title}</p>
-          </NavLink>
-          <p className="text-item text-item__icon">
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              onClick={() => {
-                // if (idClick === editor.id_user) {
-                //   setIdClick(-1);
-                //   setIdRes(-1);
-                // } else {
-                //   setIdClick(editor.id_user);
-                //   setIdRes(-1);
-                // }
+        <div key={userText.id_text}>
+          <div className="text-box">
+            <NavLink
+              to={{
+                pathname: "/text/".concat(`${userText.id_text}`),
               }}
-              // className="faPlus"
-            />
-          </p>
+              className="link-to-text"
+            >
+              <div className="text-item text-item__imgBox">
+                <img src={img} alt="text" className="text-item__img" />
+              </div>
+              <p className="text-item text-item__type-of-text">
+                {displayCorrectTypeOfText(userText.type_of_text)}
+              </p>
+              <p className="text-item text-item__title">{userText.title}</p>
+            </NavLink>
+            <p className="text-item text-item__icon">
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                onClick={() => {
+                  if (idClick === userText.id_text) {
+                    setIdClick(-1);
+                  } else {
+                    setIdClick(userText.id_text);
+                  }
+                }}
+              />
+            </p>
+          </div>
+          {idClick === userText.id_text ? (
+            <section className="editText">
+              {contentUpdateText}
+              <Formik
+                initialValues={{
+                  title: userText.title,
+                  content: userText.content,
+                  id_text: userText.id_text,
+                }}
+                validationSchema={LoginSchemat}
+                onSubmit={(values) => {
+                  update_text(values);
+                }}
+              >
+                {({ handleSubmit }) => (
+                  <Form
+                    onSubmit={handleSubmit}
+                    className="sign-change sign-change__editText"
+                  >
+                    <Field
+                      id="title"
+                      name="title"
+                      type="text"
+                      className="sign-change__input sign-change__input-text"
+                    />
+
+                    <div className="errors">
+                      <ErrorMessage name="title" />
+                    </div>
+
+                    <Field
+                      as="textarea"
+                      id="content"
+                      name="content"
+                      type="textarea"
+                      className="sign-change__input sign-change__input-text-area"
+                    />
+
+                    <div className="errors">
+                      <ErrorMessage name="content" />
+                    </div>
+
+                    <button
+                      className="sign-change__button sign-change__button--cancel"
+                      onClick={() => {
+                        setIdClick(-1);
+                      }}
+                      type="button"
+                    >
+                      Anuluj
+                    </button>
+
+                    <button type="submit" className="sign-change__button">
+                      Edytuj
+                    </button>
+                  </Form>
+                )}
+              </Formik>
+            </section>
+          ) : (
+            ""
+          )}
         </div>
       ));
   }
@@ -125,12 +222,6 @@ const ManagingTexts = () => {
       </p>
     );
   }
-
-  const {
-    isError: errorUpdate,
-    isSuccess: successUpdate,
-    mutate: update_text,
-  } = useMutation(updateText, {});
 
   if (isLogged === "success") {
     if (data.user.user_type !== "admin" && data.user.user_type !== "editor") {

@@ -39,6 +39,12 @@
     >.popUp__register201
         margin-top: 80px
 
+.popUp--updateText
+    width: 900px
+    height: 278px
+    >.popUp__register201
+        margin-top: 80px
+
 .managing-text__error
     font-size: 1.6rem
     font-weight: 600
@@ -56,22 +62,26 @@
     margin-top: 20px
     display: flex
     flex-wrap: wrap
-    justify-content: space-around
+    justify-content: space-evenly
 
 .text-box
     width: 33%
     margin: 5px 0
+    padding: 0 10px
 
 .text-item
     font-size: 1.6rem
-    padding: 2px 0
-    text-align: center
-
+    padding: 5px 0
     &__type-of-text
         color: #0062af
         font-size: 1.4rem
         text-transform: uppercase
     &__title
+        width: 210px
+        &-page
+            font-size: 3rem
+            font-weight: 800
+            margin: 20px 0
     &__imgBox
         cursor: pointer
     &__img
@@ -82,7 +92,13 @@
     &__icon
         cursor: pointer
         padding-top: 5px
-        margin-left: -180px
+    &__info
+        display: flex
+        color: #555
+        &>p
+            padding-right: 10px
+            &>em
+                color: #aaa
 
 .link-to-text
     text-decoration: none
@@ -90,9 +106,17 @@
 
 .text-item__content
     width: 950px
-pre
     white-space: pre-wrap
     text-align: justify
     text-justify: inter-word
     font-family: $font
     font-size: 1.8rem
+
+.text__comment
+    font-size: 1.8rem
+    font-weight: 600
+    margin: 30px 0
+    
+.editText
+    padding: 5px 40px
+    background-color: #eee
