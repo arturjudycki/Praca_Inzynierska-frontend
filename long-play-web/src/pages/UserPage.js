@@ -1,9 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
-import { userAuth, logoutAuth, userData } from "../API-utils/endpointsAuthUser";
-import { useQuery, useMutation } from "react-query";
+import { userAuth, userData } from "../API-utils/endpointsAuthUser";
+import { useQuery } from "react-query";
 
 const UserPage = () => {
   const { username } = useParams();

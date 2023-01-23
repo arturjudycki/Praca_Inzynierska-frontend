@@ -1,15 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { NavLink, useNavigate } from "react-router-dom";
-import InfoAccount from "../components/InfoAccount";
-import {
-  createText,
-  updateText,
-  getTextsByIdUser,
-  getTextByIdText,
-} from "../API-utils/endpointsManageTexts";
-import { userAuth, logoutAuth, userData } from "../API-utils/endpointsAuthUser";
-import { useQuery, useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { getTextByIdText } from "../API-utils/endpointsManageTexts";
+import { useQuery } from "react-query";
 
 const TextPage = () => {
   const { id_text } = useParams();
@@ -47,9 +40,9 @@ const TextPage = () => {
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   };
 
-  // if (isText === "error") {
-  //   navigate("/404");
-  // }
+  if (isText === "error") {
+    navigate("/404");
+  }
 
   if (isText === "success") {
     content = (

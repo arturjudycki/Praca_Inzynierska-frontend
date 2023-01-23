@@ -1,6 +1,6 @@
 import React from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

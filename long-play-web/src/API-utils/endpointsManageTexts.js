@@ -48,7 +48,6 @@ export const getTextsByIdUser = async (values) => {
   );
 
   if (response.ok) {
-    // console.log(response.json());
     return response.json();
   }
   return Promise.reject({
@@ -68,7 +67,22 @@ export const getTextByIdText = async (id_text) => {
   );
 
   if (response.ok) {
-    // console.log(response.json());
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getAllTexts = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/allTexts"), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.ok) {
     return response.json();
   }
   return Promise.reject({
@@ -85,7 +99,54 @@ export const getTextsByArticle = async () => {
   });
 
   if (response.ok) {
-    // console.log(response.json());
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getTextsByNews = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/news"), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.ok) {
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getTextsByRanking = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/ranking"), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.ok) {
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getTextsByInterview = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/interview"), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (response.ok) {
     return response.json();
   }
   return Promise.reject({

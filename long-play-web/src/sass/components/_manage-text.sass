@@ -77,7 +77,7 @@
         font-size: 1.4rem
         text-transform: uppercase
     &__title
-        width: 210px
+        // width: 210px
         &-page
             font-size: 3rem
             font-weight: 800
@@ -120,3 +120,24 @@
 .editText
     padding: 5px 40px
     background-color: #eee
+
+.textSlogan
+    text-transform: uppercase
+    color: #1c2e53
+    font-size: 3rem
+    margin: 20px 0
+
+.textContainer
+    display: flex
+    justify-content: space-evenly
+    &:nth-of-type(odd)
+        background-color: #f1f7fa
+
+.newest_texts
+    display: flex
+    flex-wrap: wrap
+    flex-grow: 1
+    justify-content: flex-start
+    text-align: center
+    >.textBox
+        width: 33%

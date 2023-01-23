@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import { useQuery, useMutation } from "react-query";
 import { getEditorUsers, grantAdmin } from "../API-utils/endpointsManageUsers";

@@ -28,7 +28,6 @@ export const userData = async (username) => {
   );
 
   if (response.ok) {
-    // console.log(response.json());
     return response.json();
   }
   return Promise.reject({
