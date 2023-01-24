@@ -28,7 +28,7 @@ const Navigation = () => {
               }
               to="/texts"
             >
-              artykuły
+              teksty
             </NavLink>
             <NavLink
               className={({ isActive }) =>

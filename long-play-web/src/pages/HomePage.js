@@ -2,7 +2,10 @@ import React from "react";
 import { getAllTexts } from "../API-utils/endpointsManageTexts";
 import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
-import img from "../images/article.jpg";
+import articleImg from "../images/article.jpg";
+import newsImg from "../images/news.png";
+import rankingImg from "../images/ranking.jpg";
+import interviewImg from "../images/interview.jpg";
 
 const HomePage = () => {
   let contentTexts;
@@ -10,6 +13,18 @@ const HomePage = () => {
   const { status: isTexts, data: texts } = useQuery("texts", getAllTexts, {
     retry: 0,
   });
+
+  const displayCorrectImage = (type) => {
+    if (type === "article") {
+      return articleImg;
+    } else if (type === "news") {
+      return newsImg;
+    } else if (type === "ranking") {
+      return rankingImg;
+    } else {
+      return interviewImg;
+    }
+  };
 
   const displayCorrectTypeOfText = (type) => {
     if (type === "article") {
@@ -30,13 +45,20 @@ const HomePage = () => {
             }}
             className="link-to-text"
           >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
+            <div className="textBox__item-imgBox">
+              <div className="textBox__item-imgContainer">
+                <img
+                  src={displayCorrectImage(text.type_of_text)}
+                  alt="text"
+                  className="textBox__item-img"
+                />
+              </div>
+              <p className="textBox__item-type-of-text">
+                {displayCorrectTypeOfText(text.type_of_text)}
+              </p>
             </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(text.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{text.title}</p>
+
+            <p className="textBox__item-title">{text.title}</p>
           </NavLink>
         </div>
       ));
@@ -44,7 +66,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Najnowsze teksty</h1>
+      <h1 className="textSlogan">Najnowsze teksty</h1>
       <section className="newest_texts">{contentTexts}</section>
     </div>
   );

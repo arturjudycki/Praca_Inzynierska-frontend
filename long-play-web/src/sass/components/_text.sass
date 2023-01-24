@@ -7,6 +7,7 @@
     &__title
         font-size: 2.4rem
         font-weight: 500
+        margin: 10px 0 20px 0
 
 .open-add-text
     display: inline
@@ -41,7 +42,7 @@
 
 .popUp--updateText
     width: 900px
-    height: 278px
+    height: 280px
     >.popUp__register201
         margin-top: 80px
 
@@ -77,7 +78,6 @@
         font-size: 1.4rem
         text-transform: uppercase
     &__title
-        // width: 210px
         &-page
             font-size: 3rem
             font-weight: 800
@@ -116,28 +116,83 @@
     font-size: 1.8rem
     font-weight: 600
     margin: 30px 0
-    
+
 .editText
-    padding: 5px 40px
+    padding: 20px 40px 40px 40px
     background-color: #eee
+    width: 976px
 
 .textSlogan
     text-transform: uppercase
     color: #1c2e53
     font-size: 3rem
     margin: 20px 0
+    &--margin-left
+        margin-left: 10px
 
-.textContainer
-    display: flex
-    justify-content: space-evenly
-    &:nth-of-type(odd)
+.sectionTypeOfText
+    margin: 0 -10px
+    padding: 10px 0
+    &:nth-of-type(even)
         background-color: #f1f7fa
 
-.newest_texts
+.newest_texts,
+.textContainer
     display: flex
     flex-wrap: wrap
-    flex-grow: 1
     justify-content: flex-start
     text-align: center
-    >.textBox
-        width: 33%
+    font-size: 1.8rem
+    margin: 20px auto
+
+.textContainer
+    margin: 0 10px
+
+.textBoxEdit
+    width: 70%
+    margin: 0 4px 20px 4px
+
+.textBox
+    width: 32%
+    margin: 0 4px 20px 4px
+    &:hover
+        box-shadow: 0 0 6px 0 #000
+    &__item-imgBox
+        position: relative
+    &__item-imgContainer
+        overflow: hidden
+    &__item-img
+        overflow: hidden
+        width: 100%
+        display: block
+    &__item-imgBox:hover .textBox__item-img
+        transform: scale(1.1)
+        transition: 0.4s
+    &__item-type-of-text
+        position: absolute
+        bottom: -10.5px
+        left: 50%
+        transform: translateX(-50%)
+        background-color: #0062af
+        color: #fff
+        text-transform: uppercase
+        padding: 5px 20px
+        font-size: 1.6rem
+    &__item-title
+        padding: 25px 0 20px 0
+        max-width: 320px
+    &__item-icon
+        display: flex
+        align-items: center
+        margin-top: 10px
+        transition: .2s
+        cursor: pointer
+        &:hover
+            color: #555
+    &__edit
+        margin: 0
+        display: flex
+
+.iconEdit
+    font-size: 3rem
+    margin: 0 10px 0 15px 

@@ -48,23 +48,23 @@ const TextPage = () => {
     content = (
       <>
         <p className="text-item text-item__type-of-text">
-          {displayCorrectTypeOfText(text.text.type_of_text)}
+          {displayCorrectTypeOfText(text.type_of_text)}
         </p>
         <div className="text-item text-item__info">
           <p>
             Autor:{" "}
             <em>
-              {text.text.first_name} {text.text.last_name}
+              {text.first_name} {text.last_name}
             </em>
           </p>
           <p className="">
             Data dodania:{" "}
-            <em>{displayPublicationDate(text.text.publication_date)}</em>
+            <em>{displayPublicationDate(text.publication_date)}</em>
           </p>
         </div>
-        <p className="text-item text-item__title-page">{text.text.title}</p>
+        <p className="text-item text-item__title-page">{text.title}</p>
 
-        <pre className="text-item text-item__content">{text.text.content}</pre>
+        <pre className="text-item text-item__content">{text.content}</pre>
       </>
     );
   }

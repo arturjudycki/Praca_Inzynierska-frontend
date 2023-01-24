@@ -7,7 +7,10 @@ import {
 } from "../API-utils/endpointsManageTexts";
 import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
-import img from "../images/article.jpg";
+import articleImg from "../images/article.jpg";
+import newsImg from "../images/news.png";
+import rankingImg from "../images/ranking.jpg";
+import interviewImg from "../images/interview.jpg";
 
 const Texts = () => {
   let contentArticles;
@@ -62,13 +65,20 @@ const Texts = () => {
             }}
             className="link-to-text"
           >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
+            <div className="textBox__item-imgBox">
+              <div className="textBox__item-imgContainer">
+                <img
+                  src={articleImg}
+                  alt="text"
+                  className="textBox__item-img"
+                />
+              </div>
+              <p className="textBox__item-type-of-text">
+                {displayCorrectTypeOfText(article.type_of_text)}
+              </p>
             </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(article.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{article.title}</p>
+
+            <p className="textBox__item-title">{article.title}</p>
           </NavLink>
         </div>
       ));
@@ -85,13 +95,16 @@ const Texts = () => {
             }}
             className="link-to-text"
           >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
+            <div className="textBox__item-imgBox">
+              <div className="textBox__item-imgContainer">
+                <img src={newsImg} alt="text" className="textBox__item-img" />
+              </div>
+              <p className="textBox__item-type-of-text">
+                {displayCorrectTypeOfText(news.type_of_text)}
+              </p>
             </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(news.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{news.title}</p>
+
+            <p className="textBox__item-title">{news.title}</p>
           </NavLink>
         </div>
       ));
@@ -108,13 +121,16 @@ const Texts = () => {
             }}
             className="link-to-text"
           >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
+            <div className="textBox__item-imgBox">
+              <div className="textBox__item-imgContainer">
+                <img src={rankingImg} alt="text" className="textBox__item-img" />
+              </div>
+              <p className="textBox__item-type-of-text">
+                {displayCorrectTypeOfText(ranking.type_of_text)}
+              </p>
             </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(ranking.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{ranking.title}</p>
+
+            <p className="textBox__item-title">{ranking.title}</p>
           </NavLink>
         </div>
       ));
@@ -131,13 +147,16 @@ const Texts = () => {
             }}
             className="link-to-text"
           >
-            <div className="text-item text-item__imgBox">
-              <img src={img} alt="text" className="text-item__img" />
+            <div className="textBox__item-imgBox">
+              <div className="textBox__item-imgContainer">
+                <img src={interviewImg} alt="text" className="textBox__item-img" />
+              </div>
+              <p className="textBox__item-type-of-text">
+                {displayCorrectTypeOfText(interview.type_of_text)}
+              </p>
             </div>
-            <p className="text-item text-item__type-of-text">
-              {displayCorrectTypeOfText(interview.type_of_text)}
-            </p>
-            <p className="text-item text-item__title">{interview.title}</p>
+
+            <p className="textBox__item-title">{interview.title}</p>
           </NavLink>
         </div>
       ));
@@ -145,14 +164,22 @@ const Texts = () => {
 
   return (
     <div>
-      <h1 className="textSlogan">artykuły</h1>
-      <div className="textContainer">{contentArticles}</div>
-      <h1 className="textSlogan">newsy</h1>
-      <div className="textContainer">{contentNews}</div>
-      <h1 className="textSlogan">rankingi</h1>
-      <div className="textContainer">{contentRankings}</div>
-      <h1 className="textSlogan">wywiady</h1>
-      <div className="textContainer">{contentInterviews}</div>
+      <div className="sectionTypeOfText">
+        <h1 className="textSlogan textSlogan--margin-left">artykuły</h1>
+        <div className="textContainer">{contentArticles}</div>
+      </div>
+      <div className="sectionTypeOfText">
+        <h1 className="textSlogan textSlogan--margin-left">newsy</h1>
+        <div className="textContainer">{contentNews}</div>
+      </div>
+      <div className="sectionTypeOfText">
+        <h1 className="textSlogan textSlogan--margin-left">rankingi</h1>
+        <div className="textContainer">{contentRankings}</div>
+      </div>
+      <div className="sectionTypeOfText">
+        <h1 className="textSlogan textSlogan--margin-left">wywiady</h1>
+        <div className="textContainer">{contentInterviews}</div>
+      </div>
     </div>
   );
 };

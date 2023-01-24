@@ -8,7 +8,11 @@ import {
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import { useQuery, useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import img from "../images/article.jpg";
+import articleImg from "../images/article.jpg";
+import newsImg from "../images/news.png";
+import rankingImg from "../images/ranking.jpg";
+import interviewImg from "../images/interview.jpg";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
@@ -79,6 +83,18 @@ const ManagingTexts = () => {
     navigate("/");
   }
 
+  const displayCorrectImage = (type) => {
+    if (type === "article") {
+      return articleImg;
+    } else if (type === "news") {
+      return newsImg;
+    } else if (type === "ranking") {
+      return rankingImg;
+    } else {
+      return interviewImg;
+    }
+  };
+
   const displayCorrectTypeOfText = (type) => {
     if (type === "article") {
       return "artykuł";
@@ -88,38 +104,43 @@ const ManagingTexts = () => {
   };
 
   if (isTexts === "success") {
-    TextsArray = Object.keys(userTexts).map((userText) => userTexts[userText]);
-
-    contentUserTexts = TextsArray[0]
+    contentUserTexts = userTexts
       .sort((a, b) => b.id_text - a.id_text)
       .map((userText) => (
-        <div key={userText.id_text}>
-          <div className="text-box">
+        <div key={userText.id_text} className="textBoxEdit">
+          <div className="textBox__edit">
             <NavLink
               to={{
                 pathname: "/text/".concat(`${userText.id_text}`),
               }}
               className="link-to-text"
             >
-              <div className="text-item text-item__imgBox">
-                <img src={img} alt="text" className="text-item__img" />
+              <div className="textBox__item-imgBox">
+                <div className="textBox__item-imgContainer">
+                  <img
+                    src={displayCorrectImage(userText.type_of_text)}
+                    alt="text"
+                    className="textBox__item-img"
+                  />
+                </div>
+                <p className="textBox__item-type-of-text">
+                  {displayCorrectTypeOfText(userText.type_of_text)}
+                </p>
               </div>
-              <p className="text-item text-item__type-of-text">
-                {displayCorrectTypeOfText(userText.type_of_text)}
-              </p>
-              <p className="text-item text-item__title">{userText.title}</p>
+              <p className="textBox__item-title">{userText.title}</p>
             </NavLink>
-            <p className="text-item text-item__icon">
-              <FontAwesomeIcon
-                icon={faPenToSquare}
-                onClick={() => {
-                  if (idClick === userText.id_text) {
-                    setIdClick(-1);
-                  } else {
-                    setIdClick(userText.id_text);
-                  }
-                }}
-              />
+            <p
+              className="textBox__item-icon"
+              onClick={() => {
+                if (idClick === userText.id_text) {
+                  setIdClick(-1);
+                } else {
+                  setIdClick(userText.id_text);
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faPenToSquare} className="iconEdit" />
+              <span>Wprowadź zmiany w tekście</span>
             </p>
           </div>
           {idClick === userText.id_text ? (
@@ -362,7 +383,7 @@ const ManagingTexts = () => {
             <h2 className="managing-text__title">
               Twoje ostatnio opublikowane teksty
             </h2>
-            <section className="last-texts">{contentUserTexts}</section>
+            <section className="textContainer">{contentUserTexts}</section>
           </div>
         </section>
       );
