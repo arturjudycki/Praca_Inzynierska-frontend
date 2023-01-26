@@ -7,7 +7,7 @@ import {
   editComment,
   deleteComment,
 } from "../API-utils/endpointsManageComments";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
@@ -18,38 +18,9 @@ const LoginSchemat = Yup.object().shape({
   content_comment: Yup.string().required("Komentarz nie może być pusty!"),
 });
 
-// const DisplayingComments = ({ text }) => {
-//   let displayComments;
-//   const idText = text.idText;
-
-//   const { status: isComments, data: comments } = useQuery(
-//     ["comments-data", idText],
-//     () => getComments(idText),
-//     {
-//       retry: 0,
-//     }
-//   );
-
-//   if (isComments === "success") {
-//     displayComments = comments
-//       .sort((a, b) => b.id_comment - a.id_comment)
-//       .map((comment) => (
-//         <div key={comment.id_comment} className="comment__box">
-//           <p className="comment__box-item">{comment.content_comment}</p>
-//           <p className="comment__box-item">{comment.publication_date}</p>
-//           <p className="comment__box-item">{comment.username}</p>
-//         </div>
-//       ));
-//   }
-
-//   return displayComments;
-// };
-
 const Comments = ({ info }) => {
   const idText = info.id_text;
-  // const [seed, setSeed] = useState(1);
-  // const [valueOfComment, setValueOfComment] = useState("");
-  const [allComments, setAllComments] = useState([]);
+  const queryClient = useQueryClient();
 
   let displayComments;
 
@@ -58,14 +29,10 @@ const Comments = ({ info }) => {
     () => getComments(idText),
     {
       retry: 0,
-      // onCompleted: () => {
-      //   setAllComments(comments);
-      // },
     }
   );
 
   if (isComments === "success") {
-    // setAllComments(comments);
     displayComments = comments
       .sort((a, b) => b.id_comment - a.id_comment)
       .map((comment) => (
@@ -77,21 +44,11 @@ const Comments = ({ info }) => {
       ));
   }
 
-  const {
-    isError: errorAdd,
-    isSuccess: successAdd,
-    mutate: add_comment,
-  } = useMutation(addComment, {});
-
-  if (successAdd) {
-    // return window.location.reload(false);
-    // window.location.replace(window.location.href + "#commentTitle");
-    // ;
-    // $('html, body').scrollTop(110);
-    window.top.location.hash = "#commentTitle";
-    window.location.reload(true);
-    // window.scroll(0, 300);
-  }
+  const { mutate: add_comment } = useMutation(addComment, {
+    onSuccess: (newComment) => {
+      queryClient.invalidateQueries(["comments-data"]);
+    },
+  });
 
   // const {
   //   isError: errorEdit,
@@ -125,10 +82,6 @@ const Comments = ({ info }) => {
           onSubmit={(values, onSubmitProps) => {
             add_comment(values);
             onSubmitProps.resetForm();
-            // if (successAdd) {
-
-            // () => window.location.reload(false);
-            // }
           }}
         >
           {({ handleSubmit }) => (
@@ -153,7 +106,6 @@ const Comments = ({ info }) => {
         </Formik>
       </section>
       <section className="display-comments">{displayComments}</section>
-      {/* <DisplayingComments key={seed} text={{ idText }} /> */}
     </>
   );
 };
