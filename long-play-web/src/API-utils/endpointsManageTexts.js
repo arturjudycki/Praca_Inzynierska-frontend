@@ -36,7 +36,7 @@ export const updateText = async (values) => {
   }
 };
 
-export const getTextsByIdUser = async (values) => {
+export const getTextsByIdUser = async () => {
   const response = await fetch(
     "".concat(`${base_url}`, "/text/getTextsByIdUser"),
     {

@@ -13,7 +13,11 @@ const Navigation = () => {
               <img src={img} alt="logo" />
             </NavLink>
             <form className="header__form" action="">
-              <input className="header__search-input" type="text" />
+              <input
+                className="header__search-input"
+                placeholder="Szukaj albumów muzycznych, piosenek, wykonawców"
+                type="text"
+              />
             </form>
           </div>
           <Logged />

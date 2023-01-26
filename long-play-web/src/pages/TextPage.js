@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import Comments from "../components/Comments";
 import { useNavigate } from "react-router-dom";
 import { getTextByIdText } from "../API-utils/endpointsManageTexts";
 import { useQuery } from "react-query";
@@ -9,7 +10,6 @@ const TextPage = () => {
   const navigate = useNavigate();
 
   let content = id_text;
-  let contentComments;
 
   const { status: isText, data: text } = useQuery(
     ["text-data", id_text],
@@ -72,8 +72,7 @@ const TextPage = () => {
   return (
     <>
       {content}
-      <p className="text__comment">Komentarze</p>
-      {contentComments}
+      <Comments info={{ id_text }} />
     </>
   );
 };

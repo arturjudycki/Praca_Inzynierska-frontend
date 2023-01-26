@@ -1,0 +1,36 @@
+@use '../variables.sass' as *
+
+.comment-title
+    font-size: 2rem
+    text-transform: uppercase
+    // margin: 10px 0 0 0
+    padding: 30px 0
+
+.comments
+    &__addContainer
+        position: relative
+        width: 70%
+    &__form
+        padding-bottom: 30px
+        &-input
+            font-family: $font
+            resize: none
+            width: 100%
+            font-size: 1.8rem
+            border: 3px solid #1c2e53
+            padding: 15px 125px 15px 20px
+            border-radius: 10px
+            height: 80px
+.button-addComment
+    position: absolute
+    bottom: 15%
+    right: 3.5%
+    text-transform: uppercase
+    background-color: #1c2e53
+    color: #fff
+    border: none
+    border-radius: 30px
+    padding: 10px 15px
+    cursor: pointer
+    &:hover
+        background-color: #051536

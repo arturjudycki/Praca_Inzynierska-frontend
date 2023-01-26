@@ -29,7 +29,6 @@ const ManagingTexts = () => {
   let contentCreateText;
   let contentUpdateText;
   let contentUserTexts;
-  let TextsArray;
   const [idClick, setIdClick] = useState();
 
   const { status: isLogged, data } = useQuery("user", userAuth, {
