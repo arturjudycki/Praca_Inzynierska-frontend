@@ -25,11 +25,78 @@ const LoginSchemat = Yup.object().shape({
 
 const EditComment = ({ commentInfo }) => {
   const { id_comment, content_comment } = commentInfo.comment;
+  const [editForm, setEditForm] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate: edit_comment } = useMutation(editComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["comments-data"]);
+    },
+  });
+
+  const toggleEditForm = () => {
+    setEditForm(!editForm);
+  };
+
   return (
-    <span className="comments__box-edit">
-      <FontAwesomeIcon icon={faPen} className="comments__box-icon-edit" />
-      Edytuj
-    </span>
+    <>
+      <>
+        <span className="comments__box-edit" onClick={toggleEditForm}>
+          <FontAwesomeIcon icon={faPen} className="comments__box-icon-edit" />
+          Edytuj
+        </span>
+      </>
+      {editForm ? (
+        <div className="modal">
+          <div onClick={toggleEditForm} className="overlay"></div>
+          <div className="modal-content">
+            <Formik
+              initialValues={{
+                content_comment: content_comment,
+                id_comment: id_comment,
+              }}
+              validationSchema={LoginSchemat}
+              onSubmit={(values) => {
+                edit_comment(values);
+                toggleEditForm();
+              }}
+            >
+              {({ handleSubmit }) => (
+                <Form onSubmit={handleSubmit} className="comments__editBox">
+                  <div className="comments__addContainer">
+                    <Field
+                      as="textarea"
+                      id="content_comment"
+                      name="content_comment"
+                      placeholder="Dodaj komentarz"
+                      className="comments__form-input-edit"
+                    />
+                  </div>
+                  <div className="errors">
+                    <ErrorMessage name="content_comment" />
+                  </div>
+                  <button
+                    type="button"
+                    className="button-modal button-modal--marginRight"
+                    onClick={toggleEditForm}
+                  >
+                    anuluj
+                  </button>
+                  <button
+                    type="submit"
+                    className="button-modal button-modal--margin"
+                  >
+                    zapisz
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 
@@ -151,6 +218,7 @@ const Comments = ({ info }) => {
               />
               {comment.username}
             </NavLink>
+
             <div className="comments__box-edit-delete">
               {isLogged === "success" &&
               data.user.username === comment.username ? (
@@ -165,7 +233,6 @@ const Comments = ({ info }) => {
               )}
             </div>
           </div>
-
           <p className="comments__box-item-content">
             {comment.content_comment}
           </p>
@@ -178,16 +245,10 @@ const Comments = ({ info }) => {
   }
 
   const { mutate: add_comment } = useMutation(addComment, {
-    onSuccess: (newComment) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["comments-data"]);
     },
   });
-
-  // const {
-  //   isError: errorEdit,
-  //   isSuccess: successEdit,
-  //   mutate: edit_comment,
-  // } = useMutation(editComment, {});
 
   return (
     <>
