@@ -1,0 +1,63 @@
+.modal, .overlay 
+    width: 100vw
+    height: 100vh
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    position: fixed
+
+.overlay 
+    background: rgba(49,49,49,0.8)
+
+.modal-content 
+    position: absolute
+    top: 40%
+    left: 50%
+    transform: translate(-50%, -50%)
+    background: #f1f1f1
+    padding: 14px 28px
+    border-radius: 3px
+    max-width: 600px
+    min-height: 150px
+
+.modal-title
+    font-size: 2rem
+
+.button-modal 
+    position: absolute
+    text-transform: uppercase
+    background-color: transparent
+    border: 2px solid #1c2e53
+    border-radius: 5px
+    color: #1c2e53
+    bottom: 10px
+    right: 10px
+    padding: 5px 10px
+    transition: .2s
+    cursor: pointer
+    &:hover
+        background-color: #1c2e53
+        color: #fff
+    &--confirm
+        bottom: 70px
+        right: 50%
+        transform: translateX(50%)
+        background-color: #1c2e53
+        color: #fff
+        &:hover
+            background-color: #051536
+
+.comment-del
+    position: absolute
+    top: 80px
+    left: 0
+    font-size: 1.6rem
+    font-weight: 600
+    width: 100%
+    text-align: center
+    padding: 10px 0
+    &--success
+        color: #128018
+    &--error
+        color: #b22e2e
