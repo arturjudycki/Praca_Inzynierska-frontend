@@ -218,7 +218,11 @@ const Comments = ({ info }) => {
               />
               {comment.username}
             </NavLink>
-
+            {comment.edited === 1 ? (
+              <p className="comments__box-item-edited">Edytowany</p>
+            ) : (
+              ""
+            )}
             <div className="comments__box-edit-delete">
               {isLogged === "success" &&
               data.user.username === comment.username ? (
