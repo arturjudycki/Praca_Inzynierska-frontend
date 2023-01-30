@@ -8,9 +8,6 @@ import {
   faHammer,
   faNewspaper,
   faMusic,
-  faRecordVinyl,
-  faFileAudio,
-  faGuitar,
 } from "@fortawesome/free-solid-svg-icons";
 
 const InfoAccount = ({ person }) => {
@@ -66,27 +63,6 @@ const InfoAccount = ({ person }) => {
               Panel do administrowania pozycjami muzycznymi
             </p>
           </NavLink>
-          {/* <NavLink
-            to="/"
-            className="heroUser__link heroUser__link--flexStart"
-          >
-            <FontAwesomeIcon icon={faRecordVinyl} className="faRecordVinyl" />
-            <p className="heroUser__settings-link">Albumy muzyczne</p>
-          </NavLink>
-          <NavLink
-            to="/"
-            className="heroUser__link heroUser__link--flexStart"
-          >
-            <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
-            <p className="heroUser__settings-link">Piosenki</p>
-          </NavLink>
-          <NavLink
-            to="/"
-            className="heroUser__link heroUser__link--flexStart"
-          >
-            <FontAwesomeIcon icon={faGuitar} className="faGuitar" />
-            <p className="heroUser__settings-link">Wykonawcy</p>
-          </NavLink> */}
         </div>
       ) : (
         ""

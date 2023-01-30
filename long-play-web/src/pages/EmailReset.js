@@ -1,7 +1,7 @@
 import React from "react";
-import { useMutation } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { sendLinkToEmail } from "../API-utils/endpointsAuthUser";
+import { userAuth, sendLinkToEmail } from "../API-utils/endpointsAuthUser";
 
 import * as Yup from "yup";
 
@@ -13,11 +13,14 @@ const LoginSchemat = Yup.object().shape({
 
 const EmailReset = () => {
   let content;
+  let infoResetEmail;
+
+  const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
 
   const { isError, isSuccess, mutate } = useMutation(sendLinkToEmail, {});
 
   if (isSuccess) {
-    content = (
+    infoResetEmail = (
       <section className="popUpEmail">
         <div className="popUpEmail__200">
           <p>Sprawdź swój adres email.</p>
@@ -28,50 +31,73 @@ const EmailReset = () => {
   }
 
   if (isError) {
-    content = (
+    infoResetEmail = (
       <p className="loginError">
         Użytkownik o takim adresie e-mail nie istnieje
       </p>
     );
   }
 
-  return (
-    <div className="sign-wrapper sign-wrapper--wider">
-      <p className="sign-change-password">
-        Na podany adres email zostanie przesłany link do zmiany hasła.
-      </p>
-      {content}
-      <Formik
-        initialValues={{
-          email: "",
-        }}
-        validationSchema={LoginSchemat}
-        onSubmit={(values) => {
-          mutate(values);
-        }}
-      >
-        {({ handleSubmit }) => (
-          <Form onSubmit={handleSubmit} className="sign-form">
-            <Field
-              id="email"
-              name="email"
-              placeholder="Email"
-              type="email"
-              className="sign-form__input"
-            />
+  if (isLogged === "loading") {
+    content = (
+      <div className="spinner__box spinner__box--center">
+        <div className="spinner__load"></div>
+      </div>
+    );
+  } else {
+    if (isLogged === "success") {
+      content = (
+        <section className="userLogged__box">
+          <p className="userLogged__text">
+            Brak dostępu do tej funkcjonalności
+          </p>
+          <p className="userLogged__text">
+            z poziomu zalogowanego użytkownika.
+          </p>
+        </section>
+      );
+    } else {
+      content = (
+        <div className="sign-wrapper sign-wrapper--wider">
+          <p className="sign-change-password">
+            Na podany adres email zostanie przesłany link do zmiany hasła.
+          </p>
+          {infoResetEmail}
+          <Formik
+            initialValues={{
+              email: "",
+            }}
+            validationSchema={LoginSchemat}
+            onSubmit={(values) => {
+              mutate(values);
+            }}
+          >
+            {({ handleSubmit }) => (
+              <Form onSubmit={handleSubmit} className="sign-form">
+                <Field
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  type="email"
+                  className="sign-form__input"
+                />
 
-            <div className="errors">
-              <ErrorMessage name="email" />
-            </div>
+                <div className="errors">
+                  <ErrorMessage name="email" />
+                </div>
 
-            <button type="submit" className="sign-form__button">
-              Wyślij
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
-  );
+                <button type="submit" className="sign-form__button">
+                  Wyślij
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      );
+    }
+  }
+
+  return <>{content}</>;
 };
 
 export default EmailReset;

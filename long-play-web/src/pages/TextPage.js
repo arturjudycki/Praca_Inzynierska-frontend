@@ -44,6 +44,14 @@ const TextPage = () => {
     navigate("/404");
   }
 
+  if (isText === "loading") {
+    content = (
+      <div className="spinner__box">
+        <div className="spinner__load"></div>
+      </div>
+    );
+  }
+
   if (isText === "success") {
     content = (
       <>
