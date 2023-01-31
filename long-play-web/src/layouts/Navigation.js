@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import img from "../images/lpw-logo.png";
 import Logged from "../components/Logged";
 
@@ -13,11 +15,17 @@ const Navigation = () => {
               <img src={img} alt="logo" />
             </NavLink>
             <form className="header__form" action="">
-              <input
-                className="header__search-input"
-                placeholder="Szukaj albumów muzycznych, piosenek, wykonawców"
-                type="text"
-              />
+              <div className="header__form-box">
+                <input
+                  className="header__search-input"
+                  placeholder="Szukaj albumów muzycznych, piosenek, wykonawców"
+                  type="text"
+                />
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="icon-search"
+                />
+              </div>
             </form>
           </div>
           <Logged />

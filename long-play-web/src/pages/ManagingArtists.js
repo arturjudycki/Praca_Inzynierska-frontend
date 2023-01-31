@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { addArtist } from "../API-utils/endpointsManageArtist";
+import { addArtist } from "../API-utils/endpointsManageArtists";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,8 @@ import {
   faRecordVinyl,
   faFileAudio,
   faGuitar,
+  faPlus,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -26,6 +28,9 @@ const LoginSchemat = Yup.object().shape({
 
 const ManagingArtists = () => {
   const navigate = useNavigate();
+  const [sectionSearch, setSectionSearch] = useState(true);
+  const [sectionAddArtist, setSectionAddArtist] = useState(false);
+
   let infoArtist;
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -47,6 +52,21 @@ const ManagingArtists = () => {
     );
   }
 
+  const searchingArtist = () => {
+    return (
+      <form className="search-artist">
+        <div className="search-artist__box">
+          <input
+            type="text"
+            placeholder="Wyszukaj wykonawcę"
+            className="search-artist__input"
+          />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="icon-artists" />
+        </div>
+      </form>
+    );
+  };
+
   const addingArtist = () => {
     return (
       <Formik
@@ -61,7 +81,7 @@ const ManagingArtists = () => {
         }}
       >
         {({ handleSubmit }) => (
-          <section className="adding-music">
+          <section className="adding-music adding-music-artist">
             <Form onSubmit={handleSubmit} className="adding-music__form">
               <Field
                 id="name"
@@ -155,7 +175,51 @@ const ManagingArtists = () => {
           </section>
           <hr className="line--margin-bottom" />
 
-          {addingArtist()}
+          {/* {addingArtist()} */}
+
+          <main className="section-artist-choose">
+            <div
+              onClick={() => {
+                if (sectionAddArtist) {
+                  setSectionSearch(!sectionSearch);
+                  setSectionAddArtist(!sectionAddArtist);
+                }
+              }}
+              className={
+                sectionSearch
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Wyszukanie wykonawcy
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="icon-artists"
+                />
+              </p>
+            </div>
+            <div
+              onClick={() => {
+                if (sectionSearch) {
+                  setSectionSearch(!sectionSearch);
+                  setSectionAddArtist(!sectionAddArtist);
+                }
+              }}
+              className={
+                sectionAddArtist
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Dodanie nowego wykonawcy
+                <FontAwesomeIcon icon={faPlus} className="icon-artists" />
+              </p>
+            </div>
+          </main>
+          {sectionSearch && searchingArtist()}
+          {sectionAddArtist && addingArtist()}
           {infoArtist}
         </>
       );
