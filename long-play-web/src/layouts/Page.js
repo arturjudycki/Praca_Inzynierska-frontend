@@ -17,7 +17,8 @@ import CreateAccountsAdmin from "../pages/CreateAccountsAdmin.js";
 import GrantPermissionPage from "../pages/GrantPermission.js";
 import ManagingTexts from "../pages/ManagingTexts.js";
 import TextPage from "../pages/TextPage.js";
-import ManagingMusic from "../pages/ManagingMusic.js";
+import ManagingMusicAlbums from "../pages/ManagingMusicAlbums.js";
+import ManagingArtists from "../pages/ManagingArtists.js";
 
 const Page = () => {
   return (
@@ -58,7 +59,16 @@ const Page = () => {
           element={<GrantPermissionPage />}
         />
         <Route path="/managing-texts" exact element={<ManagingTexts />} />
-        <Route path="/managing-music" exact element={<ManagingMusic />} />
+        <Route
+          path="/managing-music-albums"
+          exact
+          element={<ManagingMusicAlbums />}
+        />
+        <Route
+          path="/managing-music-artists"
+          exact
+          element={<ManagingArtists />}
+        />
         <Route path="/text/:id_text" exact element={<TextPage />} />
         <Route path="*" exact element={<ErrorPage />} />
         <Route path="/404" exact element={<ErrorPage />} />

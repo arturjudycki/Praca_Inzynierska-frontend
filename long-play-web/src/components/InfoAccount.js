@@ -55,7 +55,7 @@ const InfoAccount = ({ person }) => {
             </p>
           </NavLink>
           <NavLink
-            to="/managing-music"
+            to="/managing-music-albums"
             className="heroUser__link heroUser__link--flexStart"
           >
             <FontAwesomeIcon icon={faMusic} className="faMusic" />
