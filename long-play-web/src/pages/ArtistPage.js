@@ -5,7 +5,7 @@ import { getArtistById } from "../API-utils/endpointsManageArtists";
 import { useQuery } from "react-query";
 
 const ArtistPage = () => {
-  const { name, id_artist } = useParams();
+  const { id_artist } = useParams();
   const navigate = useNavigate();
 
   let content;

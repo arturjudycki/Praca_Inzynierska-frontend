@@ -38,14 +38,30 @@
     margin-top: 40px
     font-size: 1.8rem
 
-// .button-close-add-artist
-//     background-color: transparent
-//     border: 2px solid #1c2e53
-//     border-radius: 5px
-//     color: #1c2e53
-//     padding: 5px 10px
-//     transition: .2s
-//     cursor: pointer
-//     &:hover
-//         background-color: #1c2e53
-//         color: #fff
+.searched-artist
+    margin-top: 20px
+    &__box
+        display: flex
+        font-size: 1.8rem
+        padding: 10px
+        border: 2px solid #555
+        border-radius: 10px
+        width: 50%
+        margin: 5px 0
+    &__name
+        color: #000
+        &:hover
+            color: #444
+    &__edit
+        display: flex
+        margin-left: 15px
+        font-style: italic
+        cursor: pointer
+        transition: .2s
+        &:hover
+            color: #444
+        &-text
+            margin-right: 5px
+
+.link-to-artist
+    text-decoration: none

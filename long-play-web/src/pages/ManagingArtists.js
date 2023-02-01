@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { addArtist, getAllArtists } from "../API-utils/endpointsManageArtists";
-import { useQuery, useMutation } from "react-query";
+import {
+  addArtist,
+  editArtist,
+  getAllArtists,
+} from "../API-utils/endpointsManageArtists";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,6 +14,7 @@ import {
   faGuitar,
   faPlus,
   faMagnifyingGlass,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -33,8 +38,16 @@ const ManagingArtists = () => {
   const [infoAddArtist, setInfoAddArtist] = useState(false);
   const [artistsSearch, setArtistsSearch] = useState([]);
 
+  const [editArtistModal, setEditArtistModal] = useState(false);
+
+  const queryClient = useQueryClient();
+
   const toggleInfoAddArtist = () => {
     setInfoAddArtist(!infoAddArtist);
+  };
+
+  const toggleEditArtistModal = () => {
+    setEditArtistModal(!editArtistModal);
   };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -51,6 +64,12 @@ const ManagingArtists = () => {
     isSuccess: successAddArtist,
     mutate: add_artist,
   } = useMutation(addArtist, {});
+
+  const { mutate: edit_artist } = useMutation(editArtist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["artists"]);
+    },
+  });
 
   const infoSuccessAddArtist = () => {
     return (
@@ -118,11 +137,116 @@ const ManagingArtists = () => {
           </div>
         </form>
 
-        <section className="search__result">
+        <section className="searched-artist">
           {artistsSearch !== undefined}
           {artistsSearch.map((artist) => (
-            <div className="searched-artist__box" key={artist.id_text}>
-              <div className="searched-artist__name">{artist.name}</div>
+            <div className="searched-artist__box" key={artist.id_artist}>
+              <NavLink
+                to={{
+                  pathname: "/artist/".concat(
+                    `${artist.name}`,
+                    "/",
+                    `${artist.id_artist}`
+                  ),
+                }}
+                className="link-to-artist"
+              >
+                <div className="searched-artist__name">{artist.name}</div>
+              </NavLink>
+              <div
+                className="searched-artist__edit"
+                onClick={toggleEditArtistModal}
+              >
+                <p className="searched-artist__edit-text">Edytuj</p>
+                <FontAwesomeIcon icon={faPen} className="" />
+              </div>
+              {editArtistModal ? (
+                <div className="modal">
+                  <div
+                    onClick={() => {
+                      toggleEditArtistModal();
+                    }}
+                    className="overlay"
+                  ></div>
+                  <div className="modal-content modal-content--editArtist">
+                    <Formik
+                      initialValues={{
+                        id_artist: artist.id_artist,
+                        name: artist.name,
+                        description: artist.description,
+                        members: artist.members,
+                      }}
+                      validationSchema={LoginSchemat}
+                      onSubmit={(values) => {
+                        edit_artist(values);
+                        toggleEditArtistModal();
+                      }}
+                    >
+                      {({ handleSubmit }) => (
+                        <section className="adding-music adding-music-artist">
+                          <Form
+                            onSubmit={handleSubmit}
+                            className="adding-music__form adding-music__form--editArtist"
+                          >
+                            <label>
+                              Nazwa wykonawcy
+                              <Field
+                                id="name"
+                                name="name"
+                                placeholder="Nazwa wykonawcy"
+                                type="text"
+                                className="adding-music__form-input adding-music__form-input--editArtist"
+                              />
+                            </label>
+                            <div className="errors">
+                              <ErrorMessage name="name" />
+                            </div>
+
+                            <label>
+                              Notka biograficzna
+                              <Field
+                                as="textarea"
+                                id="description"
+                                name="description"
+                                placeholder="Notka biograficzna"
+                                className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
+                              />
+                            </label>
+                            <div className="errors">
+                              <ErrorMessage name="description" />
+                            </div>
+
+                            <label>
+                              Skład/członkowie
+                              <Field
+                                as="textarea"
+                                id="members"
+                                name="members"
+                                placeholder="Skład/członkowie"
+                                className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
+                              />
+                            </label>
+                            <div className="errors">
+                              <ErrorMessage name="members" />
+                            </div>
+                            <button
+                              type="submit"
+                              className="add-button"
+                              // onClick={() => {
+                              //   toggleEditArtistModal();
+                              // }}
+                            >
+                              Edytuj wykonawcę
+                            </button>
+                          </Form>
+                        </section>
+                      )}
+                    </Formik>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </section>
