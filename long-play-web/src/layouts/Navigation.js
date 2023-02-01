@@ -6,6 +6,21 @@ import img from "../images/lpw-logo.png";
 import Logged from "../components/Logged";
 
 const Navigation = () => {
+
+  const handleSubmitSearch = (e) => e.preventDefault();
+
+  const handleSearchChange = (e) => {
+    // if (isAllArtists === "success") {
+    //   const resultsArray = AllArtists.filter((artist) =>
+    //     artist.name
+    //       .toLowerCase()
+    //       .trim()
+    //       .includes(e.target.value.toLowerCase().trim())
+    //   );
+    //   setArtistsSearch(resultsArray);
+    // }
+  };
+
   return (
     <header className="header">
       <div className="header__wrapper">
@@ -14,12 +29,13 @@ const Navigation = () => {
             <NavLink to="/" exact="true" className="header__logo">
               <img src={img} alt="logo" />
             </NavLink>
-            <form className="header__form" action="">
+            <form className="header__form" onSubmit={handleSubmitSearch}>
               <div className="header__form-box">
                 <input
                   className="header__search-input"
                   placeholder="Szukaj albumów muzycznych, piosenek, wykonawców"
                   type="text"
+                  onChange={handleSearchChange}
                 />
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}

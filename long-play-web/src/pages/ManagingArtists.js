@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { addArtist } from "../API-utils/endpointsManageArtists";
+import { addArtist, getAllArtists } from "../API-utils/endpointsManageArtists";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,40 +30,103 @@ const ManagingArtists = () => {
   const navigate = useNavigate();
   const [sectionSearch, setSectionSearch] = useState(true);
   const [sectionAddArtist, setSectionAddArtist] = useState(false);
+  const [infoAddArtist, setInfoAddArtist] = useState(false);
+  const [artistsSearch, setArtistsSearch] = useState([]);
 
-  let infoArtist;
+  const toggleInfoAddArtist = () => {
+    setInfoAddArtist(!infoAddArtist);
+  };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
 
+  const { status: isAllArtists, data: AllArtists } = useQuery(
+    "artists",
+    getAllArtists,
+    { retry: 0 }
+  );
+
   const {
-    data: album,
+    data: artistId,
     isError: errorAddArtist,
     isSuccess: successAddArtist,
     mutate: add_artist,
   } = useMutation(addArtist, {});
 
-  if (successAddArtist) {
-    infoArtist = (
-      <div className="info-add">
+  const infoSuccessAddArtist = () => {
+    return (
+      <div className="info-add-artist">
         <p>Wykonawca został pomyślnie dodany.</p>
-        {/* <p>Możesz przypisać do niego wykonawcę.</p> */}
-        {/* <button className="add-button">Dodaj utwory do albumu</button> */}
+        <button
+          className="button-modal"
+          onClick={() => {
+            navigate("/managing-music-artists");
+            navigate(0);
+          }}
+        >
+          Zamknij
+        </button>
       </div>
     );
-  }
+  };
+
+  const infoErrorAddArtist = () => {
+    return (
+      <div className="info-add-artist">
+        <p>Wystąpił nieoczekiwanie błąd.</p>
+        <button
+          className="button-modal"
+          onClick={() => {
+            navigate("/managing-music-artists");
+            navigate(0);
+          }}
+        >
+          Zamknij
+        </button>
+      </div>
+    );
+  };
+
+  const handleSubmitSearch = (e) => e.preventDefault();
+
+  const handleSearchChange = (e) => {
+    if (isAllArtists === "success") {
+      const resultsArray = AllArtists.filter((artist) =>
+        artist.name
+          .toLowerCase()
+          .trim()
+          .includes(e.target.value.toLowerCase().trim())
+      );
+      setArtistsSearch(resultsArray);
+    }
+  };
 
   const searchingArtist = () => {
     return (
-      <form className="search-artist">
-        <div className="search-artist__box">
-          <input
-            type="text"
-            placeholder="Wyszukaj wykonawcę"
-            className="search-artist__input"
-          />
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="icon-artists" />
-        </div>
-      </form>
+      <>
+        <form className="search-artist" onSubmit={handleSubmitSearch}>
+          <div className="search-artist__box">
+            <input
+              type="text"
+              placeholder="Wyszukaj wykonawcę"
+              className="search-artist__input"
+              onChange={handleSearchChange}
+            />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="icon-artists"
+            />
+          </div>
+        </form>
+
+        <section className="search__result">
+          {artistsSearch !== undefined}
+          {artistsSearch.map((artist) => (
+            <div className="searched-artist__box" key={artist.id_text}>
+              <div className="searched-artist__name">{artist.name}</div>
+            </div>
+          ))}
+        </section>
+      </>
     );
   };
 
@@ -76,8 +139,9 @@ const ManagingArtists = () => {
           members: "",
         }}
         validationSchema={LoginSchemat}
-        onSubmit={(values) => {
+        onSubmit={(values, onSubmitProps) => {
           add_artist(values);
+          onSubmitProps.resetForm();
         }}
       >
         {({ handleSubmit }) => (
@@ -114,7 +178,13 @@ const ManagingArtists = () => {
               <div className="errors">
                 <ErrorMessage name="members" />
               </div>
-              <button type="submit" className="add-button">
+              <button
+                type="submit"
+                className="add-button"
+                onClick={() => {
+                  toggleInfoAddArtist();
+                }}
+              >
                 Dodaj wykonawcę
               </button>
             </Form>
@@ -175,8 +245,6 @@ const ManagingArtists = () => {
           </section>
           <hr className="line--margin-bottom" />
 
-          {/* {addingArtist()} */}
-
           <main className="section-artist-choose">
             <div
               onClick={() => {
@@ -220,7 +288,23 @@ const ManagingArtists = () => {
           </main>
           {sectionSearch && searchingArtist()}
           {sectionAddArtist && addingArtist()}
-          {infoArtist}
+          {infoAddArtist ? (
+            <div className="modal">
+              <div
+                onClick={() => {
+                  navigate("/managing-music-artists");
+                  navigate(0);
+                }}
+                className="overlay"
+              ></div>
+              <div className="modal-content">
+                {errorAddArtist && infoErrorAddArtist()}
+                {successAddArtist && infoSuccessAddArtist()}
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </>
       );
     }

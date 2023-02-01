@@ -15,5 +15,51 @@ export const addArtist = async (values) => {
       msg: response.statusText,
       status: response.status,
     });
+  } else {
+    return response.json();
+  }
+};
+
+export const getArtistById = async (id_artist) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/artist/".concat(`${id_artist}`, "/getArtistById")
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
+export const getAllArtists = async () => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/artist/getAllArtists"),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
   }
 };

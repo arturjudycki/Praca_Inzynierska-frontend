@@ -284,7 +284,6 @@ const ManagingTexts = () => {
                 }}
                 validationSchema={LoginSchemat}
                 onSubmit={(values) => {
-                  console.log(new Date(Date.now()));
                   create_text(values);
                 }}
               >

@@ -9,7 +9,7 @@ const TextPage = () => {
   const { id_text } = useParams();
   const navigate = useNavigate();
 
-  let content = id_text;
+  let content;
 
   const { status: isText, data: text } = useQuery(
     ["text-data", id_text],
