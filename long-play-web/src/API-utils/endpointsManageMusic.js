@@ -18,6 +18,7 @@ export const addAlbum = async (values) => {
   formData.append("type_of_album", type_of_album);
   formData.append("genre", genre);
   formData.append("record_label", record_label);
+  console.log(formData);
 
   const response = await fetch("".concat(`${base_url}`, "/album/addAlbum"), {
     method: "POST",

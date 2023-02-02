@@ -177,11 +177,7 @@ const ManagingArtists = () => {
             <div className="searched-artist__box" key={artist.id_artist}>
               <NavLink
                 to={{
-                  pathname: "/artist/".concat(
-                    `${artist.name}`,
-                    "/",
-                    `${artist.id_artist}`
-                  ),
+                  pathname: "/artist/".concat(`${artist.id_artist}`),
                 }}
                 className="link-to-artist"
               >
