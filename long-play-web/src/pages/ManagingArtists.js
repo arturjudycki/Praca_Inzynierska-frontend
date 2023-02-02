@@ -40,6 +40,9 @@ const ManagingArtists = () => {
 
   const [editArtistModal, setEditArtistModal] = useState(false);
 
+  const [infoEdit, setInfoEdit] = useState(false);
+  let info;
+
   const queryClient = useQueryClient();
 
   const toggleInfoAddArtist = () => {
@@ -48,6 +51,16 @@ const ManagingArtists = () => {
 
   const toggleEditArtistModal = () => {
     setEditArtistModal(!editArtistModal);
+  };
+
+  const toggleInfoEdit = () => {
+    setInfoEdit(!infoEdit);
+  };
+
+  const toggleEditArtistModalNavigate = () => {
+    setEditArtistModal(!editArtistModal);
+    navigate("/managing-music-artists");
+    navigate(0);
   };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -65,9 +78,14 @@ const ManagingArtists = () => {
     mutate: add_artist,
   } = useMutation(addArtist, {});
 
-  const { mutate: edit_artist } = useMutation(editArtist, {
+  const {
+    isError: errorEdit,
+    isSuccess: successEdit,
+    mutate: edit_artist,
+  } = useMutation(editArtist, {
     onSuccess: () => {
       queryClient.invalidateQueries(["artists"]);
+      setTimeout(toggleEditArtistModalNavigate, 1500);
     },
   });
 
@@ -104,6 +122,22 @@ const ManagingArtists = () => {
       </div>
     );
   };
+
+  if (successEdit) {
+    info = (
+      <p className="edit-artist-info edit-artist-info--success">
+        Wykonawca został pomyślnie edytowany
+      </p>
+    );
+  }
+
+  if (errorEdit) {
+    info = (
+      <p className="edit-artist-info edit-artist-info--error">
+        Wystąpił nieoczekiwanie błąd
+      </p>
+    );
+  }
 
   const handleSubmitSearch = (e) => e.preventDefault();
 
@@ -164,6 +198,7 @@ const ManagingArtists = () => {
                 <div className="modal">
                   <div
                     onClick={() => {
+                      toggleInfoEdit();
                       toggleEditArtistModal();
                     }}
                     className="overlay"
@@ -179,11 +214,12 @@ const ManagingArtists = () => {
                       validationSchema={LoginSchemat}
                       onSubmit={(values) => {
                         edit_artist(values);
-                        toggleEditArtistModal();
+                        toggleInfoEdit();
                       }}
                     >
                       {({ handleSubmit }) => (
                         <section className="adding-music adding-music-artist">
+                          {infoEdit ? info : ""}
                           <Form
                             onSubmit={handleSubmit}
                             className="adding-music__form adding-music__form--editArtist"
@@ -229,13 +265,7 @@ const ManagingArtists = () => {
                             <div className="errors">
                               <ErrorMessage name="members" />
                             </div>
-                            <button
-                              type="submit"
-                              className="add-button"
-                              // onClick={() => {
-                              //   toggleEditArtistModal();
-                              // }}
-                            >
+                            <button type="submit" className="add-button">
                               Edytuj wykonawcę
                             </button>
                           </Form>
