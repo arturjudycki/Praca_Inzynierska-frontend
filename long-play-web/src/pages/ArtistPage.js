@@ -31,12 +31,23 @@ const ArtistPage = () => {
   if (isArtist === "success") {
     content = (
       <>
-        <section className="artist-info__box">
-          <div className="artist-info__item-name">{artist.name}</div>
-          <div className="artist-info__item-description">
-            {artist.description}
+        <section className="artist-page__box">
+          <div className="artist-page__item-name">{artist.name}</div>
+          <div className="artist-page__container">
+            <div className="artist-page__container-info">
+              <p className="artist-page__item-title">Notka biograficzna</p>
+              <div className="artist-page__item-text">{artist.description}</div>
+            </div>
+            <div className="artist-page__container-info artist-page__container-info--width">
+              <p className="artist-page__item-title">Skład/członkowie</p>
+              <div className="artist-page__item-text">{artist.members}</div>
+            </div>
           </div>
-          <div className="artist-info__item-members">{artist.members}</div>
+        </section>
+
+        <section className="discography">
+          <h1 className="discography__title">Dyskografia ()</h1>
+          <div>Listing albumów muzycznych</div>
         </section>
       </>
     );
