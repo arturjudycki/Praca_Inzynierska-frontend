@@ -79,7 +79,5 @@ export const editArtist = async (values) => {
       msg: response.statusText,
       status: response.status,
     });
-  } else {
-    return response.json();
   }
 };
