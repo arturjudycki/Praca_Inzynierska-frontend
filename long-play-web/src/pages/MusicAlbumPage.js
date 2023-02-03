@@ -1,7 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { getAlbumById } from "../API-utils/endpointsManageMusic";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  getAlbumById,
+  getArtistsByAlbumId,
+} from "../API-utils/endpointsManageMusic";
 import { useQuery } from "react-query";
 
 const MusicAlbumPage = () => {
@@ -11,6 +14,8 @@ const MusicAlbumPage = () => {
   let img_path = "http://localhost:8000/images/";
 
   let content;
+
+  let contentArtist;
 
   const displayPublicationDate = (publicationDate) => {
     let time = new Date(publicationDate);
@@ -35,6 +40,39 @@ const MusicAlbumPage = () => {
     () => getAlbumById(id_music_album),
     { retry: 0 }
   );
+
+  const { status: isArtists, data: artists } = useQuery(
+    ["artists", id_music_album],
+    () => getArtistsByAlbumId(id_music_album),
+    { retry: 0 }
+  );
+
+  if (isArtists === "error") {
+    contentArtist = "";
+  }
+
+  if (isArtists === "loading") {
+    contentArtist = (
+      <div className="spinner__box">
+        <div className="spinner__load"></div>
+      </div>
+    );
+  }
+
+  if (isArtists === "success") {
+    contentArtist = artists.map((artist) => (
+      <div key={artist.id_artist}>
+        <NavLink
+          to={{
+            pathname: "/artist/".concat(`${artist.id_artist}`),
+          }}
+          className="link-to-artist"
+        >
+          <p className="album-page__artist-item">{artist.name}</p>
+        </NavLink>
+      </div>
+    ));
+  }
 
   if (isMusicAlbum === "error") {
     navigate("/404");
@@ -67,7 +105,7 @@ const MusicAlbumPage = () => {
               <p className="album-page__release-date">
                 {displayPublicationDate(music_album.release_date)}
               </p>
-              <p className="album-page__artist">miejsce na wykonawcę</p>
+              <div className="album-page__artist">{contentArtist}</div>
             </div>
 
             <div className="ocenianko">

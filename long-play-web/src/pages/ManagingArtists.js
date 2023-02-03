@@ -291,6 +291,7 @@ const ManagingArtists = () => {
         validationSchema={LoginSchemat}
         onSubmit={(values, onSubmitProps) => {
           add_artist(values);
+          toggleInfoAddArtist();
           onSubmitProps.resetForm();
         }}
       >
@@ -328,13 +329,7 @@ const ManagingArtists = () => {
               <div className="errors">
                 <ErrorMessage name="members" />
               </div>
-              <button
-                type="submit"
-                className="add-button"
-                onClick={() => {
-                  toggleInfoAddArtist();
-                }}
-              >
+              <button type="submit" className="add-button">
                 Dodaj wykonawcę
               </button>
             </Form>

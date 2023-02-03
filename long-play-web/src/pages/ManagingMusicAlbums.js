@@ -60,6 +60,7 @@ const ManagingMusicAlbums = () => {
   const [sectionSearch, setSectionSearch] = useState(true);
   const [sectionAdd, setSectionAdd] = useState(false);
   const [albumsSearch, setAlbumsSearch] = useState([]);
+  const [infoAddAlbum, setInfoAddAlbum] = useState(false);
 
   const [editAlbumModal, setEditAlbumModal] = useState(false);
 
@@ -69,6 +70,10 @@ const ManagingMusicAlbums = () => {
 
   const toggleEditAlbumModal = () => {
     setEditAlbumModal(!editAlbumModal);
+  };
+
+  const toggleInfoAddAlbum = () => {
+    setInfoAddAlbum(!infoAddAlbum);
   };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -86,15 +91,46 @@ const ManagingMusicAlbums = () => {
     mutate: add_album,
   } = useMutation(addAlbum, {});
 
-  if (successAddAlbum) {
-    infoAlbum = (
+  const infoSuccessAddAlbum = () => {
+    return (
       <div className="infoAlbum">
         <p>Album został pomyślnie dodany.</p>
         <p>Możesz przypisać do niego wykonawcę.</p>
-        <button className="add-button">Przypisz wykonawcę</button>
+        <button
+          className="add-button add-button--center"
+          // onClick={}
+        >
+          Przypisz wykonawcę
+        </button>
+        <button
+          className="add-button"
+          onClick={() => {
+            navigate("/managing-music-albums");
+            navigate(0);
+          }}
+        >
+          Zamknij
+        </button>
       </div>
     );
-  }
+  };
+
+  const infoErrorAddAlbum = () => {
+    return (
+      <div className="infoAlbum">
+        <p>Wystąpił nieoczekiwanie błąd.</p>
+        <button
+          className="add-button"
+          onClick={() => {
+            navigate("/managing-music-albums");
+            navigate(0);
+          }}
+        >
+          Zamknij
+        </button>
+      </div>
+    );
+  };
 
   const handleSubmitSearch = (e) => e.preventDefault();
 
@@ -171,8 +207,10 @@ const ManagingMusicAlbums = () => {
           record_label: "",
         }}
         validationSchema={LoginSchemat}
-        onSubmit={(values) => {
+        onSubmit={(values, onSubmitProps) => {
           add_album(values);
+          toggleInfoAddAlbum();
+          onSubmitProps.resetForm();
         }}
       >
         {({ handleSubmit, values, setFieldValue }) => (
@@ -399,7 +437,23 @@ const ManagingMusicAlbums = () => {
           </main>
           {sectionSearch && searchingAlbum()}
           {sectionAdd && addingAlbum()}
-          {infoAlbum}
+          {infoAddAlbum ? (
+            <div className="modal">
+              <div
+                onClick={() => {
+                  navigate("/managing-music-albums");
+                  navigate(0);
+                }}
+                className="overlay"
+              ></div>
+              <div className="modal-content">
+                {errorAddAlbum && infoErrorAddAlbum()}
+                {successAddAlbum && infoSuccessAddAlbum()}
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </>
       );
     }

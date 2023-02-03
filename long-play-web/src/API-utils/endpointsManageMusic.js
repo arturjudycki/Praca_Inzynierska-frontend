@@ -18,7 +18,6 @@ export const addAlbum = async (values) => {
   formData.append("type_of_album", type_of_album);
   formData.append("genre", genre);
   formData.append("record_label", record_label);
-  console.log(formData);
 
   const response = await fetch("".concat(`${base_url}`, "/album/addAlbum"), {
     method: "POST",
@@ -100,6 +99,50 @@ export const getAlbumById = async (id_music_album) => {
 export const getAllAlbums = async () => {
   const response = await fetch(
     "".concat(`${base_url}`, "/album/getAllAlbums"),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
+export const assignArtistToAlbum = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/album/assignArtistToAlbum"),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const getArtistsByAlbumId = async (id_music_album) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/album/".concat(`${id_music_album}`, "/getArtistsByAlbumId")
+    ),
     {
       headers: {
         "Content-Type": "application/json",
