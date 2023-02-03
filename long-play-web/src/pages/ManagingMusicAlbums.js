@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { addAlbum } from "../API-utils/endpointsManageMusic";
+import { addAlbum, getAllAlbums } from "../API-utils/endpointsManageMusic";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,9 @@ import {
   faRecordVinyl,
   faFileAudio,
   faGuitar,
+  faPlus,
+  faMagnifyingGlass,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -53,9 +56,28 @@ const LoginSchemat = Yup.object().shape({
 
 const ManagingMusicAlbums = () => {
   const navigate = useNavigate();
+
+  const [sectionSearch, setSectionSearch] = useState(true);
+  const [sectionAdd, setSectionAdd] = useState(false);
+  const [albumsSearch, setAlbumsSearch] = useState([]);
+
+  const [editAlbumModal, setEditAlbumModal] = useState(false);
+
   let infoAlbum;
 
+  let img_path = "http://localhost:8000/images/";
+
+  const toggleEditAlbumModal = () => {
+    setEditAlbumModal(!editAlbumModal);
+  };
+
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
+
+  const { status: isAllAlbums, data: AllAlbums } = useQuery(
+    "albums",
+    getAllAlbums,
+    { retry: 0 }
+  );
 
   const {
     data: album,
@@ -73,6 +95,68 @@ const ManagingMusicAlbums = () => {
       </div>
     );
   }
+
+  const handleSubmitSearch = (e) => e.preventDefault();
+
+  const handleSearchChange = (e) => {
+    if (isAllAlbums === "success") {
+      const resultsArray = AllAlbums.filter((album) =>
+        album.title
+          .toLowerCase()
+          .trim()
+          .includes(e.target.value.toLowerCase().trim())
+      );
+      setAlbumsSearch(resultsArray);
+    }
+  };
+
+  const searchingAlbum = () => {
+    return (
+      <>
+        <form className="search-artist" onSubmit={handleSubmitSearch}>
+          <div className="search-artist__box">
+            <input
+              type="text"
+              placeholder="Wyszukaj album"
+              className="search-artist__input"
+              onChange={handleSearchChange}
+            />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="icon-artists"
+            />
+          </div>
+        </form>
+
+        <section className="searched-artist">
+          {albumsSearch.map((album) => (
+            <div className="searched-artist__box" key={album.id_music_album}>
+              <NavLink
+                to={{
+                  pathname: "/music-album/".concat(`${album.id_music_album}`),
+                }}
+                className="link-to-artist link-to-artist--display"
+              >
+                <img
+                  src={img_path + album.cover}
+                  alt="cover-of-album"
+                  className="album-page__cover album-page__cover--smaller"
+                />
+                <div className="searched-artist__name">{album.title}</div>
+              </NavLink>
+              <div
+                className="searched-artist__edit searched-artist__edit--top"
+                onClick={toggleEditAlbumModal}
+              >
+                <p className="searched-artist__edit-text">Edytuj</p>
+                <FontAwesomeIcon icon={faPen} />
+              </div>
+            </div>
+          ))}
+        </section>
+      </>
+    );
+  };
 
   const addingAlbum = () => {
     return (
@@ -92,7 +176,7 @@ const ManagingMusicAlbums = () => {
         }}
       >
         {({ handleSubmit, values, setFieldValue }) => (
-          <section className="adding-music">
+          <section className="adding-music adding-music--marginTop">
             <Form onSubmit={handleSubmit} className="adding-music__form">
               <Field
                 id="title"
@@ -272,9 +356,50 @@ const ManagingMusicAlbums = () => {
           </section>
           <hr className="line--margin-bottom" />
 
-          {addingAlbum()}
+          <main className="section-artist-choose">
+            <div
+              onClick={() => {
+                if (sectionAdd) {
+                  setSectionSearch(!sectionSearch);
+                  setSectionAdd(!sectionAdd);
+                }
+              }}
+              className={
+                sectionSearch
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Wyszukanie nowego albumu
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className="icon-artists"
+                />
+              </p>
+            </div>
+            <div
+              onClick={() => {
+                if (sectionSearch) {
+                  setSectionSearch(!sectionSearch);
+                  setSectionAdd(!sectionAdd);
+                }
+              }}
+              className={
+                sectionAdd
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Dodanie nowego albumu
+                <FontAwesomeIcon icon={faPlus} className="icon-artists" />
+              </p>
+            </div>
+          </main>
+          {sectionSearch && searchingAlbum()}
+          {sectionAdd && addingAlbum()}
           {infoAlbum}
-          {/* <AddingAlbum /> */}
         </>
       );
     }

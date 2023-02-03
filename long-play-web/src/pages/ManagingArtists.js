@@ -34,13 +34,14 @@ const LoginSchemat = Yup.object().shape({
 const ManagingArtists = () => {
   const navigate = useNavigate();
   const [sectionSearch, setSectionSearch] = useState(true);
-  const [sectionAddArtist, setSectionAddArtist] = useState(false);
+  const [sectionAdd, setSectionAdd] = useState(false);
   const [infoAddArtist, setInfoAddArtist] = useState(false);
   const [artistsSearch, setArtistsSearch] = useState([]);
 
   const [editArtistModal, setEditArtistModal] = useState(false);
 
   const [infoEdit, setInfoEdit] = useState(false);
+
   let info;
 
   const queryClient = useQueryClient();
@@ -172,7 +173,6 @@ const ManagingArtists = () => {
         </form>
 
         <section className="searched-artist">
-          {artistsSearch !== undefined}
           {artistsSearch.map((artist) => (
             <div className="searched-artist__box" key={artist.id_artist}>
               <NavLink
@@ -188,7 +188,7 @@ const ManagingArtists = () => {
                 onClick={toggleEditArtistModal}
               >
                 <p className="searched-artist__edit-text">Edytuj</p>
-                <FontAwesomeIcon icon={faPen} className="" />
+                <FontAwesomeIcon icon={faPen} />
               </div>
               {editArtistModal ? (
                 <div className="modal">
@@ -295,7 +295,7 @@ const ManagingArtists = () => {
         }}
       >
         {({ handleSubmit }) => (
-          <section className="adding-music adding-music-artist">
+          <section className="adding-music adding-music--marginTop">
             <Form onSubmit={handleSubmit} className="adding-music__form">
               <Field
                 id="name"
@@ -398,9 +398,9 @@ const ManagingArtists = () => {
           <main className="section-artist-choose">
             <div
               onClick={() => {
-                if (sectionAddArtist) {
+                if (sectionAdd) {
                   setSectionSearch(!sectionSearch);
-                  setSectionAddArtist(!sectionAddArtist);
+                  setSectionAdd(!sectionAdd);
                 }
               }}
               className={
@@ -421,11 +421,11 @@ const ManagingArtists = () => {
               onClick={() => {
                 if (sectionSearch) {
                   setSectionSearch(!sectionSearch);
-                  setSectionAddArtist(!sectionAddArtist);
+                  setSectionAdd(!sectionAdd);
                 }
               }}
               className={
-                sectionAddArtist
+                sectionAdd
                   ? "section-artist-choose__item section-artist-choose__item-active"
                   : "section-artist-choose__item"
               }
@@ -437,7 +437,7 @@ const ManagingArtists = () => {
             </div>
           </main>
           {sectionSearch && searchingArtist()}
-          {sectionAddArtist && addingArtist()}
+          {sectionAdd && addingArtist()}
           {infoAddArtist ? (
             <div className="modal">
               <div
