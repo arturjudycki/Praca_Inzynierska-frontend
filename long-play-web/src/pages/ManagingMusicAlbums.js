@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import { addAlbum, getAllAlbums } from "../API-utils/endpointsManageMusic";
+import AssignArtist from "../components/AssignArtist";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,7 @@ import {
   faPlus,
   faMagnifyingGlass,
   faPen,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -64,6 +66,8 @@ const ManagingMusicAlbums = () => {
 
   const [editAlbumModal, setEditAlbumModal] = useState(false);
 
+  const [assignModal, setAssignModal] = useState(false);
+
   let infoAlbum;
 
   let img_path = "http://localhost:8000/images/";
@@ -76,6 +80,10 @@ const ManagingMusicAlbums = () => {
     setInfoAddAlbum(!infoAddAlbum);
   };
 
+  const toggleAssignModal = () => {
+    setAssignModal(!assignModal);
+  };
+
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
 
   const { status: isAllAlbums, data: AllAlbums } = useQuery(
@@ -85,7 +93,7 @@ const ManagingMusicAlbums = () => {
   );
 
   const {
-    data: album,
+    data: addedAlbum,
     isError: errorAddAlbum,
     isSuccess: successAddAlbum,
     mutate: add_album,
@@ -95,13 +103,6 @@ const ManagingMusicAlbums = () => {
     return (
       <div className="infoAlbum">
         <p>Album został pomyślnie dodany.</p>
-        <p>Możesz przypisać do niego wykonawcę.</p>
-        <button
-          className="add-button add-button--center"
-          // onClick={}
-        >
-          Przypisz wykonawcę
-        </button>
         <button
           className="add-button"
           onClick={() => {
@@ -166,7 +167,10 @@ const ManagingMusicAlbums = () => {
 
         <section className="searched-artist">
           {albumsSearch.map((album) => (
-            <div className="searched-artist__box" key={album.id_music_album}>
+            <div
+              className="searched-artist__box searched-artist__box--spaceBetween"
+              key={album.id_music_album}
+            >
               <NavLink
                 to={{
                   pathname: "/music-album/".concat(`${album.id_music_album}`),
@@ -187,6 +191,18 @@ const ManagingMusicAlbums = () => {
                 <p className="searched-artist__edit-text">Edytuj</p>
                 <FontAwesomeIcon icon={faPen} />
               </div>
+              <div className="assign-link" onClick={toggleAssignModal}>
+                <p className="assign-link__text">Przypisz wykonawcę</p>
+                <FontAwesomeIcon icon={faUserPlus} />
+              </div>
+              {assignModal ? (
+                <AssignArtist
+                  toggleAssignModal={toggleAssignModal}
+                  props={{ album }}
+                />
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </section>
@@ -409,7 +425,7 @@ const ManagingMusicAlbums = () => {
               }
             >
               <p>
-                Wyszukanie nowego albumu
+                Wyszukanie albumu
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
                   className="icon-artists"
