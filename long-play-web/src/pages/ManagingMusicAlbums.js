@@ -7,7 +7,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRecordVinyl,
-  faFileAudio,
   faGuitar,
   faPlus,
   faMagnifyingGlass,
@@ -415,10 +414,8 @@ const ManagingMusicAlbums = () => {
                 if (sectionManage) {
                   setSectionManage(!sectionManage);
                   setSectionAdd(!sectionAdd);
-                  // setSectionSongs(!sectionSongs);
                 } else if (sectionSongs) {
-                  setSectionManage(!sectionManage);
-                  // setSectionAdd(!sectionAdd);
+                  setSectionAdd(!sectionAdd);
                   setSectionSongs(!sectionSongs);
                 }
               }}
