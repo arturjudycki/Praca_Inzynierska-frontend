@@ -15,6 +15,7 @@ import {
   faPlus,
   faMagnifyingGlass,
   faPen,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -33,8 +34,8 @@ const LoginSchemat = Yup.object().shape({
 
 const ManagingArtists = () => {
   const navigate = useNavigate();
-  const [sectionSearch, setSectionSearch] = useState(true);
-  const [sectionAdd, setSectionAdd] = useState(false);
+  const [sectionAdd, setSectionAdd] = useState(true);
+  const [sectionSearch, setSectionSearch] = useState(false);
   const [infoAddArtist, setInfoAddArtist] = useState(false);
   const [artistsSearch, setArtistsSearch] = useState([]);
 
@@ -161,7 +162,7 @@ const ManagingArtists = () => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj wykonawcę"
+              placeholder="Wyszukaj wykonawcę, aby go zedytować"
               className="search-artist__input"
               onChange={handleSearchChange}
             />
@@ -363,18 +364,7 @@ const ManagingArtists = () => {
               }
             >
               <FontAwesomeIcon icon={faRecordVinyl} className="faRecordVinyl" />
-              <p className="heroUser__settings-link">Albumy muzyczne</p>
-            </NavLink>
-            <NavLink
-              to="/managing-music-songs"
-              className={({ isActive }) =>
-                isActive
-                  ? "heroUser__link heroUser__link--flexEvenly heroUser__link--selected"
-                  : "heroUser__link heroUser__link--flexEvenly"
-              }
-            >
-              <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
-              <p className="heroUser__settings-link">Utwory</p>
+              <p className="heroUser__settings-link">Albumy muzyczne/Utwory</p>
             </NavLink>
             <NavLink
               to="/managing-music-artists"
@@ -393,27 +383,6 @@ const ManagingArtists = () => {
           <main className="section-artist-choose">
             <div
               onClick={() => {
-                if (sectionAdd) {
-                  setSectionSearch(!sectionSearch);
-                  setSectionAdd(!sectionAdd);
-                }
-              }}
-              className={
-                sectionSearch
-                  ? "section-artist-choose__item section-artist-choose__item-active"
-                  : "section-artist-choose__item"
-              }
-            >
-              <p>
-                Wyszukanie wykonawcy
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="icon-artists"
-                />
-              </p>
-            </div>
-            <div
-              onClick={() => {
                 if (sectionSearch) {
                   setSectionSearch(!sectionSearch);
                   setSectionAdd(!sectionAdd);
@@ -428,6 +397,27 @@ const ManagingArtists = () => {
               <p>
                 Dodanie nowego wykonawcy
                 <FontAwesomeIcon icon={faPlus} className="icon-artists" />
+              </p>
+            </div>
+            <div
+              onClick={() => {
+                if (sectionAdd) {
+                  setSectionSearch(!sectionSearch);
+                  setSectionAdd(!sectionAdd);
+                }
+              }}
+              className={
+                sectionSearch
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Edycja wykonawcy
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  className="icon-artists"
+                />
               </p>
             </div>
           </main>

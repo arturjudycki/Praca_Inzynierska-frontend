@@ -13,6 +13,7 @@ import {
   faMagnifyingGlass,
   faPen,
   faUserPlus,
+  faGears,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -59,8 +60,9 @@ const LoginSchemat = Yup.object().shape({
 const ManagingMusicAlbums = () => {
   const navigate = useNavigate();
 
-  const [sectionSearch, setSectionSearch] = useState(true);
-  const [sectionAdd, setSectionAdd] = useState(false);
+  const [sectionAdd, setSectionAdd] = useState(true);
+  const [sectionManage, setSectionManage] = useState(false);
+  const [sectionSongs, setSectionSongs] = useState(false);
   const [albumsSearch, setAlbumsSearch] = useState([]);
   const [infoAddAlbum, setInfoAddAlbum] = useState(false);
 
@@ -147,6 +149,14 @@ const ManagingMusicAlbums = () => {
     }
   };
 
+  const managingSongs = () => {
+    return (
+      <>
+        <div>piosenki bez refrenu, piosenki bez melodii</div>
+      </>
+    );
+  };
+
   const searchingAlbum = () => {
     return (
       <>
@@ -154,7 +164,7 @@ const ManagingMusicAlbums = () => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj album"
+              placeholder="Wyszukaj album, aby go zedytować lub przypisać do niego wykonawcę"
               className="search-artist__input"
               onChange={handleSearchChange}
             />
@@ -383,18 +393,7 @@ const ManagingMusicAlbums = () => {
               }
             >
               <FontAwesomeIcon icon={faRecordVinyl} className="faRecordVinyl" />
-              <p className="heroUser__settings-link">Albumy muzyczne</p>
-            </NavLink>
-            <NavLink
-              to="/managing-music-songs"
-              className={({ isActive }) =>
-                isActive
-                  ? "heroUser__link heroUser__link--flexEvenly heroUser__link--selected"
-                  : "heroUser__link heroUser__link--flexEvenly"
-              }
-            >
-              <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
-              <p className="heroUser__settings-link">Utwory</p>
+              <p className="heroUser__settings-link">Albumy muzyczne/Utwory</p>
             </NavLink>
             <NavLink
               to="/managing-music-artists"
@@ -413,30 +412,14 @@ const ManagingMusicAlbums = () => {
           <main className="section-artist-choose">
             <div
               onClick={() => {
-                if (sectionAdd) {
-                  setSectionSearch(!sectionSearch);
+                if (sectionManage) {
+                  setSectionManage(!sectionManage);
                   setSectionAdd(!sectionAdd);
-                }
-              }}
-              className={
-                sectionSearch
-                  ? "section-artist-choose__item section-artist-choose__item-active"
-                  : "section-artist-choose__item"
-              }
-            >
-              <p>
-                Wyszukanie albumu
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="icon-artists"
-                />
-              </p>
-            </div>
-            <div
-              onClick={() => {
-                if (sectionSearch) {
-                  setSectionSearch(!sectionSearch);
-                  setSectionAdd(!sectionAdd);
+                  // setSectionSongs(!sectionSongs);
+                } else if (sectionSongs) {
+                  setSectionManage(!sectionManage);
+                  // setSectionAdd(!sectionAdd);
+                  setSectionSongs(!sectionSongs);
                 }
               }}
               className={
@@ -450,9 +433,53 @@ const ManagingMusicAlbums = () => {
                 <FontAwesomeIcon icon={faPlus} className="icon-artists" />
               </p>
             </div>
+            <div
+              onClick={() => {
+                if (sectionAdd) {
+                  setSectionManage(!sectionManage);
+                  setSectionAdd(!sectionAdd);
+                } else if (sectionSongs) {
+                  setSectionManage(!sectionManage);
+                  setSectionSongs(!sectionSongs);
+                }
+              }}
+              className={
+                sectionManage
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Zarządzanie dodanym albumem
+                <FontAwesomeIcon icon={faGears} className="icon-artists" />
+              </p>
+            </div>
+            <div
+              onClick={() => {
+                if (sectionAdd) {
+                  setSectionSongs(!sectionSongs);
+                  setSectionAdd(!sectionAdd);
+                } else if (sectionManage) {
+                  setSectionSongs(!sectionSongs);
+                  setSectionManage(!sectionManage);
+                }
+              }}
+              className={
+                sectionSongs
+                  ? "section-artist-choose__item section-artist-choose__item-active"
+                  : "section-artist-choose__item"
+              }
+            >
+              <p>
+                Zarządzanie utworami
+                <FontAwesomeIcon icon={faGears} className="icon-artists" />
+              </p>
+            </div>
           </main>
-          {sectionSearch && searchingAlbum()}
+          {sectionManage && searchingAlbum()}
           {sectionAdd && addingAlbum()}
+          {sectionSongs && managingSongs()}
+
           {infoAddAlbum ? (
             <div className="modal">
               <div
