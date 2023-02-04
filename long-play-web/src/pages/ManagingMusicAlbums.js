@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRecordVinyl,
   faGuitar,
+  faFileAudio,
   faPlus,
   faMagnifyingGlass,
   faPen,
@@ -63,13 +64,14 @@ const ManagingMusicAlbums = () => {
   const [sectionManage, setSectionManage] = useState(false);
   const [sectionSongs, setSectionSongs] = useState(false);
   const [albumsSearch, setAlbumsSearch] = useState([]);
+  const [albumsSearch2, setAlbumsSearch2] = useState([]);
   const [infoAddAlbum, setInfoAddAlbum] = useState(false);
 
   const [editAlbumModal, setEditAlbumModal] = useState(false);
+  const [editInfoAlbum, setEditInfoAlbum] = useState(true);
+  const [editCoverAlbum, setEditCoverAlbum] = useState(false);
 
   const [assignModal, setAssignModal] = useState(false);
-
-  let infoAlbum;
 
   let img_path = "http://localhost:8000/images/";
 
@@ -138,20 +140,84 @@ const ManagingMusicAlbums = () => {
 
   const handleSearchChange = (e) => {
     if (isAllAlbums === "success") {
-      const resultsArray = AllAlbums.filter((album) =>
-        album.title
-          .toLowerCase()
-          .trim()
-          .includes(e.target.value.toLowerCase().trim())
+      const resultsArray = AllAlbums.filter(
+        (album) =>
+          e.target.value !== "" &&
+          album.title
+            .toLowerCase()
+            .trim()
+            .includes(e.target.value.toLowerCase().trim())
       );
       setAlbumsSearch(resultsArray);
+    }
+  };
+
+  const handleSearchChange2 = (e) => {
+    if (isAllAlbums === "success") {
+      const resultsArray = AllAlbums.filter(
+        (album) =>
+          e.target.value !== "" &&
+          album.title
+            .toLowerCase()
+            .trim()
+            .includes(e.target.value.toLowerCase().trim())
+      );
+      setAlbumsSearch2(resultsArray);
     }
   };
 
   const managingSongs = () => {
     return (
       <>
-        <div>piosenki bez refrenu, piosenki bez melodii</div>
+        <form className="search-artist" onSubmit={handleSubmitSearch}>
+          <div className="search-artist__box">
+            <input
+              type="text"
+              placeholder="Wyszukaj album, aby zarządzać utworami znajdującymi się na albumie"
+              className="search-artist__input"
+              onChange={handleSearchChange2}
+            />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="icon-artists"
+            />
+          </div>
+        </form>
+
+        <section className="searched-artist">
+          {albumsSearch2.map((album) => (
+            <div
+              className="searched-artist__box searched-artist__box--spaceBetween"
+              key={album.id_music_album}
+            >
+              <NavLink
+                to={{
+                  pathname: "/music-album/".concat(`${album.id_music_album}`),
+                }}
+                className="link-to-artist link-to-artist--display"
+              >
+                <img
+                  src={img_path + album.cover}
+                  alt="cover-of-album"
+                  className="album-page__cover album-page__cover--smaller"
+                />
+                <div className="searched-artist__name">{album.title}</div>
+              </NavLink>
+              <div className="assign-link" onClick={() => {}}>
+                <p className="assign-link__text">Zarządzaj utworami</p>
+                <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
+              </div>
+              {/* {assignModal ? (
+                <AssignArtist
+                  toggleAssignModal={toggleAssignModal}
+                  props={{ album }}
+                />
+              ) : (
+                ""
+              )} */}
+            </div>
+          ))}
+        </section>
       </>
     );
   };
@@ -368,6 +434,57 @@ const ManagingMusicAlbums = () => {
     );
   };
 
+  const editAlbum = () => {
+    return (
+      <div className="modal">
+        <div
+          onClick={() => {
+            // navigate("/managing-music-albums");
+            // navigate(0);
+            toggleEditAlbumModal();
+          }}
+          className="overlay"
+        ></div>
+        <div className="modal-content">
+          <div className="edit-album__choose-box">
+            <div
+              onClick={() => {
+                if (editCoverAlbum) {
+                  setEditCoverAlbum(!editCoverAlbum);
+                  setEditInfoAlbum(!editInfoAlbum);
+                }
+              }}
+              className={
+                editInfoAlbum
+                  ? "edit-album__choose-item edit-album__choose-item-active"
+                  : "edit-album__choose-item"
+              }
+            >
+              Edytuj dane albumu
+            </div>
+            <div
+              onClick={() => {
+                if (editInfoAlbum) {
+                  setEditCoverAlbum(!editCoverAlbum);
+                  setEditInfoAlbum(!editInfoAlbum);
+                }
+              }}
+              className={
+                editCoverAlbum
+                  ? "edit-album__choose-item edit-album__choose-item-active"
+                  : "edit-album__choose-item"
+              }
+            >
+              Edytuj okładkę albumu
+            </div>
+          </div>
+          {editInfoAlbum ? <div>formularzInfo</div> : ""}
+          {editCoverAlbum ? <div>formularzCover</div> : ""}
+        </div>
+      </div>
+    );
+  };
+
   if (isLogged === "error") {
     navigate("/");
   }
@@ -476,6 +593,7 @@ const ManagingMusicAlbums = () => {
           {sectionManage && searchingAlbum()}
           {sectionAdd && addingAlbum()}
           {sectionSongs && managingSongs()}
+          {editAlbumModal && editAlbum()}
 
           {infoAddAlbum ? (
             <div className="modal">

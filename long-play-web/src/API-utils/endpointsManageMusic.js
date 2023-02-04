@@ -36,33 +36,42 @@ export const addAlbum = async (values) => {
   }
 };
 
-export const editAlbum = async (values) => {
-  const {
-    id_music_album,
-    title,
-    cover,
-    release_date,
-    duration,
-    type_of_album,
-    genre,
-    record_label,
-  } = values;
+export const editInfoAlbum = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/album/editInfoAlbum"),
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const editCoverAlbum = async (values) => {
+  const { id_music_album, cover } = values;
   const formData = new FormData();
   formData.append("id_music_album", id_music_album);
-  formData.append("title", title);
   formData.append("cover", cover);
-  formData.append("release_date", release_date);
-  formData.append("duration", duration);
-  formData.append("type_of_album", type_of_album);
-  formData.append("genre", genre);
-  formData.append("record_label", record_label);
 
-  const response = await fetch("".concat(`${base_url}`, "/album/editAlbum"), {
-    method: "PUT",
-    headers: {},
-    credentials: "include",
-    body: formData,
-  });
+  const response = await fetch(
+    "".concat(`${base_url}`, "/album/editCoverAlbum"),
+    {
+      method: "PUT",
+      headers: {},
+      credentials: "include",
+      body: formData,
+    }
+  );
 
   if (!response.ok) {
     return Promise.reject({
@@ -121,6 +130,26 @@ export const assignArtistToAlbum = async (values) => {
     "".concat(`${base_url}`, "/album/assignArtistToAlbum"),
     {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(values, null, 2),
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const deleteAssignArtist = async (values) => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/album/deleteAssignArtist"),
+    {
       headers: {
         "Content-Type": "application/json",
       },
