@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
-import { addAlbum, getAllAlbums } from "../API-utils/endpointsManageMusic";
+import {
+  editInfoAlbum,
+  addAlbum,
+  getAllAlbums,
+} from "../API-utils/endpointsManageMusic";
 import AssignArtist from "../components/AssignArtist";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -57,6 +61,263 @@ const LoginSchemat = Yup.object().shape({
   record_label: Yup.string().required("Wytwórnia muzyczna jest wymagana!"),
 });
 
+const LoginSchematEditInfo = Yup.object().shape({
+  title: Yup.string().required("Tytuł jest wymagany!"),
+
+  // release_date: Yup.date().required("Data wydania albumu jest wymagana!"),
+
+  duration: Yup.string().required("Czas trwania płyty jest wymagany!"),
+
+  genre: Yup.string().required("Przypisanie gatunku jest wymagane!"),
+
+  record_label: Yup.string().required("Wytwórnia muzyczna jest wymagana!"),
+});
+
+const EditAlbum = ({ albumInfo }) => {
+  const album = albumInfo.album;
+
+  const [editAlbumModal, setEditAlbumModal] = useState(false);
+  const [editAlbumInfo, setEditAlbumInfo] = useState(true);
+  const [editCoverAlbum, setEditCoverAlbum] = useState(false);
+
+  const toggleEditAlbumModal = () => {
+    setEditAlbumModal(!editAlbumModal);
+  };
+
+  const {
+    data: editAlbum,
+    isError: errorEditInfoAlbum,
+    isSuccess: successErrorInfoAlbum,
+    mutate: edit_info_album,
+  } = useMutation(editInfoAlbum, {});
+
+  const displayPublicationDate = (publicationDate) => {
+    let time = new Date(publicationDate);
+    let day = time.getDate();
+    let month = time.getMonth() + 1;
+    let year = time.getFullYear();
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+
+    return `${day}-${month}-${year}`;
+  };
+
+  const displayPublicationDate2 = (publicationDate) => {
+    let time = new Date(publicationDate);
+    let day = time.getDate();
+    let month = time.getMonth();
+    let year = time.getFullYear();
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+    return Date.UTC(year, month, day);
+  };
+
+  return (
+    <>
+      <div
+        className="searched-artist__edit searched-artist__edit--top"
+        onClick={toggleEditAlbumModal}
+      >
+        <p className="searched-artist__edit-text">Edytuj</p>
+        <FontAwesomeIcon icon={faPen} />
+      </div>
+      {editAlbumModal ? (
+        <div className="modal">
+          <div
+            onClick={() => {
+              // navigate("/managing-music-albums");
+              // navigate(0);
+              toggleEditAlbumModal();
+            }}
+            className="overlay"
+          ></div>
+          <div className="modal-content">
+            <div className="edit-album__choose-box">
+              <div
+                onClick={() => {
+                  if (editCoverAlbum) {
+                    setEditCoverAlbum(!editCoverAlbum);
+                    setEditAlbumInfo(!editAlbumInfo);
+                  }
+                }}
+                className={
+                  editAlbumInfo
+                    ? "edit-album__choose-item edit-album__choose-item-active"
+                    : "edit-album__choose-item"
+                }
+              >
+                Edytuj dane albumu
+              </div>
+              <div
+                onClick={() => {
+                  if (editAlbumInfo) {
+                    setEditCoverAlbum(!editCoverAlbum);
+                    setEditAlbumInfo(!editAlbumInfo);
+                  }
+                }}
+                className={
+                  editCoverAlbum
+                    ? "edit-album__choose-item edit-album__choose-item-active"
+                    : "edit-album__choose-item"
+                }
+              >
+                Edytuj okładkę albumu
+              </div>
+            </div>
+            {editAlbumInfo ? (
+              <div>
+                <Formik
+                  initialValues={{
+                    id_music_album: album.id_music_album,
+                    title: album.title,
+                    release_date: new Date(
+                      displayPublicationDate2(album.release_date)
+                    ),
+                    duration: album.duration,
+                    type_of_album: album.type_of_album,
+                    genre: album.genre,
+                    record_label: album.record_label,
+                  }}
+                  validationSchema={LoginSchematEditInfo}
+                  onSubmit={(values) => {
+                    toggleEditAlbumModal();
+                    edit_info_album(values);
+                    // toggleInfoAddAlbum();
+                    // onSubmitProps.resetForm();
+                  }}
+                >
+                  {({ handleSubmit }) => (
+                    <section className="adding-music adding-music--marginTop">
+                      <Form
+                        onSubmit={handleSubmit}
+                        className="adding-music__form"
+                      >
+                        <Field
+                          id="title"
+                          name="title"
+                          placeholder="Tytuł albumu"
+                          type="text"
+                          className="adding-music__form-input"
+                        />
+                        <div className="errors">
+                          <ErrorMessage name="title" />
+                        </div>
+
+                        <label className="add-date">
+                          Data wydania albumu{" "}
+                          <span>
+                            {displayPublicationDate(album.release_date)}
+                          </span>
+                          <Field
+                            id="release_date"
+                            name="release_date"
+                            placeholder="Data wydania albumu"
+                            type="date"
+                            className="adding-music__form-input adding-music__form-input-date"
+                          />
+                        </label>
+                        <div className="errors">
+                          <ErrorMessage name="release_date" />
+                        </div>
+                        <Field
+                          id="duration"
+                          name="duration"
+                          placeholder="Czas trwania płyty"
+                          type="text"
+                          className="adding-music__form-input"
+                        />
+                        <div className="errors">
+                          <ErrorMessage name="duration" />
+                        </div>
+                        <div className="radio-box__choose">
+                          <label>
+                            <Field
+                              type="radio"
+                              id="type_of_album"
+                              name="type_of_album"
+                              value="studio_album"
+                              className="radio-box__choose-item"
+                            />
+                            Album studyjny
+                          </label>
+                          <label>
+                            <Field
+                              type="radio"
+                              id="type_of_album"
+                              name="type_of_album"
+                              value="live_album"
+                              className="radio-box__choose-item"
+                            />
+                            Album koncertowy
+                          </label>
+                          <label>
+                            <Field
+                              type="radio"
+                              id="type_of_album"
+                              name="type_of_album"
+                              value="compilation_album"
+                              className="radio-box__choose-item"
+                            />
+                            Album kompilacyjny
+                          </label>
+                          <label>
+                            <Field
+                              type="radio"
+                              id="type_of_album"
+                              name="type_of_album"
+                              value="EP"
+                              className="radio-box__choose-item"
+                            />
+                            EP - minialbum
+                          </label>
+                        </div>
+                        <Field
+                          id="genre"
+                          name="genre"
+                          placeholder="Gatunek"
+                          type="text"
+                          className="adding-music__form-input"
+                        />
+                        <div className="errors">
+                          <ErrorMessage name="genre" />
+                        </div>
+                        <Field
+                          id="record_label"
+                          name="record_label"
+                          placeholder="Wytwórnia muzyczna"
+                          type="text"
+                          className="adding-music__form-input"
+                        />
+                        <div className="errors">
+                          <ErrorMessage name="record_label" />
+                        </div>
+                        <button
+                          type="submit"
+                          className="add-button"
+                          // onClick={() => {
+                          //   console.log("lala");
+                          // }}
+                        >
+                          Edytuj album
+                        </button>
+                      </Form>
+                    </section>
+                  )}
+                </Formik>
+              </div>
+            ) : (
+              ""
+            )}
+            {editCoverAlbum ? <div>formularzCover</div> : ""}
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
+
 const ManagingMusicAlbums = () => {
   const navigate = useNavigate();
 
@@ -67,24 +328,16 @@ const ManagingMusicAlbums = () => {
   const [albumsSearch2, setAlbumsSearch2] = useState([]);
   const [infoAddAlbum, setInfoAddAlbum] = useState(false);
 
-  const [editAlbumModal, setEditAlbumModal] = useState(false);
-  const [editInfoAlbum, setEditInfoAlbum] = useState(true);
-  const [editCoverAlbum, setEditCoverAlbum] = useState(false);
-
   const [assignModal, setAssignModal] = useState(false);
 
   let img_path = "http://localhost:8000/images/";
 
-  const toggleEditAlbumModal = () => {
-    setEditAlbumModal(!editAlbumModal);
+  const toggleAssignModal = () => {
+    setAssignModal(!assignModal);
   };
 
   const toggleInfoAddAlbum = () => {
     setInfoAddAlbum(!infoAddAlbum);
-  };
-
-  const toggleAssignModal = () => {
-    setAssignModal(!assignModal);
   };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -207,14 +460,6 @@ const ManagingMusicAlbums = () => {
                 <p className="assign-link__text">Zarządzaj utworami</p>
                 <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
               </div>
-              {/* {assignModal ? (
-                <AssignArtist
-                  toggleAssignModal={toggleAssignModal}
-                  props={{ album }}
-                />
-              ) : (
-                ""
-              )} */}
             </div>
           ))}
         </section>
@@ -259,13 +504,16 @@ const ManagingMusicAlbums = () => {
                 />
                 <div className="searched-artist__name">{album.title}</div>
               </NavLink>
-              <div
-                className="searched-artist__edit searched-artist__edit--top"
-                onClick={toggleEditAlbumModal}
-              >
-                <p className="searched-artist__edit-text">Edytuj</p>
-                <FontAwesomeIcon icon={faPen} />
-              </div>
+
+              <EditAlbum albumInfo={{ album }} />
+              {/* {assignModal ? (
+                <AssignArtist
+                  toggleAssignModal={toggleAssignModal}
+                  props={{ album }}
+                />
+              ) : (
+                ""
+              )} */}
               <div className="assign-link" onClick={toggleAssignModal}>
                 <p className="assign-link__text">Przypisz wykonawcę</p>
                 <FontAwesomeIcon icon={faUserPlus} />
@@ -434,57 +682,6 @@ const ManagingMusicAlbums = () => {
     );
   };
 
-  const editAlbum = () => {
-    return (
-      <div className="modal">
-        <div
-          onClick={() => {
-            // navigate("/managing-music-albums");
-            // navigate(0);
-            toggleEditAlbumModal();
-          }}
-          className="overlay"
-        ></div>
-        <div className="modal-content">
-          <div className="edit-album__choose-box">
-            <div
-              onClick={() => {
-                if (editCoverAlbum) {
-                  setEditCoverAlbum(!editCoverAlbum);
-                  setEditInfoAlbum(!editInfoAlbum);
-                }
-              }}
-              className={
-                editInfoAlbum
-                  ? "edit-album__choose-item edit-album__choose-item-active"
-                  : "edit-album__choose-item"
-              }
-            >
-              Edytuj dane albumu
-            </div>
-            <div
-              onClick={() => {
-                if (editInfoAlbum) {
-                  setEditCoverAlbum(!editCoverAlbum);
-                  setEditInfoAlbum(!editInfoAlbum);
-                }
-              }}
-              className={
-                editCoverAlbum
-                  ? "edit-album__choose-item edit-album__choose-item-active"
-                  : "edit-album__choose-item"
-              }
-            >
-              Edytuj okładkę albumu
-            </div>
-          </div>
-          {editInfoAlbum ? <div>formularzInfo</div> : ""}
-          {editCoverAlbum ? <div>formularzCover</div> : ""}
-        </div>
-      </div>
-    );
-  };
-
   if (isLogged === "error") {
     navigate("/");
   }
@@ -593,7 +790,6 @@ const ManagingMusicAlbums = () => {
           {sectionManage && searchingAlbum()}
           {sectionAdd && addingAlbum()}
           {sectionSongs && managingSongs()}
-          {editAlbumModal && editAlbum()}
 
           {infoAddAlbum ? (
             <div className="modal">

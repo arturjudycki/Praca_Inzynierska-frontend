@@ -10,7 +10,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRecordVinyl,
-  faFileAudio,
   faGuitar,
   faPlus,
   faMagnifyingGlass,
@@ -32,24 +31,17 @@ const LoginSchemat = Yup.object().shape({
   ),
 });
 
-const ManagingArtists = () => {
+const EditArtist = ({ artistInfo }) => {
   const navigate = useNavigate();
-  const [sectionAdd, setSectionAdd] = useState(true);
-  const [sectionSearch, setSectionSearch] = useState(false);
-  const [infoAddArtist, setInfoAddArtist] = useState(false);
-  const [artistsSearch, setArtistsSearch] = useState([]);
+  const queryClient = useQueryClient();
+
+  const artist = artistInfo.artist;
 
   const [editArtistModal, setEditArtistModal] = useState(false);
 
   const [infoEdit, setInfoEdit] = useState(false);
 
   let info;
-
-  const queryClient = useQueryClient();
-
-  const toggleInfoAddArtist = () => {
-    setInfoAddArtist(!infoAddArtist);
-  };
 
   const toggleEditArtistModal = () => {
     setEditArtistModal(!editArtistModal);
@@ -63,6 +55,136 @@ const ManagingArtists = () => {
     setEditArtistModal(!editArtistModal);
     navigate("/managing-music-artists");
     navigate(0);
+  };
+
+  const {
+    isError: errorEdit,
+    isSuccess: successEdit,
+    mutate: edit_artist,
+  } = useMutation(editArtist, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["artists"]);
+      setTimeout(toggleEditArtistModalNavigate, 1500);
+    },
+  });
+
+  if (successEdit) {
+    info = (
+      <p className="edit-artist-info edit-artist-info--success">
+        Wykonawca został pomyślnie edytowany
+      </p>
+    );
+  }
+
+  if (errorEdit) {
+    info = (
+      <p className="edit-artist-info edit-artist-info--error">
+        Wystąpił nieoczekiwanie błąd
+      </p>
+    );
+  }
+
+  return (
+    <>
+      <div className="searched-artist__edit" onClick={toggleEditArtistModal}>
+        <p className="searched-artist__edit-text">Edytuj</p>
+        <FontAwesomeIcon icon={faPen} />
+      </div>
+
+      {editArtistModal ? (
+        <div className="modal">
+          <div
+            onClick={() => {
+              toggleInfoEdit();
+              toggleEditArtistModal();
+            }}
+            className="overlay"
+          ></div>
+          <div className="modal-content modal-content--editArtist">
+            <Formik
+              initialValues={{
+                id_artist: artist.id_artist,
+                name: artist.name,
+                description: artist.description,
+                members: artist.members,
+              }}
+              validationSchema={LoginSchemat}
+              onSubmit={(values) => {
+                toggleInfoEdit();
+                edit_artist(values);
+              }}
+            >
+              {({ handleSubmit }) => (
+                <section className="adding-music adding-music-artist">
+                  {infoEdit ? info : ""}
+                  <Form
+                    onSubmit={handleSubmit}
+                    className="adding-music__form adding-music__form--editArtist"
+                  >
+                    <label>
+                      Nazwa wykonawcy
+                      <Field
+                        id="name"
+                        name="name"
+                        placeholder="Nazwa wykonawcy"
+                        type="text"
+                        className="adding-music__form-input adding-music__form-input--editArtist"
+                      />
+                    </label>
+                    <div className="errors">
+                      <ErrorMessage name="name" />
+                    </div>
+                    <label>
+                      Notka biograficzna
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        placeholder="Notka biograficzna"
+                        className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
+                      />
+                    </label>
+                    <div className="errors">
+                      <ErrorMessage name="description" />
+                    </div>
+                    <label>
+                      Skład/członkowie
+                      <Field
+                        as="textarea"
+                        id="members"
+                        name="members"
+                        placeholder="Skład/członkowie"
+                        className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
+                      />
+                    </label>
+                    <div className="errors">
+                      <ErrorMessage name="members" />
+                    </div>
+                    <button type="submit" className="add-button">
+                      Edytuj wykonawcę
+                    </button>
+                  </Form>
+                </section>
+              )}
+            </Formik>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
+
+const ManagingArtists = () => {
+  const navigate = useNavigate();
+  const [sectionAdd, setSectionAdd] = useState(true);
+  const [sectionSearch, setSectionSearch] = useState(false);
+  const [infoAddArtist, setInfoAddArtist] = useState(false);
+  const [artistsSearch, setArtistsSearch] = useState([]);
+
+  const toggleInfoAddArtist = () => {
+    setInfoAddArtist(!infoAddArtist);
   };
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -79,17 +201,6 @@ const ManagingArtists = () => {
     isSuccess: successAddArtist,
     mutate: add_artist,
   } = useMutation(addArtist, {});
-
-  const {
-    isError: errorEdit,
-    isSuccess: successEdit,
-    mutate: edit_artist,
-  } = useMutation(editArtist, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["artists"]);
-      setTimeout(toggleEditArtistModalNavigate, 1500);
-    },
-  });
 
   const infoSuccessAddArtist = () => {
     return (
@@ -124,22 +235,6 @@ const ManagingArtists = () => {
       </div>
     );
   };
-
-  if (successEdit) {
-    info = (
-      <p className="edit-artist-info edit-artist-info--success">
-        Wykonawca został pomyślnie edytowany
-      </p>
-    );
-  }
-
-  if (errorEdit) {
-    info = (
-      <p className="edit-artist-info edit-artist-info--error">
-        Wystąpił nieoczekiwanie błąd
-      </p>
-    );
-  }
 
   const handleSubmitSearch = (e) => e.preventDefault();
 
@@ -184,96 +279,7 @@ const ManagingArtists = () => {
               >
                 <div className="searched-artist__name">{artist.name}</div>
               </NavLink>
-              <div
-                className="searched-artist__edit"
-                onClick={toggleEditArtistModal}
-              >
-                <p className="searched-artist__edit-text">Edytuj</p>
-                <FontAwesomeIcon icon={faPen} />
-              </div>
-              {editArtistModal ? (
-                <div className="modal">
-                  <div
-                    onClick={() => {
-                      toggleInfoEdit();
-                      toggleEditArtistModal();
-                    }}
-                    className="overlay"
-                  ></div>
-                  <div className="modal-content modal-content--editArtist">
-                    <Formik
-                      initialValues={{
-                        id_artist: artist.id_artist,
-                        name: artist.name,
-                        description: artist.description,
-                        members: artist.members,
-                      }}
-                      validationSchema={LoginSchemat}
-                      onSubmit={(values) => {
-                        edit_artist(values);
-                        toggleInfoEdit();
-                      }}
-                    >
-                      {({ handleSubmit }) => (
-                        <section className="adding-music adding-music-artist">
-                          {infoEdit ? info : ""}
-                          <Form
-                            onSubmit={handleSubmit}
-                            className="adding-music__form adding-music__form--editArtist"
-                          >
-                            <label>
-                              Nazwa wykonawcy
-                              <Field
-                                id="name"
-                                name="name"
-                                placeholder="Nazwa wykonawcy"
-                                type="text"
-                                className="adding-music__form-input adding-music__form-input--editArtist"
-                              />
-                            </label>
-                            <div className="errors">
-                              <ErrorMessage name="name" />
-                            </div>
-
-                            <label>
-                              Notka biograficzna
-                              <Field
-                                as="textarea"
-                                id="description"
-                                name="description"
-                                placeholder="Notka biograficzna"
-                                className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
-                              />
-                            </label>
-                            <div className="errors">
-                              <ErrorMessage name="description" />
-                            </div>
-
-                            <label>
-                              Skład/członkowie
-                              <Field
-                                as="textarea"
-                                id="members"
-                                name="members"
-                                placeholder="Skład/członkowie"
-                                className="adding-music__form-input adding-music__form-input-textarea adding-music__form-input--editArtist"
-                              />
-                            </label>
-                            <div className="errors">
-                              <ErrorMessage name="members" />
-                            </div>
-                            <button type="submit" className="add-button">
-                              Edytuj wykonawcę
-                            </button>
-                          </Form>
-                        </section>
-                      )}
-                    </Formik>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
+              <EditArtist artistInfo={{ artist }} />
             </div>
           ))}
         </section>
