@@ -32,7 +32,7 @@ const MusicAlbumPage = () => {
     if (typeOfAlbum === "studio_album") return "album studyjny";
     else if (typeOfAlbum === "live_album") return "album koncertowy";
     else if (typeOfAlbum === "compilation_album") return "album kompilacyjny";
-    else return "EP";
+    else if (typeOfAlbum === "EP") return "EP";
   };
 
   const { status: isMusicAlbum, data: music_album } = useQuery(

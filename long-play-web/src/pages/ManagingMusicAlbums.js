@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import {
   editInfoAlbum,
+  editCoverOfAlbum,
   addAlbum,
   getAllAlbums,
 } from "../API-utils/endpointsManageMusic";
@@ -73,23 +74,98 @@ const LoginSchematEditInfo = Yup.object().shape({
   record_label: Yup.string().required("Wytwórnia muzyczna jest wymagana!"),
 });
 
+const LoginSchematCoverAlbum = Yup.object().shape({
+  cover: Yup.mixed()
+    .required("Dodanie zdjęcia albumu jest wymagane!")
+    .test(
+      "FILE_TYPE",
+      "Nieodpowiedni typ pliku - tylko .png, .jpeg., .jpg",
+      (value) =>
+        value && ["image/png", "image/jpeg", "image/jpg"].includes(value.type)
+    )
+    .test(
+      "FILE_SIZE",
+      "Rozmiar zdjęcia za duży - max 50kB",
+      (value) => value && value.size < 51200
+    ),
+});
+
 const EditAlbum = ({ albumInfo }) => {
   const album = albumInfo.album;
+  const navigate = useNavigate();
+
+  let img_path = "http://localhost:8000/images/";
 
   const [editAlbumModal, setEditAlbumModal] = useState(false);
   const [editAlbumInfo, setEditAlbumInfo] = useState(true);
   const [editCoverAlbum, setEditCoverAlbum] = useState(false);
+  const [infoEdit, setInfoEdit] = useState(false);
+  const [coverEdit, setCoverEdit] = useState(false);
+
+  let infoEditAlbum;
+  let coverEditAlbum;
 
   const toggleEditAlbumModal = () => {
     setEditAlbumModal(!editAlbumModal);
   };
 
+  const toggleEditArtistModalNavigate = () => {
+    setEditAlbumModal(!editAlbumModal);
+    navigate("/managing-music-albums");
+    navigate(0);
+  };
+
   const {
-    data: editAlbum,
     isError: errorEditInfoAlbum,
     isSuccess: successErrorInfoAlbum,
     mutate: edit_info_album,
-  } = useMutation(editInfoAlbum, {});
+  } = useMutation(editInfoAlbum, {
+    onSuccess: () => {
+      setTimeout(toggleEditArtistModalNavigate, 1500);
+    },
+  });
+
+  if (successErrorInfoAlbum) {
+    infoEditAlbum = (
+      <p className="edit-artist-info edit-artist-info--success">
+        Album został pomyślnie edytowany
+      </p>
+    );
+  }
+
+  if (errorEditInfoAlbum) {
+    infoEditAlbum = (
+      <p className="edit-artist-info edit-artist-info--error">
+        Wystąpił nieoczekiwanie błąd
+      </p>
+    );
+  }
+
+  const {
+    isError: errorEditCoverAlbum,
+    isSuccess: successErrorCoverAlbum,
+    mutate: edit_cover_album,
+  } = useMutation(editCoverOfAlbum, {
+    onSuccess: () => {
+      setTimeout(toggleEditArtistModalNavigate, 1500);
+    },
+  });
+
+  if (successErrorCoverAlbum) {
+    coverEditAlbum = (
+      <p className="edit-artist-info edit-artist-info--success">
+        Okładka została pomyślnie edytowana
+      </p>
+    );
+  }
+
+  if (errorEditCoverAlbum) {
+    coverEditAlbum = (
+      <p className="edit-artist-info edit-artist-info--error">
+        Wystąpił nieoczekiwanie błąd
+      </p>
+    );
+  }
 
   const displayPublicationDate = (publicationDate) => {
     let time = new Date(publicationDate);
@@ -122,16 +198,16 @@ const EditAlbum = ({ albumInfo }) => {
         <FontAwesomeIcon icon={faPen} />
       </div>
       {editAlbumModal ? (
-        <div className="modal">
+        <div className="modal modal--zIndex">
           <div
             onClick={() => {
-              // navigate("/managing-music-albums");
-              // navigate(0);
+              setInfoEdit(!infoEdit);
+              setCoverEdit(!coverEdit);
               toggleEditAlbumModal();
             }}
             className="overlay"
           ></div>
-          <div className="modal-content">
+          <div className="modal-content modal-content--editAlbum">
             <div className="edit-album__choose-box">
               <div
                 onClick={() => {
@@ -180,14 +256,13 @@ const EditAlbum = ({ albumInfo }) => {
                   }}
                   validationSchema={LoginSchematEditInfo}
                   onSubmit={(values) => {
-                    toggleEditAlbumModal();
+                    setInfoEdit(!infoEdit);
                     edit_info_album(values);
-                    // toggleInfoAddAlbum();
-                    // onSubmitProps.resetForm();
                   }}
                 >
                   {({ handleSubmit }) => (
                     <section className="adding-music adding-music--marginTop">
+                      {infoEdit ? infoEditAlbum : ""}
                       <Form
                         onSubmit={handleSubmit}
                         className="adding-music__form"
@@ -203,7 +278,7 @@ const EditAlbum = ({ albumInfo }) => {
                           <ErrorMessage name="title" />
                         </div>
 
-                        <label className="add-date">
+                        <label className="add-date add-date--flexBetween">
                           Data wydania albumu{" "}
                           <span>
                             {displayPublicationDate(album.release_date)}
@@ -291,13 +366,7 @@ const EditAlbum = ({ albumInfo }) => {
                         <div className="errors">
                           <ErrorMessage name="record_label" />
                         </div>
-                        <button
-                          type="submit"
-                          className="add-button"
-                          // onClick={() => {
-                          //   console.log("lala");
-                          // }}
-                        >
+                        <button type="submit" className="add-button">
                           Edytuj album
                         </button>
                       </Form>
@@ -308,7 +377,75 @@ const EditAlbum = ({ albumInfo }) => {
             ) : (
               ""
             )}
-            {editCoverAlbum ? <div>formularzCover</div> : ""}
+            {editCoverAlbum ? (
+              <div>
+                <Formik
+                  initialValues={{
+                    id_music_album: album.id_music_album,
+                    cover: "",
+                  }}
+                  validationSchema={LoginSchematCoverAlbum}
+                  onSubmit={(values) => {
+                    setCoverEdit(!coverEdit);
+                    edit_cover_album(values);
+                  }}
+                >
+                  {({ handleSubmit, values, setFieldValue }) => (
+                    <section className="adding-music adding-music--marginTop">
+                      {coverEdit ? coverEditAlbum : ""}
+                      <Form
+                        onSubmit={handleSubmit}
+                        className="adding-music__form"
+                      >
+                        <div className="edit-cover">
+                          <div>
+                            <p className="edit-cover__current">
+                              Obecna okładka
+                            </p>
+                            <img src={img_path + album.cover} alt="cover" />
+                          </div>
+
+                          <div className="add-cover">
+                            <p>Dodaj nową okładkę albumu</p>
+
+                            <div className="preview-image__box">
+                              {values.cover && (
+                                <PreviewImage file={values.cover} />
+                              )}
+                            </div>
+
+                            <input
+                              type="file"
+                              id="cover"
+                              name="cover"
+                              className="file-cover"
+                              onChange={(event) => {
+                                setFieldValue(
+                                  "cover",
+                                  event.currentTarget.files[0]
+                                );
+                              }}
+                            />
+                            <div className="errors">
+                              <ErrorMessage name="cover" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="add-button add-button--end"
+                        >
+                          Edytuj okładkę
+                        </button>
+                      </Form>
+                    </section>
+                  )}
+                </Formik>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ) : (
@@ -451,7 +588,7 @@ const ManagingMusicAlbums = () => {
               >
                 <img
                   src={img_path + album.cover}
-                  alt="cover-of-album"
+                  alt="cover"
                   className="album-page__cover album-page__cover--smaller"
                 />
                 <div className="searched-artist__name">{album.title}</div>
@@ -499,7 +636,7 @@ const ManagingMusicAlbums = () => {
               >
                 <img
                   src={img_path + album.cover}
-                  alt="cover-of-album"
+                  alt="cover"
                   className="album-page__cover album-page__cover--smaller"
                 />
                 <div className="searched-artist__name">{album.title}</div>

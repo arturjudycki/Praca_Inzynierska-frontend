@@ -57,7 +57,7 @@ export const editInfoAlbum = async (values) => {
   }
 };
 
-export const editCoverAlbum = async (values) => {
+export const editCoverOfAlbum = async (values) => {
   const { id_music_album, cover } = values;
   const formData = new FormData();
   formData.append("id_music_album", id_music_album);
@@ -66,7 +66,7 @@ export const editCoverAlbum = async (values) => {
   const response = await fetch(
     "".concat(`${base_url}`, "/album/editCoverAlbum"),
     {
-      method: "PUT",
+      method: "PATCH",
       headers: {},
       credentials: "include",
       body: formData,
