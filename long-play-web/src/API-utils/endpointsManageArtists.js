@@ -81,3 +81,27 @@ export const editArtist = async (values) => {
     });
   }
 };
+
+export const getAlbumsByArtistId = async (id_artist) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/artist/".concat(`${id_artist}`, "/getAlbumsByArtistId")
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
