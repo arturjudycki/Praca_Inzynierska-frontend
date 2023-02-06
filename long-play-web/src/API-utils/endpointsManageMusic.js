@@ -150,6 +150,7 @@ export const deleteAssignArtist = async (values) => {
   const response = await fetch(
     "".concat(`${base_url}`, "/album/deleteAssignArtist"),
     {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },

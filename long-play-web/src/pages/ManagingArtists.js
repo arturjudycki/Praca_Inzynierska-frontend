@@ -240,11 +240,13 @@ const ManagingArtists = () => {
 
   const handleSearchChange = (e) => {
     if (isAllArtists === "success") {
-      const resultsArray = AllArtists.filter((artist) =>
-        artist.name
-          .toLowerCase()
-          .trim()
-          .includes(e.target.value.toLowerCase().trim())
+      const resultsArray = AllArtists.filter(
+        (artist) =>
+          e.target.value !== "" &&
+          artist.name
+            .toLowerCase()
+            .trim()
+            .includes(e.target.value.toLowerCase().trim())
       );
       setArtistsSearch(resultsArray);
     }

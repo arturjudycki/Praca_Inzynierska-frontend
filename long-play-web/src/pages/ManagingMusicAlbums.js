@@ -17,7 +17,6 @@ import {
   faPlus,
   faMagnifyingGlass,
   faPen,
-  faUserPlus,
   faGears,
 } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -65,7 +64,7 @@ const LoginSchemat = Yup.object().shape({
 const LoginSchematEditInfo = Yup.object().shape({
   title: Yup.string().required("Tytuł jest wymagany!"),
 
-  // release_date: Yup.date().required("Data wydania albumu jest wymagana!"),
+  release_date: Yup.date().required("Data wydania albumu jest wymagana!"),
 
   duration: Yup.string().required("Czas trwania płyty jest wymagany!"),
 
@@ -465,13 +464,7 @@ const ManagingMusicAlbums = () => {
   const [albumsSearch2, setAlbumsSearch2] = useState([]);
   const [infoAddAlbum, setInfoAddAlbum] = useState(false);
 
-  const [assignModal, setAssignModal] = useState(false);
-
   let img_path = "http://localhost:8000/images/";
-
-  const toggleAssignModal = () => {
-    setAssignModal(!assignModal);
-  };
 
   const toggleInfoAddAlbum = () => {
     setInfoAddAlbum(!infoAddAlbum);
@@ -643,26 +636,7 @@ const ManagingMusicAlbums = () => {
               </NavLink>
 
               <EditAlbum albumInfo={{ album }} />
-              {/* {assignModal ? (
-                <AssignArtist
-                  toggleAssignModal={toggleAssignModal}
-                  props={{ album }}
-                />
-              ) : (
-                ""
-              )} */}
-              <div className="assign-link" onClick={toggleAssignModal}>
-                <p className="assign-link__text">Przypisz wykonawcę</p>
-                <FontAwesomeIcon icon={faUserPlus} />
-              </div>
-              {assignModal ? (
-                <AssignArtist
-                  toggleAssignModal={toggleAssignModal}
-                  props={{ album }}
-                />
-              ) : (
-                ""
-              )}
+              <AssignArtist props={{ album }} />
             </div>
           ))}
         </section>
