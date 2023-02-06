@@ -10,6 +10,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserPlus,
+  faCirclePlus,
   faTrash,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
@@ -37,7 +38,7 @@ const DeleteAssign = ({ artistInfo, id_album }) => {
         }}
       >
         <p className="">Usuń</p>
-        <FontAwesomeIcon icon={faTrash} />
+        <FontAwesomeIcon icon={faTrash} className="delAssignIcon" />
       </div>
     </>
   );
@@ -58,7 +59,7 @@ const AddAssign = ({ artistInfo, id_album }) => {
   return (
     <>
       <div
-        className="searched-artist__edit searched-artist__edit--top"
+        className="searched-artist__edit searched-artist__edit--top searched-artist__edit--alignCenter"
         onClick={() => {
           console.log(id_music_album);
           console.log(id_artist);
@@ -66,7 +67,7 @@ const AddAssign = ({ artistInfo, id_album }) => {
         }}
       >
         <p className="">Przypisz wykonawcę</p>
-        <FontAwesomeIcon icon={faTrash} />
+        <FontAwesomeIcon icon={faCirclePlus} />
       </div>
     </>
   );
@@ -152,8 +153,8 @@ const AssignArtist = ({ props }) => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj wykonawcę, aby go zedytować"
-              className="search-artist__input"
+              placeholder="Wyszukaj wykonawcę, aby go przypisać"
+              className="search-artist__input search-artist__input--width"
               onChange={handleSearchChange}
             />
             <FontAwesomeIcon
@@ -165,7 +166,10 @@ const AssignArtist = ({ props }) => {
 
         <section className="searched-artist">
           {artistsSearch.map((artist) => (
-            <div className="searched-artist__box" key={artist.id_artist}>
+            <div
+              className="searched-artist__box searched-artist__box--width"
+              key={artist.id_artist}
+            >
               <NavLink
                 to={{
                   pathname: "/artist/".concat(`${artist.id_artist}`),
