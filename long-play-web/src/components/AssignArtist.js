@@ -74,7 +74,6 @@ const AddAssign = ({ artistInfo, id_album }) => {
 };
 
 const AssignArtist = ({ props }) => {
-  const navigate = useNavigate();
   const id_music_album = props.album.id_music_album;
 
   const [assignModal, setAssignModal] = useState(false);

@@ -7,13 +7,13 @@ import {
   getAllAlbums,
 } from "../API-utils/endpointsManageMusic";
 import AssignArtist from "../components/AssignArtist";
+import ManagingSong from "../components/ManagingSong";
 import { useQuery, useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRecordVinyl,
   faGuitar,
-  faFileAudio,
   faPlus,
   faMagnifyingGlass,
   faPen,
@@ -586,10 +586,7 @@ const ManagingMusicAlbums = () => {
                 />
                 <div className="searched-artist__name">{album.title}</div>
               </NavLink>
-              <div className="assign-link" onClick={() => {}}>
-                <p className="assign-link__text">Zarządzaj utworami</p>
-                <FontAwesomeIcon icon={faFileAudio} className="faFileAudio" />
-              </div>
+              <ManagingSong props={{ album }} />
             </div>
           ))}
         </section>
