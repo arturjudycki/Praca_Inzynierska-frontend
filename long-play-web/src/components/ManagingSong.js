@@ -8,7 +8,12 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { getAllArtists } from "../API-utils/endpointsManageArtists";
-import { addSong, getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
+import {
+  addSong,
+  getSongsOfAlbum,
+  editSong,
+  deleteSong,
+} from "../API-utils/endpointsManageSongs";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -24,6 +29,38 @@ const LoginSchemat = Yup.object().shape({
   id_artist: Yup.number().required("Wykonawca jest wymagany!"),
 });
 
+const EditSong = ({ props }) => {
+  const song = props.song;
+  const [editSong, setEditSong] = useState(false);
+
+  return (
+    <>
+      <div
+        className="searched-artist__edit searched-artist__edit--top"
+        onClick={() => {
+          setEditSong(!editSong);
+        }}
+      >
+        <p className="searched-artist__edit-text">Edytuj</p>
+        <FontAwesomeIcon icon={faPen} />
+      </div>
+      {editSong ? (
+        <div className="modal modal--zIndex6">
+          <div
+            onClick={() => {
+              setEditSong(!editSong);
+            }}
+            className="overlay"
+          ></div>
+          <div className="modal-content modal-content--editAlbum"></div>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
+
 const ManagingSong = ({ props }) => {
   const id_music_album = props.album.id_music_album;
   const [songModal, setSongModal] = useState(false);
@@ -34,6 +71,18 @@ const ManagingSong = ({ props }) => {
   const queryClient = useQueryClient();
 
   const { mutate: add_song } = useMutation(addSong, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["songs-data"]);
+    },
+  });
+
+  const { mutate: edit_song } = useMutation(editSong, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["songs-data"]);
+    },
+  });
+
+  const { mutate: delete_song } = useMutation(deleteSong, {
     onSuccess: () => {
       queryClient.invalidateQueries(["songs-data"]);
     },
@@ -70,11 +119,16 @@ const ManagingSong = ({ props }) => {
               {song.duration}
             </p>
             <p className="song__item-c">{song.name}</p>
-            <p className="song__item-c">
-              Edytuj
-              <FontAwesomeIcon icon={faPen} className="" />
-            </p>
-            <p className="song__item-c">
+            <div className="song__item-c">
+              <EditSong props={{ song }} />
+            </div>
+            <p
+              className="song__item-c"
+              onClick={() => {
+                let values = { id_song: song.id_song };
+                delete_song(values);
+              }}
+            >
               Usuń <FontAwesomeIcon icon={faTrash} className="" />
             </p>
           </div>

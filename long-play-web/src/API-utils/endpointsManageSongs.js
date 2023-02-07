@@ -42,3 +42,38 @@ export const getSongsOfAlbum = async (id_music_album) => {
   }
 };
 
+export const editSong = async (values) => {
+  const response = await fetch("".concat(`${base_url}`, "/song/editSong"), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(values, null, 2),
+  });
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
+
+export const deleteSong = async (values) => {
+  const response = await fetch("".concat(`${base_url}`, "/song/deleteSong"), {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(values, null, 2),
+  });
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  }
+};
