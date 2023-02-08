@@ -4,6 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import img from "../images/lpw-logo.png";
 import Logged from "../components/Logged";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getAllArtists } from "../API-utils/endpointsManageArtists";
+import { getAllAlbums } from "../API-utils/endpointsManageMusic";
+import { getAllSongs } from "../API-utils/endpointsManageSongs";
+
 
 const Navigation = () => {
 
