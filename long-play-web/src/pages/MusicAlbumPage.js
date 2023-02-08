@@ -5,7 +5,10 @@ import {
   getAlbumById,
   getArtistsByAlbumId,
 } from "../API-utils/endpointsManageMusic";
+import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
 import { useQuery } from "react-query";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MusicAlbumPage = () => {
   const { id_music_album } = useParams();
@@ -16,6 +19,43 @@ const MusicAlbumPage = () => {
   let content;
 
   let contentArtist;
+
+  let contentSongs;
+
+  const { status: isSongs, data: songs } = useQuery(
+    ["songs-data", id_music_album],
+    () => getSongsOfAlbum(id_music_album),
+    { retry: 0 }
+  );
+
+  if (isSongs === "success") {
+    contentSongs = songs
+      .sort((a, b) => a.track_number - b.track_number)
+      .map((song) => (
+        <div className="tracklist__song-box" key={song.id_song}>
+          <p className="tracklist__song-item tracklist__song-item--track-number">
+            {song.track_number}
+          </p>
+          <p className="tracklist__song-item tracklist__song-item--title">
+            <NavLink
+              to={{
+                pathname: "/song/".concat(`${song.id_song}`),
+              }}
+              className="tracklist__link"
+            >
+              {song.title}
+            </NavLink>
+          </p>
+
+          <p className="tracklist__song-item tracklist__song-item--duration">
+            {song.duration}
+          </p>
+          <p className="rate-song">
+            <FontAwesomeIcon icon={faStar} className="star" /> oceń
+          </p>
+        </div>
+      ));
+  }
 
   const displayPublicationDate = (publicationDate) => {
     let time = new Date(publicationDate);
@@ -131,7 +171,10 @@ const MusicAlbumPage = () => {
                 <p>{music_album.record_label}</p>
               </div>
             </div>
-            <div className="pioseneczki">piosenki</div>
+            <div className="tracklist">
+              <h2 className="tracklist__title">Lista utworów</h2>
+              <div className="tracklist__container">{contentSongs}</div>
+            </div>
           </section>
         </main>
       </>

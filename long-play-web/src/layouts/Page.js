@@ -21,6 +21,7 @@ import ManagingMusicAlbums from "../pages/ManagingMusicAlbums.js";
 import ManagingArtists from "../pages/ManagingArtists.js";
 import ArtistPage from "../pages/ArtistPage.js";
 import MusicAlbumPage from "../pages/MusicAlbumPage.js";
+import SongPage from "../pages/SongPage.js";
 
 const Page = () => {
   return (
@@ -78,6 +79,7 @@ const Page = () => {
         />
         <Route path="/artist/:id_artist" exact element={<ArtistPage />} />
         <Route path="/text/:id_text" exact element={<TextPage />} />
+        <Route path="/song/:id_song" exact element={<SongPage />} />
         <Route path="*" exact element={<ErrorPage />} />
         <Route path="/404" exact element={<ErrorPage />} />
       </Routes>
