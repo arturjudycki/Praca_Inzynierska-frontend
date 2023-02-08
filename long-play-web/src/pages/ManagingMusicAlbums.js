@@ -116,7 +116,7 @@ const EditAlbum = ({ albumInfo }) => {
 
   const {
     isError: errorEditInfoAlbum,
-    isSuccess: successErrorInfoAlbum,
+    isSuccess: successEditInfoAlbum,
     mutate: edit_info_album,
   } = useMutation(editInfoAlbum, {
     onSuccess: () => {
@@ -124,7 +124,7 @@ const EditAlbum = ({ albumInfo }) => {
     },
   });
 
-  if (successErrorInfoAlbum) {
+  if (successEditInfoAlbum) {
     infoEditAlbum = (
       <p className="edit-artist-info edit-artist-info--success">
         Album został pomyślnie edytowany
