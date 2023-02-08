@@ -6,6 +6,7 @@ import {
   addAlbum,
   getAllAlbums,
 } from "../API-utils/endpointsManageMusic";
+import { img_path } from "../API-utils/links";
 import AssignArtist from "../components/AssignArtist";
 import ManagingSong from "../components/ManagingSong";
 import { useQuery, useMutation } from "react-query";
@@ -92,8 +93,6 @@ const LoginSchematCoverAlbum = Yup.object().shape({
 const EditAlbum = ({ albumInfo }) => {
   const album = albumInfo.album;
   const navigate = useNavigate();
-
-  let img_path = "http://localhost:8000/images/";
 
   const [editAlbumModal, setEditAlbumModal] = useState(false);
   const [editAlbumInfo, setEditAlbumInfo] = useState(true);
@@ -463,8 +462,6 @@ const ManagingMusicAlbums = () => {
   const [albumsSearch, setAlbumsSearch] = useState([]);
   const [albumsSearch2, setAlbumsSearch2] = useState([]);
   const [infoAddAlbum, setInfoAddAlbum] = useState(false);
-
-  let img_path = "http://localhost:8000/images/";
 
   const toggleInfoAddAlbum = () => {
     setInfoAddAlbum(!infoAddAlbum);

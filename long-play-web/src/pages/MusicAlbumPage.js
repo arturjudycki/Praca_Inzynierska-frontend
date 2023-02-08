@@ -6,6 +6,7 @@ import {
   getArtistsByAlbumId,
 } from "../API-utils/endpointsManageMusic";
 import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
+import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,8 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const MusicAlbumPage = () => {
   const { id_music_album } = useParams();
   const navigate = useNavigate();
-
-  let img_path = "http://localhost:8000/images/";
 
   let content;
 
