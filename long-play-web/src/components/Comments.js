@@ -297,10 +297,7 @@ const Comments = ({ info }) => {
                   type="submit"
                   onClick={() => {
                     if (isLogged !== "success") {
-                      console.log("lala");
                       toggleModal();
-                      // {modal ?
-                      // : ""}
                     }
                   }}
                   className="button-addComment"

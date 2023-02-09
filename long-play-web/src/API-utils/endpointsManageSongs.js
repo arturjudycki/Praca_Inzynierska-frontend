@@ -64,7 +64,7 @@ export const getSong = async (id_song) => {
 };
 
 export const getAllSongs = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/song/getSongs"), {
+  const response = await fetch("".concat(`${base_url}`, "/song/getAllSongs"), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
