@@ -82,45 +82,82 @@ const Navigation = () => {
       return (
         <section className="navigation-search__results">
           <div className="navigation-search__results-box">
-            {albumsSearch.length !== 0 ? <h2>Albumy</h2> : ""}
+            {albumsSearch.length !== 0 ? (
+              <h2 className="navigation-search__results-box-title">Albumy</h2>
+            ) : (
+              ""
+            )}
             {albumsSearch.map((album) => (
-              <div key={album.id_music_album}>
+              <div
+                key={album.id_music_album}
+                className="navigation-search__results-box-item"
+              >
                 <NavLink
                   to={{
                     pathname: "/music-album/".concat(`${album.id_music_album}`),
                   }}
-                  className=""
+                  className="navigation-search__results-box-link"
                 >
-                  <img src={img_path + album.cover} alt="cover" />
+                  <img
+                    src={img_path + album.cover}
+                    alt="cover"
+                    className="navigation-search__results-box-img"
+                  />
                   <p>{album.title}</p>
                 </NavLink>
               </div>
             ))}
           </div>
           <div className="navigation-search__results-box">
-            {songsSearch.length !== 0 ? <h2>Utwory</h2> : ""}
+            {songsSearch.length !== 0 ? (
+              <h2 className="navigation-search__results-box-title">Utwory</h2>
+            ) : (
+              ""
+            )}
             {songsSearch.map((song) => (
-              <div key={song.id_song}>
+              <div
+                key={song.id_song}
+                className="navigation-search__results-box-item"
+              >
                 <NavLink
                   to={{
                     pathname: "/song/".concat(`${song.id_song}`),
                   }}
-                  className=""
+                  className="navigation-search__results-box-link"
                 >
-                  <p>{song.title}</p>
+                  <img
+                    src={img_path + song.cover}
+                    alt="cover"
+                    className="navigation-search__results-box-img"
+                  />
+                  <div className="navigation-search__results-box-container">
+                    <p>{song.title}</p>
+                    <p className="navigation-search__results-box-artist-of-song">
+                      {song.name}
+                    </p>
+                  </div>
                 </NavLink>
               </div>
             ))}
           </div>
           <div className="navigation-search__results-box">
-            {artistsSearch.length !== 0 ? <h2>Wykonawcy</h2> : ""}
+            {artistsSearch.length !== 0 ? (
+              <h2 className="navigation-search__results-box-title">
+                Wykonawcy
+              </h2>
+            ) : (
+              ""
+            )}
             {artistsSearch.map((artist) => (
-              <div key={artist.id_artist}>
+              <div
+                key={artist.id_artist}
+                className="navigation-search__results-box-item"
+              >
                 <NavLink
                   to={{
                     pathname: "/artist/".concat(`${artist.id_artist}`),
                   }}
-                  className=""
+                  className="navigation-search__results-box-link"
                 >
                   <p>{artist.name}</p>
                 </NavLink>

@@ -115,5 +115,39 @@
     background-color: #181a1c
     overflow-y: scroll
     max-height: 500px
+    border-radius: 8px
     &-box
         padding: 5px 10px
+        &-title
+            font-size: 2.6rem
+            font-weight: 500
+            margin-top: 5px
+            margin-bottom: 10px
+            letter-spacing: 1px
+            color: #ddd
+        &-item
+            padding: 5px
+            font-size: 1.8rem
+            transition: .2s
+            &:hover
+                background-color: #3d3e40
+                border-radius: 5px
+        &-link
+            display: flex
+            align-items: center
+            text-decoration: none
+            color: #fff
+        &-img
+            width: 68px
+            height: 68px
+            border-radius: 5px
+            margin-right: 10px
+            box-shadow: 0 0 3px 0 #000
+        &-container
+            display: flex
+            flex-direction: column
+            justify-content: center
+        &-artist-of-song
+            padding: 5px 0
+            font-size: 1.5rem
+            color: #888
