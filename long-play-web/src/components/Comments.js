@@ -7,6 +7,7 @@ import {
   editComment,
   deleteComment,
 } from "../API-utils/endpointsManageComments";
+import InfoToLog from "./InfoToLog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
@@ -173,6 +174,12 @@ const Comments = ({ info }) => {
   const idText = info.id_text;
   const queryClient = useQueryClient();
 
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
   let displayComments;
 
   const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
@@ -286,7 +293,18 @@ const Comments = ({ info }) => {
                   placeholder="Dodaj komentarz"
                   className="comments__form-input"
                 />
-                <button type="submit" className="button-addComment">
+                <button
+                  type="submit"
+                  onClick={() => {
+                    if (isLogged !== "success") {
+                      console.log("lala");
+                      toggleModal();
+                      // {modal ?
+                      // : ""}
+                    }
+                  }}
+                  className="button-addComment"
+                >
                   skomentuj
                 </button>
               </div>
@@ -297,6 +315,7 @@ const Comments = ({ info }) => {
           )}
         </Formik>
       </section>
+      <InfoToLog toggleModal={toggleModal} props={{ modal }} />
       <section className="display-comments">{displayComments}</section>
     </>
   );
