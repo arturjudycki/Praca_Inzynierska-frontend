@@ -6,6 +6,7 @@ import {
   getArtistsByAlbumId,
 } from "../API-utils/endpointsManageMusic";
 import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
+import RateAlbum from "../components/RateAlbum";
 import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -147,9 +148,7 @@ const MusicAlbumPage = () => {
               <div className="album-page__artist">{contentArtist}</div>
             </div>
 
-            <div className="ocenianko">
-              Komponent - stanowiący sedno aplikacji - opiniowanie albumu
-            </div>
+            <RateAlbum />
           </section>
           <hr className="album-page__line" />
 

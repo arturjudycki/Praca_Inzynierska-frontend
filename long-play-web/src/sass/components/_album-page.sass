@@ -1,3 +1,5 @@
+@use '../variables.sass' as *
+
 .album-page
     margin-top: 20px
     &__box
@@ -14,7 +16,7 @@
             box-shadow: 0 0 1px 0 #000
             margin-right: 10px
     &__box-info
-        margin: 0 100px 0 50px
+        margin: 0 0 0 50px
     &__type-album
         color: #0062af
         text-transform: uppercase
@@ -52,11 +54,6 @@
                 margin-bottom: 4px
     &__line
         margin: 30px 0
-
-.ocenianko
-    border-radius: 5px
-    padding: 50px
-    box-shadow: 0 0 2px 0 #000
 
 .tracklist
     border-radius: 5px
@@ -108,3 +105,67 @@
 
 .star
     color: #fcfc00
+
+.rate
+    // flex-grow: 1
+    border-radius: 5px
+    padding: 50px
+    box-shadow: 1px 1px 6px 0px #000
+    width: 420px
+    min-width: 420px
+    margin-left: auto
+    &__box
+        &-button
+            display: flex
+            font-size: 1.5rem
+            margin-top: 10px
+            margin-left: auto
+            text-align: left
+            background-color: #0062af
+            border: 1px solid #0062af
+            border-radius: 5px
+            color: #fff
+            text-transform: uppercase
+            padding: 6px 20px
+            cursor: pointer
+            transition: .3s
+            &:hover
+                border: 1px solid #004d88
+                background-color: #004d88
+
+    &__container
+        display: flex
+        align-items: center
+        font-size: 1.8rem
+        padding-bottom: 15px
+        &-text
+            text-transform: uppercase
+            letter-spacing: 1px
+            font-weight: 500
+        &-value
+            margin-left: 10px
+
+.star-input
+    display: none
+
+.heart-icon
+    font-size: 32px !important
+    margin-left: auto
+
+.star-icon
+    font-size: 32px !important
+
+.form
+    &__opinion
+        width: 100%
+        margin-top: 20px
+        &-item
+            width: 100%
+            background-color: #f8f8f8
+            border: 1px solid #c0bfbf
+            border-radius: 8px
+            padding: 10px
+            word-break: break-all
+            resize: none
+            font-family: $font
+
