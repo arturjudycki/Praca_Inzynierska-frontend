@@ -50,7 +50,7 @@ const RateAlbum = () => {
             }}
             style={
               isFavorite || hoverFavorite
-                ? { color: "#fcfc00" }
+                ? { color: "#ffc200" }
                 : { color: "#ddd" }
             }
           />
@@ -79,7 +79,7 @@ const RateAlbum = () => {
                   }}
                   style={
                     value_rating <= (rateValueAlbum || hoverValue)
-                      ? { color: "#fcfc00" }
+                      ? { color: "#ffc200" }
                       : { color: "#ddd" }
                   }
                 />
@@ -134,7 +134,7 @@ const RateAlbum = () => {
             }}
             style={
               isFavorite || hoverFavorite
-                ? { color: "#fcfc00" }
+                ? { color: "#ffc200" }
                 : { color: "#ddd" }
             }
           />
@@ -163,7 +163,7 @@ const RateAlbum = () => {
                   }}
                   style={
                     value_rating <= (rateValueAlbum || hoverValue)
-                      ? { color: "#fcfc00" }
+                      ? { color: "#ffc200" }
                       : { color: "#ddd" }
                   }
                 />
