@@ -7,7 +7,10 @@ import {
 } from "../API-utils/endpointsManageRates";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { Star, Favorite } from "@material-ui/icons";
 import InfoToLog from "./InfoToLog";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -20,6 +23,17 @@ const LoginSchemat = Yup.object().shape({
 const RateAlbum = () => {
   const { id_music_album } = useParams();
   const queryClient = useQueryClient();
+
+  const displayPublicationDate = (publicationDate) => {
+    let time = new Date(publicationDate);
+    let day = time.getDate();
+    let month = time.getMonth() + 1;
+    let year = time.getFullYear();
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+
+    return `${day}-${month}-${year}`;
+  };
 
   const { status, data } = useQuery("user", userAuth, { retry: 0 });
   const { status: statusGetRateAlbum, data: rateAlbum } = useQuery(
@@ -38,9 +52,14 @@ const RateAlbum = () => {
   const [hoverFavorite, setHoverFavorite] = useState(false);
 
   const [modal, setModal] = useState(false);
+  const [rateModal, setRateModal] = useState(false);
 
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const toggleRateModal = () => {
+    setRateModal(!rateModal);
   };
 
   const {
@@ -271,150 +290,190 @@ const RateAlbum = () => {
     }
     if (statusGetRateAlbum === "success") {
       contentRate = (
-        <div className="rate__box">
-          <div className="rate__container">
-            <p className="rate__container-text">Twoja ocena </p>
-            <span className="rate__container-value">
-              {rateAlbum.numerical_rating + "/10"}
-            </span>
-            <Favorite
-              className="heart-icon"
-              style={
-                rateAlbum.favourites ? { color: "#ffc200" } : { color: "#ddd" }
-              }
-            />
-          </div>
-          <div>
-            {[...Array(10)].map((star, index) => {
-              const value_rating = index + 1;
+        <>
+          <div className="rate__box">
+            <div className="rate__container">
+              <p className="rate__container-text">Twoja ocena </p>
+              <span className="rate__container-value">
+                {rateAlbum.numerical_rating + "/10"}
+              </span>
+              <Favorite
+                className="heart-icon"
+                style={
+                  rateAlbum.favourites
+                    ? { color: "#ffc200" }
+                    : { color: "#ddd" }
+                }
+              />
+            </div>
+            <div className="rate__change">
+              <p className="rate__change-date">
+                {displayPublicationDate(rateAlbum.rating_date)}
+              </p>
+            </div>
+            <div>
+              {[...Array(10)].map((star, index) => {
+                const value_rating = index + 1;
 
-              return (
-                <label key={index}>
-                  <input
-                    type="radio"
-                    className="star-input"
-                    value={value_rating}
-                  />
-                  <Star
-                    className="star-icon"
-                    style={
-                      value_rating <= rateAlbum.numerical_rating
-                        ? { color: "#ffc200" }
-                        : { color: "#ddd" }
-                    }
-                  />
-                </label>
-              );
-            })}
+                return (
+                  <label key={index}>
+                    <input
+                      type="radio"
+                      className="star-input"
+                      value={value_rating}
+                    />
+                    <Star
+                      className="star-icon"
+                      style={
+                        value_rating <= rateAlbum.numerical_rating
+                          ? { color: "#ffc200" }
+                          : { color: "#ddd" }
+                      }
+                    />
+                  </label>
+                );
+              })}
+            </div>
+            <div className="form__opinion">
+              {rateAlbum.verbal_rating === "" ? (
+                ""
+              ) : (
+                <p className="form__opinion-item">{rateAlbum.verbal_rating}</p>
+              )}
+            </div>
+            <div className="rate__edit-del">
+              <div
+                onClick={() => {
+                  toggleRateModal();
+                }}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} className="" />
+                <FontAwesomeIcon icon={faCircleXmark} className="" />
+              </div>
+            </div>
           </div>
-          <div className="form__opinion">
-            <p className="form__opinion-item">{rateAlbum.verbal_rating}</p>
-          </div>
-        </div>
 
-        // <Formik
-        //   initialValues={{
-        //     favourites: rateAlbum.favourites,
-        //     numerical_rating: rateAlbum.numerical_rating,
-        //     verbal_rating: rateAlbum.verbal_rating,
-        //     music_album: rateAlbum.music_album,
-        //     user: rateAlbum.user,
-        //   }}
-        //   validationSchema={LoginSchemat}
-        //   validateOnChange={false}
-        //   validateOnBlur={false}
-        //   onSubmit={(values) => {
-        //     // add_rate(values);
-        //   }}
-        // >
-        //   {({ handleSubmit, setErrors, values }) => (
-        //     <Form onSubmit={handleSubmit} className="">
-        //       <div className="rate__box">
-        //         <div className="rate__container">
-        //           <p className="rate__container-text"> Twoja ocena </p>
-        //           <span className="rate__container-value">
-        //             {rateValueAlbum === null && hoverValue !== null
-        //               ? hoverValue + "/10"
-        //               : ""}
-        //             {rateValueAlbum !== null ? rateValueAlbum + "/10" : ""}
-        //           </span>
-        //           <Field
-        //             type="radio"
-        //             id="favourites"
-        //             name="favourites"
-        //             value={1}
-        //             className="star-input"
-        //           />
-        //           <Favorite
-        //             className="heart-icon"
-        //             onClick={() => {
-        //               setIsFavorite(!isFavorite);
-        //             }}
-        //             onMouseEnter={() => {
-        //               setHoverFavorite(true);
-        //             }}
-        //             onMouseLeave={() => {
-        //               setHoverFavorite(false);
-        //             }}
-        //             style={
-        //               isFavorite || hoverFavorite
-        //                 ? { color: "#ffc200" }
-        //                 : { color: "#ddd" }
-        //             }
-        //           />
-        //         </div>
-        //         <div>
-        //           {[...Array(10)].map((star, index) => {
-        //             const value_rating = index + 1;
+          {rateModal ? (
+            <div className="modal">
+              <div
+                onClick={() => {
+                  toggleRateModal();
+                }}
+                className="overlay"
+              ></div>
+              <div className="modal-content modal-content--editArtist">
+                <Formik
+                  initialValues={{
+                    favourites: rateAlbum.favourites,
+                    numerical_rating: rateAlbum.numerical_rating,
+                    verbal_rating: rateAlbum.verbal_rating,
+                    music_album: rateAlbum.music_album,
+                    user: rateAlbum.user,
+                  }}
+                  validationSchema={LoginSchemat}
+                  validateOnChange={false}
+                  validateOnBlur={false}
+                  onSubmit={(values) => {
+                    // add_rate(values);
+                  }}
+                >
+                  {({ handleSubmit, setErrors, values }) => (
+                    <Form onSubmit={handleSubmit} className="">
+                      <div className="rate__box">
+                        <div className="rate__container">
+                          <p className="rate__container-text"> Twoja ocena </p>
+                          <span className="rate__container-value">
+                            {rateValueAlbum === null && hoverValue !== null
+                              ? hoverValue + "/10"
+                              : ""}
+                            {rateValueAlbum !== null
+                              ? rateValueAlbum + "/10"
+                              : ""}
+                          </span>
+                          <Field
+                            type="radio"
+                            id="favourites"
+                            name="favourites"
+                            value={1}
+                            className="star-input"
+                          />
+                          <Favorite
+                            className="heart-icon"
+                            onClick={() => {
+                              setIsFavorite(!isFavorite);
+                            }}
+                            onMouseEnter={() => {
+                              setHoverFavorite(true);
+                            }}
+                            onMouseLeave={() => {
+                              setHoverFavorite(false);
+                            }}
+                            style={
+                              isFavorite || hoverFavorite
+                                ? { color: "#ffc200" }
+                                : { color: "#ddd" }
+                            }
+                          />
+                        </div>
+                        <div>
+                          {[...Array(10)].map((star, index) => {
+                            const value_rating = index + 1;
 
-        //             return (
-        //               <label key={index}>
-        //                 <Field
-        //                   type="radio"
-        //                   id="numerical_rating"
-        //                   name="numerical_rating"
-        //                   className="star-input"
-        //                   value={value_rating}
-        //                   onClick={() => {
-        //                     setRateValueAlbum(value_rating);
-        //                     setErrors({});
-        //                   }}
-        //                 />
-        //                 <Star
-        //                   className="star-icon"
-        //                   onMouseEnter={() => {
-        //                     setHoverValue(value_rating);
-        //                   }}
-        //                   onMouseLeave={() => {
-        //                     setHoverValue(null);
-        //                   }}
-        //                   style={
-        //                     value_rating <= (rateValueAlbum || hoverValue)
-        //                       ? { color: "#ffc200" }
-        //                       : { color: "#ddd" }
-        //                   }
-        //                 />
-        //               </label>
-        //             );
-        //           })}
-        //         </div>
-        //         <div className="errors">
-        //           <ErrorMessage name="numerical_rating" />
-        //         </div>
-        //         <div className="form__opinion">
-        //           <Field
-        //             as="textarea"
-        //             id="verbal_rating"
-        //             name="verbal_rating"
-        //             className="form__opinion-item"
-        //             placeholder="Treść tekstu"
-        //             type="textarea"
-        //           />
-        //         </div>
-        //       </div>
-        //     </Form>
-        //   )}
-        // </Formik>
+                            return (
+                              <label key={index}>
+                                <Field
+                                  type="radio"
+                                  id="numerical_rating"
+                                  name="numerical_rating"
+                                  className="star-input"
+                                  value={value_rating}
+                                  onClick={() => {
+                                    setRateValueAlbum(value_rating);
+                                    setErrors({});
+                                  }}
+                                />
+                                <Star
+                                  className="star-icon"
+                                  onMouseEnter={() => {
+                                    setHoverValue(value_rating);
+                                  }}
+                                  onMouseLeave={() => {
+                                    setHoverValue(null);
+                                  }}
+                                  style={
+                                    value_rating <=
+                                    (rateValueAlbum || hoverValue)
+                                      ? { color: "#ffc200" }
+                                      : { color: "#ddd" }
+                                  }
+                                />
+                              </label>
+                            );
+                          })}
+                        </div>
+                        <div className="errors">
+                          <ErrorMessage name="numerical_rating" />
+                        </div>
+                        <div className="form__opinion">
+                          <Field
+                            as="textarea"
+                            id="verbal_rating"
+                            name="verbal_rating"
+                            className="form__opinion-item"
+                            placeholder="Treść tekstu"
+                            type="textarea"
+                          />
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+        </>
       );
     }
   }

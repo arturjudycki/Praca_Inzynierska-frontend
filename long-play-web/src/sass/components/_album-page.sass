@@ -136,7 +136,7 @@
         display: flex
         align-items: center
         font-size: 1.8rem
-        padding-bottom: 15px
+        padding-bottom: 10px
         &-text
             text-transform: uppercase
             letter-spacing: 1px
@@ -173,4 +173,30 @@
             word-break: break-all
             resize: none
             font-family: $font
+
+.rate__change
+    font-size: 1.2rem
+    margin-bottom: 15px
+    color: #666
+
+.rate__edit-del
+    display: flex
+    align-items: flex-end
+    flex-direction: column
+    margin-left: auto
+    color: #aaa
+    font-size: 3rem
+    margin-top: 20px
+    &>div
+        display: flex
+        margin-left: auto
+        padding: 8px
+        border-radius: 10px
+        transition: .3s
+        &:hover
+            background-color: #aaa
+            color: #fff
+            cursor: pointer
+        &>*
+            margin-left: 5px
 
