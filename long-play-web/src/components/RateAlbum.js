@@ -27,6 +27,7 @@ const RateAlbum = () => {
     () => getRateAlbumByUser(id_music_album),
     {
       retry: 0,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -165,7 +166,12 @@ const RateAlbum = () => {
         >
           {({ handleSubmit, setErrors, values }) => (
             <Form onSubmit={handleSubmit} className="">
-              <div className="rate__box">
+              <div
+                className="rate__box"
+                onDoubleClick={() => {
+                  setRateValueAlbum(null);
+                }}
+              >
                 <div className="rate__container">
                   <p className="rate__container-text">Ocena </p>
                   <span className="rate__container-value">
@@ -271,13 +277,10 @@ const RateAlbum = () => {
             <span className="rate__container-value">
               {rateAlbum.numerical_rating + "/10"}
             </span>
-            {rateAlbum.favourite === 1 ? setIsFavorite(!isFavorite) : ""}
             <Favorite
               className="heart-icon"
               style={
-                isFavorite || hoverFavorite
-                  ? { color: "#ffc200" }
-                  : { color: "#ddd" }
+                rateAlbum.favourites ? { color: "#ffc200" } : { color: "#ddd" }
               }
             />
           </div>
@@ -291,20 +294,11 @@ const RateAlbum = () => {
                     type="radio"
                     className="star-input"
                     value={value_rating}
-                    onClick={() => {
-                      toggleModal();
-                    }}
                   />
                   <Star
                     className="star-icon"
-                    onMouseEnter={() => {
-                      setHoverValue(value_rating);
-                    }}
-                    onMouseLeave={() => {
-                      setHoverValue(null);
-                    }}
                     style={
-                      value_rating <= (rateValueAlbum || hoverValue)
+                      value_rating <= rateAlbum.numerical_rating
                         ? { color: "#ffc200" }
                         : { color: "#ddd" }
                     }
