@@ -10,8 +10,7 @@ import RateAlbum from "../components/RateAlbum";
 import StatisticsAlbum from "../components/StatisticsAlbum";
 import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Star } from "@material-ui/icons";
 
 const MusicAlbumPage = () => {
   const { id_music_album } = useParams();
@@ -51,9 +50,9 @@ const MusicAlbumPage = () => {
           <p className="tracklist__song-item tracklist__song-item--duration">
             {song.duration}
           </p>
-          <p className="rate-song">
-            <FontAwesomeIcon icon={faStar} className="star" /> oceń
-          </p>
+          {/* <p className="rate-song">
+            <Star className="star-icon-listing" />
+          </p> */}
         </div>
       ));
   }

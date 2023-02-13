@@ -2,9 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Star, Favorite } from "@material-ui/icons";
+import { Star } from "@material-ui/icons";
 
 const StatisticsAlbum = () => {
   const { id_music_album } = useParams();

@@ -1,5 +1,4 @@
 import React from "react";
-import StatisticsSong from "../components/StatisticsSong";
 import { useParams } from "react-router-dom";
 import { getStatisticsOfSong } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
