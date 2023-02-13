@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import {
   addRateAlbum,
   getRateAlbumByUser,
+  editRate,
+  deleteRate,
 } from "../API-utils/endpointsManageRates";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,11 +20,17 @@ import * as Yup from "yup";
 
 const LoginSchemat = Yup.object().shape({
   numerical_rating: Yup.number().required("Przyznaj albumowi liczbę gwiazdek!"),
+  verbal_rating: Yup.string().max(
+    160,
+    "Opinia za długa, maksymalnie 160 znaków."
+  ),
 });
 
 const RateAlbum = () => {
   const { id_music_album } = useParams();
   const queryClient = useQueryClient();
+
+  const execute = useEffect;
 
   const displayPublicationDate = (publicationDate) => {
     let time = new Date(publicationDate);
@@ -67,6 +75,20 @@ const RateAlbum = () => {
     isSuccess: successAdd,
     mutate: add_rate,
   } = useMutation(addRateAlbum, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["rate-album"]);
+    },
+  });
+
+  const { mutate: delete_rate } = useMutation(deleteRate, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["rate-album"]);
+      setRateValueAlbum(null);
+      setIsFavorite(false);
+    },
+  });
+
+  const { mutate: edit_rate } = useMutation(editRate, {
     onSuccess: () => {
       queryClient.invalidateQueries(["rate-album"]);
     },
@@ -179,8 +201,7 @@ const RateAlbum = () => {
           validateOnChange={false}
           validateOnBlur={false}
           onSubmit={(values) => {
-            // add_rate(values);
-            console.log(values);
+            add_rate(values);
           }}
         >
           {({ handleSubmit, setErrors, values }) => (
@@ -279,6 +300,9 @@ const RateAlbum = () => {
                     placeholder="Napisz swoją opinię"
                   />
                 </div>
+                <div className="errors">
+                  <ErrorMessage name="verbal_rating" />
+                </div>
                 <button className="rate__box-button" type="submit">
                   oceń
                 </button>
@@ -364,6 +388,7 @@ const RateAlbum = () => {
               <div className="modal-content modal-content--editArtist">
                 <Formik
                   initialValues={{
+                    id_rate: rateAlbum.id_rate,
                     favourites: rateAlbum.favourites,
                     numerical_rating: rateAlbum.numerical_rating,
                     verbal_rating: rateAlbum.verbal_rating,
@@ -374,7 +399,8 @@ const RateAlbum = () => {
                   validateOnChange={false}
                   validateOnBlur={false}
                   onSubmit={(values) => {
-                    // add_rate(values);
+                    edit_rate(values);
+                    toggleRateModal();
                   }}
                 >
                   {({ handleSubmit, setErrors, values }) => (
@@ -390,16 +416,26 @@ const RateAlbum = () => {
                               ? rateValueAlbum + "/10"
                               : ""}
                           </span>
-                          <Field
+                          {execute(() => {
+                            if (rateAlbum.favourites === 1) {
+                              setIsFavorite(true);
+                            }
+                            setRateValueAlbum(rateAlbum.numerical_rating);
+                          }, [])}
+                          <input
                             type="radio"
                             id="favourites"
                             name="favourites"
-                            value={1}
                             className="star-input"
                           />
                           <Favorite
                             className="heart-icon"
                             onClick={() => {
+                              if (values.favourites === 0) {
+                                values.favourites = 1;
+                              } else if (values.favourites === 1) {
+                                values.favourites = 0;
+                              }
                               setIsFavorite(!isFavorite);
                             }}
                             onMouseEnter={() => {
@@ -464,10 +500,29 @@ const RateAlbum = () => {
                             type="textarea"
                           />
                         </div>
+                        <div className="errors">
+                          <ErrorMessage name="verbal_rating" />
+                        </div>
                       </div>
+                      <button
+                        className="rate__box-button rate__box-button--edit"
+                        type="submit"
+                      >
+                        edytuj
+                      </button>
                     </Form>
                   )}
                 </Formik>
+                <button
+                  className="rate__box-button rate__box-button--position"
+                  onClick={() => {
+                    const values = { id_rate: rateAlbum.id_rate };
+                    delete_rate(values);
+                    toggleRateModal();
+                  }}
+                >
+                  usuń
+                </button>
               </div>
             </div>
           ) : (

@@ -131,6 +131,19 @@
             &:hover
                 border: 1px solid #004d88
                 background-color: #004d88
+            &--edit
+                margin-right: 50px
+                margin-bottom: 5px
+            &--position
+                background-color: #ff4154
+                border: 1px solid #ff4154
+                position: absolute
+                bottom: 20px
+                left: 80px
+                &:hover
+                    background-color: #fb1128
+                    border: 1px solid #fb1128
+
 
     &__container
         display: flex
@@ -173,6 +186,7 @@
             word-break: break-all
             resize: none
             font-family: $font
+            height: auto
 
 .rate__change
     font-size: 1.2rem
@@ -181,15 +195,15 @@
 
 .rate__edit-del
     display: flex
-    align-items: flex-end
+    align-items: flex-start
     flex-direction: column
-    margin-left: auto
+    // margin-right: auto
     color: #aaa
     font-size: 3rem
-    margin-top: 20px
+    margin-top: 40px
     &>div
         display: flex
-        margin-left: auto
+        margin-right: auto
         padding: 8px
         border-radius: 10px
         transition: .3s
@@ -198,5 +212,4 @@
             color: #fff
             cursor: pointer
         &>*
-            margin-left: 5px
-
+            margin-right: 5px
