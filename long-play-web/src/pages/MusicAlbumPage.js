@@ -7,6 +7,7 @@ import {
 } from "../API-utils/endpointsManageMusic";
 import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
 import RateAlbum from "../components/RateAlbum";
+import StatisticsAlbum from "../components/StatisticsAlbum";
 import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -131,11 +132,17 @@ const MusicAlbumPage = () => {
       <>
         <main className="album-page">
           <section className="album-page__box">
-            <img
-              src={img_path + music_album.cover}
-              alt="cover-of-album"
-              className="album-page__cover"
-            />
+            <div className="album-page__cover-statistics">
+              <img
+                src={img_path + music_album.cover}
+                alt="cover-of-album"
+                className="album-page__cover"
+              />
+
+              <div className="album-page__statistics">
+                <StatisticsAlbum />
+              </div>
+            </div>
 
             <div className="album-page__box-info">
               <p className="album-page__type-album">

@@ -77,12 +77,14 @@ const RateAlbum = () => {
   } = useMutation(addRateAlbum, {
     onSuccess: () => {
       queryClient.invalidateQueries(["rate-album"]);
+      queryClient.invalidateQueries(["statistics-album"]);
     },
   });
 
   const { mutate: delete_rate } = useMutation(deleteRate, {
     onSuccess: () => {
       queryClient.invalidateQueries(["rate-album"]);
+      queryClient.invalidateQueries(["statistics-album"]);
       setRateValueAlbum(null);
       setIsFavorite(false);
     },
@@ -91,6 +93,7 @@ const RateAlbum = () => {
   const { mutate: edit_rate } = useMutation(editRate, {
     onSuccess: () => {
       queryClient.invalidateQueries(["rate-album"]);
+      queryClient.invalidateQueries(["statistics-album"]);
     },
   });
 
@@ -495,7 +498,7 @@ const RateAlbum = () => {
                             as="textarea"
                             id="verbal_rating"
                             name="verbal_rating"
-                            className="form__opinion-item"
+                            className="form__opinion-item form__opinion-item--height"
                             placeholder="Treść tekstu"
                             type="textarea"
                           />
