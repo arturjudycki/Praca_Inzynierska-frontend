@@ -64,19 +64,19 @@ const ErrorPage = () => {
               >
                 <p className="song-page__item-artist">{song.name}</p>
               </NavLink>
-            </div>
-            <div className="song-page__box-info">
-              <div className="song-page__box-info-item">
-                <p className="song-page__box-info-item-title">
-                  Numer utworu na płycie
-                </p>
-                <p>{song.track_number}</p>
-              </div>
-              <div className="song-page__box-info-item">
-                <p className="song-page__box-info-item-title">
-                  Czas trwania utworu
-                </p>
-                <p>{song.duration}</p>
+              <div className="song-page__box-info">
+                <div className="song-page__box-info-item">
+                  <p className="song-page__box-info-item-title">
+                    Numer utworu na płycie
+                  </p>
+                  <p>{song.track_number}</p>
+                </div>
+                <div className="song-page__box-info-item">
+                  <p className="song-page__box-info-item-title">
+                    Czas trwania utworu
+                  </p>
+                  <p>{song.duration}</p>
+                </div>
               </div>
             </div>
           </div>
