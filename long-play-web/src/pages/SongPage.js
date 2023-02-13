@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { img_path } from "../API-utils/links";
+import StatisticsSong from "../components/StatisticsSong";
 import { getSong } from "../API-utils/endpointsManageSongs";
 import { useQuery } from "react-query";
 
@@ -32,11 +33,16 @@ const ErrorPage = () => {
   if (isSong === "success") {
     contentSong = (
       <div className="song-page" key={song.id_song}>
-        <img
-          src={img_path + song.cover}
-          alt="cover"
-          className="song-page__cover"
-        />
+        <div className="album-page__cover-statistics">
+          <img
+            src={img_path + song.cover}
+            alt="cover"
+            className="song-page__cover"
+          />
+          <div className="album-page__statistics">
+            <StatisticsSong />
+          </div>
+        </div>
         <div className="song-page__box">
           <div className="song-page__item-title">{song.title}</div>
           <div className="song-page__container">
