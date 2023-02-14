@@ -11,6 +11,8 @@ import MusicAlbums from "../pages/MusicAlbums";
 import Songs from "../pages/Songs";
 import Artists from "../pages/Artists";
 import UserPage from "../pages/UserPage";
+import UserPageAlbums from "../pages/UserPageAlbums";
+import UserPageSongs from "../pages/UserPageSongs";
 import SettingPage from "../pages/SettingPage";
 import CreateAccountsEditor from "../pages/CreateAccountsEditor";
 import CreateAccountsAdmin from "../pages/CreateAccountsAdmin.js";
@@ -41,6 +43,12 @@ const Page = () => {
           element={<ResetPassword />}
         />
         <Route path="/user/:username" exact element={<UserPage />} />
+        <Route
+          path="/user/:username/albums"
+          exact
+          element={<UserPageAlbums />}
+        />
+        <Route path="/user/:username/songs" exact element={<UserPageSongs />} />
         <Route path="/texts" exact element={<Texts />} />
         <Route path="/music-albums" exact element={<MusicAlbums />} />
         <Route path="/songs" exact element={<Songs />} />

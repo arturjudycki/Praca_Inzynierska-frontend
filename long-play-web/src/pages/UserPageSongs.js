@@ -5,7 +5,7 @@ import InfoAccount from "../components/InfoAccount";
 import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import { useQuery } from "react-query";
 
-const UserPage = () => {
+const UserPageAlbums = () => {
   const { username } = useParams();
   const navigate = useNavigate();
 
@@ -76,4 +76,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default UserPageAlbums;
