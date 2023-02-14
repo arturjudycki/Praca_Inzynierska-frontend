@@ -333,6 +333,7 @@ const EditAlbum = ({ albumInfo }) => {
                             />
                             Album kompilacyjny
                           </label>
+                          <br className="space-beetween-type-of-album"></br>
                           <label>
                             <Field
                               type="radio"
@@ -342,6 +343,16 @@ const EditAlbum = ({ albumInfo }) => {
                               className="radio-box__choose-item"
                             />
                             EP - minialbum
+                          </label>
+                          <label>
+                            <Field
+                              type="radio"
+                              id="type_of_album"
+                              name="type_of_album"
+                              value="OST"
+                              className="radio-box__choose-item"
+                            />
+                            OST - ścieżka dźwiękowa
                           </label>
                         </div>
                         <Field
@@ -746,6 +757,7 @@ const ManagingMusicAlbums = () => {
                   />
                   Album kompilacyjny
                 </label>
+                <br className="space-beetween-type-of-album"></br>
                 <label>
                   <Field
                     type="radio"
@@ -755,6 +767,16 @@ const ManagingMusicAlbums = () => {
                     className="radio-box__choose-item"
                   />
                   EP - minialbum
+                </label>
+                <label>
+                  <Field
+                    type="radio"
+                    id="type_of_album"
+                    name="type_of_album"
+                    value="OST"
+                    className="radio-box__choose-item"
+                  />
+                  OST - ścieżka dźwiękowa
                 </label>
               </div>
               <Field

@@ -14,7 +14,10 @@ import rankingImg from "../images/ranking.jpg";
 import interviewImg from "../images/interview.jpg";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 
 import * as Yup from "yup";
 
@@ -30,6 +33,7 @@ const ManagingTexts = () => {
   let contentUpdateText;
   let contentUserTexts;
   const [idClick, setIdClick] = useState();
+  const [textsSearch, setTextsSearch] = useState([]);
 
   const { status: isLogged, data } = useQuery("user", userAuth, {
     retry: 0,
@@ -100,6 +104,149 @@ const ManagingTexts = () => {
     } else if (type === "interview") {
       return "wywiad";
     } else return type;
+  };
+
+  const handleSubmitSearch = (e) => e.preventDefault();
+
+  const handleSearchChange = (e) => {
+    if (isTexts === "success") {
+      const resultsArray = userTexts.filter(
+        (text) =>
+          e.target.value !== "" &&
+          text.title
+            .toLowerCase()
+            .trim()
+            .includes(e.target.value.toLowerCase().trim())
+      );
+      setTextsSearch(resultsArray);
+    }
+  };
+
+  const searchingText = () => {
+    return (
+      <>
+        <form className="search-artist" onSubmit={handleSubmitSearch}>
+          <div className="search-artist__box">
+            <input
+              type="text"
+              placeholder="Wyszukaj tekst po tytule, aby go zedytować"
+              className="search-artist__input"
+              onChange={handleSearchChange}
+            />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="icon-artists"
+            />
+          </div>
+        </form>
+
+        <section className="searched-artist">
+          {textsSearch.map((userText) => (
+            <div key={userText.id_text} className="textBoxEdit">
+              <div className="textBox__edit">
+                <NavLink
+                  to={{
+                    pathname: "/text/".concat(`${userText.id_text}`),
+                  }}
+                  className="link-to-text"
+                >
+                  <div className="textBox__item-imgBox">
+                    <div className="textBox__item-imgContainer">
+                      <img
+                        src={displayCorrectImage(userText.type_of_text)}
+                        alt="text"
+                        className="textBox__item-img"
+                      />
+                    </div>
+                    <p className="textBox__item-type-of-text">
+                      {displayCorrectTypeOfText(userText.type_of_text)}
+                    </p>
+                  </div>
+                  <p className="textBox__item-title textBox__item-title--fsz">
+                    {userText.title}
+                  </p>
+                </NavLink>
+                <p
+                  className="textBox__item-icon textBox__item-icon--fsz"
+                  onClick={() => {
+                    if (idClick === userText.id_text) {
+                      setIdClick(-1);
+                    } else {
+                      setIdClick(userText.id_text);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} className="iconEdit" />
+                  <span>Wprowadź zmiany w tekście</span>
+                </p>
+              </div>
+              {idClick === userText.id_text ? (
+                <section className="editText">
+                  {contentUpdateText}
+                  <Formik
+                    initialValues={{
+                      title: userText.title,
+                      content: userText.content,
+                      id_text: userText.id_text,
+                    }}
+                    validationSchema={LoginSchemat}
+                    onSubmit={(values) => {
+                      update_text(values);
+                    }}
+                  >
+                    {({ handleSubmit }) => (
+                      <Form
+                        onSubmit={handleSubmit}
+                        className="sign-change sign-change__editText"
+                      >
+                        <Field
+                          id="title"
+                          name="title"
+                          type="text"
+                          className="sign-change__input sign-change__input-text"
+                        />
+
+                        <div className="errors">
+                          <ErrorMessage name="title" />
+                        </div>
+
+                        <Field
+                          as="textarea"
+                          id="content"
+                          name="content"
+                          type="textarea"
+                          className="sign-change__input sign-change__input-text-area"
+                        />
+
+                        <div className="errors">
+                          <ErrorMessage name="content" />
+                        </div>
+
+                        <button
+                          className="sign-change__button sign-change__button--cancel"
+                          onClick={() => {
+                            setIdClick(-1);
+                          }}
+                          type="button"
+                        >
+                          Anuluj
+                        </button>
+
+                        <button type="submit" className="sign-change__button">
+                          Edytuj
+                        </button>
+                      </Form>
+                    )}
+                  </Formik>
+                </section>
+              ) : (
+                ""
+              )}
+            </div>
+          ))}
+        </section>
+      </>
+    );
   };
 
   if (isTexts === "success") {
@@ -377,6 +524,7 @@ const ManagingTexts = () => {
             </div>
           </div>
           <div className="line"></div>
+          {searchingText()}
           <div className="managing-text__box">
             <h2 className="managing-text__title">
               Twoje ostatnio opublikowane teksty

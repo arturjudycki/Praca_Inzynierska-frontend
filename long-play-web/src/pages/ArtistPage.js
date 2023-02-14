@@ -69,6 +69,7 @@ const ArtistPage = () => {
     else if (typeOfAlbum === "live_album") return "album koncertowy";
     else if (typeOfAlbum === "compilation_album") return "album kompilacyjny";
     else if (typeOfAlbum === "EP") return "EP";
+    else if (typeOfAlbum === "OST") return "OST";
   };
 
   if (isAlbums === "success") {
