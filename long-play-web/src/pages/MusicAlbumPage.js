@@ -10,7 +10,6 @@ import RateAlbum from "../components/RateAlbum";
 import StatisticsAlbum from "../components/StatisticsAlbum";
 import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
-import { Star } from "@material-ui/icons";
 
 const MusicAlbumPage = () => {
   const { id_music_album } = useParams();

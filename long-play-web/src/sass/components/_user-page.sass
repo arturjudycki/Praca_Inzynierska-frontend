@@ -53,7 +53,7 @@
         font-size: 1.8rem
         text-decoration: none
         margin: 40px 0
-        padding: 0 15px 15px 5px
+        padding: 0 15px 10px 5px
         color: #000
         font-weight: 600
         transition: .1s
@@ -61,4 +61,42 @@
             color: #242527
         &--selected
             color: #242527
-            border-bottom: 3px solid #242527
+            border-bottom: 3px solid #0062af
+
+
+.stats
+    &__box
+        margin: 20px -10px 
+        padding: 15px 0
+        background-color: #f1f7fa
+        width: calc(100% + 20px)
+        display: flex
+        flex-direction: column
+        align-items: center
+        text-transform: uppercase
+        letter-spacing: 2px
+        color: #444
+    &__title
+        font-size: 2.4rem
+        margin-bottom: 10px
+    &__container
+        display: flex
+    &__item
+        display: flex
+        flex-direction: column
+        align-items: center
+        width: 180px
+        padding: 10px
+        margin: 0 30px
+        &-title
+            font-size: 1.8rem
+        &-value
+            display: flex
+            align-items: center
+            font-size: 1.8rem
+            margin-top: 10px
+
+.icon-user-page
+    font-size: 32px !important
+    color: #ffc200
+    margin-right: 5px

@@ -91,7 +91,6 @@ export const getAllRatesAlbumsByUser = async (username) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }
   );
 
@@ -115,7 +114,6 @@ export const getAllRatesSongsByUser = async (username) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }
   );
 
@@ -139,7 +137,6 @@ export const getStatisticsOfAlbum = async (music_album) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }
   );
 
@@ -163,7 +160,6 @@ export const getStatisticsOfSong = async (song) => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }
   );
 
@@ -210,5 +206,51 @@ export const deleteRate = async (values) => {
       msg: response.statusText,
       status: response.status,
     });
+  }
+};
+
+export const getStatisticsOfAllRatesByUser = async (username) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/rate/".concat(`${username}`, "/getStatisticsOfAllRatesByUser")
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
+export const getAllRatesByUser = async (username) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/rate/".concat(`${username}`, "/getAllRatesByUser")
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
   }
 };
