@@ -231,26 +231,3 @@ export const getStatisticsOfAllRatesByUser = async (username) => {
     return response.json();
   }
 };
-
-export const getAllRatesByUser = async (username) => {
-  const response = await fetch(
-    "".concat(
-      `${base_url}`,
-      "/rate/".concat(`${username}`, "/getAllRatesByUser")
-    ),
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  if (!response.ok) {
-    return Promise.reject({
-      msg: response.statusText,
-      status: response.status,
-    });
-  } else {
-    return response.json();
-  }
-};

@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
 import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import {
-  getAllRatesByUser,
+  getAllRatesAlbumsByUser,
+  getAllRatesSongsByUser,
   getStatisticsOfAllRatesByUser,
 } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
 import { Star, Favorite } from "@material-ui/icons";
+import { img_path } from "../API-utils/links";
 
 const UserPage = () => {
   const { username } = useParams();
   const navigate = useNavigate();
+  const [results, setResults] = useState([]);
 
   let userIsLogged = false;
   let user_info;
   let content;
   let contentStats;
   let contentLastRates;
+
+  const displayReleaseYear = (releaseDate) => {
+    let time = new Date(releaseDate);
+    let year = time.getFullYear();
+
+    return year;
+  };
 
   const { status, data } = useQuery("user", userAuth, { retry: 0 });
   const { status: isUser, data: user } = useQuery(
@@ -33,10 +43,16 @@ const UserPage = () => {
     { retry: 0 }
   );
 
-  const { status: isLastRates, data: lastRates } = useQuery(
-    ["last-rates", username],
-    () => getAllRatesByUser(username),
-    { retry: 0 }
+  const { status: isRatesAlbums, data: ratesAlbums } = useQuery(
+    ["rates-albums", username],
+    () => getAllRatesAlbumsByUser(username),
+    { retry: 0, refetchOnWindowFocus: false }
+  );
+
+  const { status: isRatesSongs, data: ratesSongs } = useQuery(
+    ["rates-songs", username],
+    () => getAllRatesSongsByUser(username),
+    { retry: 0, refetchOnWindowFocus: false }
   );
 
   if (status === "success") {
@@ -142,11 +158,45 @@ const UserPage = () => {
     );
   }
 
-  if (isLastRates === "success") {
+  if (isRatesAlbums === "success" && isRatesSongs === "success") {
+    const resultArray = ratesAlbums.concat(ratesSongs);
+
     contentLastRates = (
-      <div>
-        {lastRates.length !== 0 ? (
-          lastRates.map((rate) => <div key={rate.id_rate}></div>)
+      <div className="last-rates">
+        {resultArray.length !== 0 ? (
+          resultArray
+            .sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date))
+            .map((rate) => (
+              <NavLink
+                to={
+                  rate.song === null
+                    ? "/music-album/".concat(`${rate.id}`)
+                    : "/song/".concat(`${rate.id}`)
+                }
+                className="link-to-artist"
+                key={rate.id_rate}
+              >
+                <div className="last-rates__box">
+                  <div className="last-rates__box-img">
+                    <img
+                      src={img_path + rate.cover}
+                      alt="cover"
+                      className="last-rates__img"
+                    />
+                    <p className="last-rates__value">{rate.numerical_rating}</p>
+                  </div>
+                  <p className="last-rates__type">
+                    {rate.song === null ? "ALBUM" : "UTWÓR"}
+                  </p>
+                  <p className="last-rates__name">
+                    {rate.title +
+                      " (" +
+                      displayReleaseYear(rate.release_date) +
+                      ")"}
+                  </p>
+                </div>
+              </NavLink>
+            ))
         ) : (
           <div>Brak jakichkolwiek ocen</div>
         )}

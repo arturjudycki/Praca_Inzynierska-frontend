@@ -100,3 +100,52 @@
     font-size: 32px !important
     color: #ffc200
     margin-right: 5px
+
+.last-rates
+    display: flex
+    flex-wrap: wrap
+    justify-content: flex-start
+    &__box
+        margin: 20px 25px 0 25px 
+        width: 200px
+        padding-bottom: 15px
+        &:hover
+            box-shadow: 0 0 2px 0 #000
+        &-img
+            position: relative
+            width: 200px
+            height: 200px
+            overflow: hidden
+            box-shadow: 0 0 2px 0 #000
+    &__img
+        display: block
+        width: 200px
+        height: 200px
+        box-shadow: 0 0 4px 0 #000
+        transition: .2s
+        &:hover
+            transform: scale(1.025)
+    &__value
+        position: absolute
+        top: 10px
+        right: 10px
+        font-size: 2.1rem
+        font-weight: 600
+        background-color: #000
+        border: 2px solid #ffc200
+        border-radius: 50%
+        color: #ffc200
+        width: 35px
+        height: 35px
+        text-align: center
+        line-height: 32px
+    &__type
+        font-size: 1.4rem
+        font-weight: 600
+        text-align: center
+        color: #0062af
+        margin: 5px 0
+    &__name
+        font-size: 1.8rem
+        text-align: center
+        color: #000
