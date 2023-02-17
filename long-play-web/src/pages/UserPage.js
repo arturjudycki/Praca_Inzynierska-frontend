@@ -198,7 +198,9 @@ const UserPage = () => {
               </NavLink>
             ))
         ) : (
-          <div>Brak jakichkolwiek ocen</div>
+          <div className="last-rates__nope">
+            Nie oceniłeś jeszcze żadnej pozycji
+          </div>
         )}
       </div>
     );
@@ -245,7 +247,7 @@ const UserPage = () => {
 
       {contentStats}
 
-      <h2>Ostatnio ocenione pozycje</h2>
+      <h2 className="last-rates__title">Ostatnio ocenione pozycje</h2>
       {contentLastRates}
     </>
   );

@@ -325,7 +325,7 @@ const RateAlbum = () => {
                 {rateAlbum.numerical_rating + "/10"}
               </span>
               <Favorite
-                className="heart-icon"
+                className="heart-icon heart-icon--noCursor"
                 style={
                   rateAlbum.favourites
                     ? { color: "#ffc200" }
@@ -350,7 +350,7 @@ const RateAlbum = () => {
                       value={value_rating}
                     />
                     <Star
-                      className="star-icon"
+                      className="star-icon star-icon--noCursor"
                       style={
                         value_rating <= rateAlbum.numerical_rating
                           ? { color: "#ffc200" }
