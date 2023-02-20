@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
@@ -135,7 +135,7 @@ const UserPageAlbums = () => {
       <section className="user-page__options">
         <div className="user-page__sorters">
           <div className="user-page__sortBy">
-            <div className="user-page__sortBy-title">daty ocen</div>
+            <div className="user-page__sortBy-title">daty ocen:</div>
             <div>
               <div
                 className="user-page__sortBy-item"
@@ -143,6 +143,11 @@ const UserPageAlbums = () => {
                   option = "rating-date_DESC";
                   handleSearchParams(option);
                 }}
+                style={
+                  !searchParams.has("sortBy")
+                    ? { fontWeight: 700 }
+                    : { fontWeight: 400 }
+                }
               >
                 najnowsze
               </div>
@@ -152,13 +157,18 @@ const UserPageAlbums = () => {
                   option = "rating-date_ASC";
                   handleSearchParams(option);
                 }}
+                style={
+                  searchParams.get("sortBy") === "rating-date_ASC"
+                    ? { fontWeight: 700 }
+                    : { fontWeight: 400 }
+                }
               >
                 najstarsze
               </div>
             </div>
           </div>
           <div className="user-page__sortBy">
-            <div className="user-page__sortBy-title">oceny</div>
+            <div className="user-page__sortBy-title">oceny:</div>
             <div>
               <div
                 className="user-page__sortBy-item"
@@ -166,6 +176,11 @@ const UserPageAlbums = () => {
                   option = "numerical-rating_DESC";
                   handleSearchParams(option);
                 }}
+                style={
+                  searchParams.get("sortBy") === "numerical-rating_DESC"
+                    ? { fontWeight: 700 }
+                    : { fontWeight: 400 }
+                }
               >
                 najwyższe
               </div>
@@ -175,6 +190,11 @@ const UserPageAlbums = () => {
                   option = "numerical-rating_ASC";
                   handleSearchParams(option);
                 }}
+                style={
+                  searchParams.get("sortBy") === "numerical-rating_ASC"
+                    ? { fontWeight: 700 }
+                    : { fontWeight: 400 }
+                }
               >
                 najniższe
               </div>
@@ -194,7 +214,14 @@ const UserPageAlbums = () => {
               }
             }}
           >
-            <Favorite />
+            <Favorite
+              className="fav-filter"
+              style={
+                searchParams.has("favourite")
+                  ? { color: "#ffc200" }
+                  : { color: "#ddd" }
+              }
+            />
             Pokaż tylko ulubione
           </div>
         </div>

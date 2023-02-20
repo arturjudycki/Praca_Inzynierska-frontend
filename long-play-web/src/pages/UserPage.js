@@ -15,7 +15,6 @@ import { img_path } from "../API-utils/links";
 const UserPage = () => {
   const { username } = useParams();
   const navigate = useNavigate();
-  const [results, setResults] = useState([]);
 
   let userIsLogged = false;
   let user_info;

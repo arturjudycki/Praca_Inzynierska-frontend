@@ -168,11 +168,26 @@
         display: flex
         &-title
             width: 100px
+            color: #999
         &-item
+            width: 100px
             padding-bottom: 5px
-            margin: 2px 0
+            margin-bottom: 5px
+            font-weight: 500
             &:hover
                 cursor: pointer
                 color: #222
     &__filters
         margin-left: 20px
+    &__filterBy
+        display: flex
+        align-items: center
+        &:hover
+            cursor: pointer
+            color: #555
+        &:hover .fav-filter
+            color: #ffc200
+
+.fav-filter
+    font-size: 28px !important
+    margin-right: 5px

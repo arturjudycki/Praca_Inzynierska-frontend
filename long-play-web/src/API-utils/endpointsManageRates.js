@@ -109,7 +109,6 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
   let fav;
   let qmark;
   let ampersand;
-  console.log(searchParams);
   if (searchParams.has("sortBy")) {
     sort = true;
   } else {
@@ -197,6 +196,78 @@ export const getAllRatesSongsByUser = async (username) => {
     });
   } else {
     return response.json();
+  }
+};
+
+export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
+  let sort;
+  let fav;
+  let qmark;
+  let ampersand;
+  if (searchParams.has("sortBy")) {
+    sort = true;
+  } else {
+    sort = false;
+  }
+  if (searchParams.has("favourite")) {
+    fav = true;
+  } else {
+    fav = false;
+  }
+
+  if (sort || fav) {
+    qmark = "?";
+  } else {
+    qmark = "";
+  }
+
+  if (sort && fav) {
+    ampersand = "&";
+  } else {
+    ampersand = "";
+  }
+
+  let sortValue;
+  if (sort) {
+    sortValue = "sortBy=".concat(`${searchParams.get("sortBy")}`);
+  } else {
+    sortValue = "";
+  }
+  let favouriteValue;
+  {
+    if (fav) {
+      favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
+    } else {
+      favouriteValue = "";
+    }
+
+    const response = await fetch(
+      "".concat(
+        `${base_url}`,
+        "/rate/".concat(
+          `${username}`,
+          "/getAllRatesSongsByUserQuery",
+          `${qmark}`,
+          `${sortValue}`,
+          `${ampersand}`,
+          `${favouriteValue}`
+        )
+      ),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return Promise.reject({
+        msg: response.statusText,
+        status: response.status,
+      });
+    } else {
+      return response.json();
+    }
   }
 };
 
