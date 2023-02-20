@@ -109,12 +109,13 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
   let fav;
   let qmark;
   let ampersand;
-  if (searchParams.hasOwnProperty("sortBy")) {
+  console.log(searchParams);
+  if (searchParams.has("sortBy")) {
     sort = true;
   } else {
     sort = false;
   }
-  if (searchParams.hasOwnProperty("favourite")) {
+  if (searchParams.has("favourite")) {
     fav = true;
   } else {
     fav = false;
@@ -134,14 +135,14 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
 
   let sortValue;
   if (sort) {
-    sortValue = "sortBy=".concat(`${searchParams.sortBy}`);
+    sortValue = "sortBy=".concat(`${searchParams.get("sortBy")}`);
   } else {
     sortValue = "";
   }
   let favouriteValue;
   {
     if (fav) {
-      favouriteValue = "favourite=".concat(`${searchParams.sortBy}`);
+      favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
     } else {
       favouriteValue = "";
     }

@@ -12,7 +12,6 @@ const UserPageAlbums = () => {
   const navigate = useNavigate();
   let option;
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isFavourite, setIsFavourite] = useState(false);
 
   let userIsLogged = false;
   let user_info;
@@ -23,10 +22,11 @@ const UserPageAlbums = () => {
     if (arg) {
       searchParams.set("favourite", "1");
       setSearchParams(searchParams, { replace: true });
-      console.log(searchParams);
+      refetch();
     } else {
       searchParams.delete("favourite");
       setSearchParams(searchParams, { replace: true });
+      refetch();
     }
   };
 
@@ -34,15 +34,19 @@ const UserPageAlbums = () => {
     if (arg === "rating-date_ASC") {
       searchParams.set("sortBy", "rating-date_ASC");
       setSearchParams(searchParams, { replace: true });
+      refetch();
     } else if (arg === "numerical-rating_DESC") {
-      searchParams.set("sortBy", "numerical_rating_DESC");
+      searchParams.set("sortBy", "numerical-rating_DESC");
       setSearchParams(searchParams, { replace: true });
+      refetch();
     } else if (arg === "numerical-rating_ASC") {
       searchParams.set("sortBy", "numerical-rating_ASC");
       setSearchParams(searchParams, { replace: true });
+      refetch();
     } else {
       searchParams.delete("sortBy");
       setSearchParams(searchParams, { replace: true });
+      refetch();
     }
   };
 
@@ -53,14 +57,26 @@ const UserPageAlbums = () => {
     { retry: 0 }
   );
 
-  const { status: isRates, data: rates } = useQuery(
+  const {
+    status: isRates,
+    data: rates,
+    refetch,
+  } = useQuery(
     ["rates-query-data", username, searchParams],
     () => getAllRatesAlbumsByUserQuery(username, searchParams),
     { retry: 0 }
   );
 
   if (isRates === "success") {
-    console.log("sukces");
+    contentAlbums = (
+      <>
+        {rates.length !== 0
+          ? rates.map((rate) => (
+              <div key={rate.id_rate}>{rate.numerical_rating}</div>
+            ))
+          : "brak ocen"}
+      </>
+    );
   }
 
   if (status === "success") {
@@ -169,14 +185,10 @@ const UserPageAlbums = () => {
           <div
             className="user-page__filterBy"
             onClick={() => {
-              if (isFavourite) {
-                console.log(isFavourite);
-                setIsFavourite(!isFavourite);
+              if (searchParams.has("favourite")) {
                 let value = false;
                 handleSearchParamsFav(value);
               } else {
-                console.log(isFavourite);
-                setIsFavourite(!isFavourite);
                 let value = true;
                 handleSearchParamsFav(value);
               }
@@ -187,6 +199,7 @@ const UserPageAlbums = () => {
           </div>
         </div>
       </section>
+      {contentAlbums}
     </>
   );
 };
