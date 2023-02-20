@@ -163,6 +163,8 @@
     &__options
         font-size: 1.5rem
         display: flex
+        margin-left: 25px
+        margin-bottom: 50px
     &__sorters
     &__sortBy
         display: flex
@@ -189,3 +191,74 @@
 .fav-filter
     font-size: 28px !important
     margin-right: 5px
+
+.rated-music
+    &__box
+        display: flex
+        margin: 20px 0
+    &__container
+        width: 50%
+        display: flex
+    &__img-box
+        overflow: hidden
+        border-radius: 5px
+        border: 1px solid #ccc
+    &__cover
+        display: block
+        border-radius: 5px
+        width: 200px
+        height: 200px
+        box-shadow: 0 0 3px 0 #000
+        transition: .4s
+        &:hover
+            transform: scale(1.05)
+    &__info
+        margin-left: 15px
+        &-type
+            color: #0062af
+            font-size: 1.4rem
+            text-transform: uppercase
+            font-weight: 600
+        &-title
+            color: #000
+            font-size: 2rem
+            margin: 10px 0
+        &-date
+            color: #999
+            font-size: 1.4rem
+            font-weight: 600
+    &__rate
+        width: 50%
+        background-color: #f1f7fa
+        display: flex
+        justify-content: space-around
+        align-items: center
+        &-values
+            display: flex
+            align-items: center
+        &-value
+            display: inline-block
+            font-size: 1.8rem
+            line-height: 32px
+            margin-right: 5px
+            width: 20px
+        &-verbal
+            border-radius: 5px
+            background-color: #fff
+            padding: 10px
+            margin-top: 10px
+            font-size: 1.5rem
+            width: 350px
+            max-height: 100px
+        &-date
+            color: #777
+            font-size: 1.3rem
+            font-weight: 500
+
+.rated-icon
+    font-size: 28px !important
+    cursor: pointer
+    &--noCursor
+        cursor: auto
+    &--marginLeft
+        margin-left: 15px
