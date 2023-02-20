@@ -198,7 +198,7 @@ const UserPage = () => {
             ))
         ) : (
           <div className="last-rates__nope">
-            Nie oceniłeś jeszcze żadnej pozycji
+            Nie oceniono jeszcze żadnej pozycji
           </div>
         )}
       </div>
