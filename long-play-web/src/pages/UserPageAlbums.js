@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
@@ -11,6 +11,7 @@ const UserPageAlbums = () => {
   const { username } = useParams();
   const navigate = useNavigate();
   let option;
+  const [hoverFavorite, setHoverFavorite] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   let userIsLogged = false;
@@ -204,6 +205,12 @@ const UserPageAlbums = () => {
         <div className="user-page__filters">
           <div
             className="user-page__filterBy"
+            onMouseEnter={() => {
+              setHoverFavorite(true);
+            }}
+            onMouseLeave={() => {
+              setHoverFavorite(false);
+            }}
             onClick={() => {
               if (searchParams.has("favourite")) {
                 let value = false;
@@ -217,7 +224,7 @@ const UserPageAlbums = () => {
             <Favorite
               className="fav-filter"
               style={
-                searchParams.has("favourite")
+                searchParams.has("favourite") || hoverFavorite
                   ? { color: "#ffc200" }
                   : { color: "#ddd" }
               }
