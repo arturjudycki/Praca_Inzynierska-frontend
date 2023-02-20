@@ -4,8 +4,9 @@ import { useNavigate, NavLink } from "react-router-dom";
 import InfoAccount from "../components/InfoAccount";
 import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import { useQuery } from "react-query";
-import { Favorite } from "@material-ui/icons";
+import { Favorite, Star } from "@material-ui/icons";
 import { getAllRatesSongsByUserQuery } from "../API-utils/endpointsManageRates";
+import { img_path } from "../API-utils/links";
 
 const UserPageAlbums = () => {
   const { username } = useParams();
@@ -18,6 +19,17 @@ const UserPageAlbums = () => {
   let user_info;
   let content;
   let contentSongs;
+
+  const displayPublicationDate = (publicationDate) => {
+    let time = new Date(publicationDate);
+    let day = time.getDate();
+    let month = time.getMonth() + 1;
+    let year = time.getFullYear();
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+
+    return `${day}-${month}-${year}`;
+  };
 
   const handleSearchParamsFav = (arg) => {
     if (arg) {
@@ -71,11 +83,102 @@ const UserPageAlbums = () => {
   if (isRates === "success") {
     contentSongs = (
       <>
-        {rates.length !== 0
-          ? rates.map((rate) => (
-              <div key={rate.id_rate}>{rate.numerical_rating}</div>
-            ))
-          : "brak ocen"}
+        {rates.length !== 0 ? (
+          rates.map((rate) => (
+            <div key={rate.id_rate} className="rated-music__box">
+              <div className="rated-music__container">
+                <NavLink
+                  to={{
+                    pathname: "/song/".concat(`${rate.id}`),
+                  }}
+                  className="rated-music__img-box"
+                >
+                  <img
+                    src={img_path + rate.cover}
+                    alt="cover"
+                    className="rated-music__cover"
+                  />
+                </NavLink>
+
+                <div className="rated-music__info">
+                  <p className="rated-music__info-type">utwór</p>
+                  <NavLink
+                    to={{
+                      pathname: "/song/".concat(`${rate.id}`),
+                    }}
+                    className="link-to-artist"
+                  >
+                    <p className="rated-music__info-title">{rate.title}</p>
+                  </NavLink>
+                  <NavLink
+                    to={{
+                      pathname: "/music-album/".concat(`${rate.id_ma}`),
+                    }}
+                    className="link-to-artist"
+                  >
+                    <p className="rated-music__info-title_ma">
+                      {rate.ma_title}
+                    </p>
+                  </NavLink>
+                  <p className="rated-music__info-date">
+                    {displayPublicationDate(rate.release_date)}
+                  </p>
+                </div>
+              </div>
+              <div className="rated-music__rate">
+                <div className="rated-music__rate-box">
+                  <div className="rated-music__rate-values">
+                    {" "}
+                    <span className="rated-music__rate-value">
+                      {rate.numerical_rating}
+                    </span>
+                    {[...Array(10)].map((star, index) => {
+                      const value_rating = index + 1;
+
+                      return (
+                        <label key={index}>
+                          <input
+                            type="radio"
+                            className="star-input"
+                            value={value_rating}
+                          />
+                          <Star
+                            className="rated-icon rated-icon--noCursor"
+                            style={
+                              value_rating <= rate.numerical_rating
+                                ? { color: "#ffc200" }
+                                : { color: "#ddd" }
+                            }
+                          />
+                        </label>
+                      );
+                    })}
+                    <Favorite
+                      className="rated-icon rated-icon--noCursor rated-icon--marginLeft"
+                      style={
+                        rate.favourites
+                          ? { color: "#ffc200" }
+                          : { color: "#ddd" }
+                      }
+                    />
+                  </div>
+                  {rate.verbal_rating !== "" ? (
+                    <div className="rated-music__rate-verbal">
+                      {rate.verbal_rating}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="rated-music__rate-date">
+                  {displayPublicationDate(rate.rating_date)}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="nope-rates">brak ocen</p>
+        )}
       </>
     );
   }
