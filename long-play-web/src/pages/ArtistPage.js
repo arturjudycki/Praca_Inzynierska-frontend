@@ -1,13 +1,45 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
+import { userAuth } from "../API-utils/endpointsAuthUser";
 import {
   getArtistById,
   getAlbumsByArtistId,
 } from "../API-utils/endpointsManageArtists";
-import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
+import {
+  getStatisticsOfAlbum,
+  getRateAlbumByUser,
+} from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
 import { Star } from "@material-ui/icons";
+
+const Rated = ({ props }) => {
+  const album_id = props.album.id_music_album;
+  const { status, data: rated_value } = useQuery(
+    ["rated_value", album_id],
+    () => getRateAlbumByUser(album_id),
+    {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  let contentRateValue;
+
+  if (status === "success") {
+    contentRateValue = (
+      <div className="rated-value__content">{rated_value.numerical_rating}</div>
+    );
+  } else {
+    contentRateValue = (
+      <div className="rated-value__content">
+        <Star />
+      </div>
+    );
+  }
+
+  return <div className="rated-value">{contentRateValue}</div>;
+};
 
 const RatesByCommunity = ({ props }) => {
   const album_id = props.album.id_music_album;
@@ -26,22 +58,31 @@ const RatesByCommunity = ({ props }) => {
   if (status === "success") {
     contentStatistics = (
       <>
-        <div className="statistics__container">
+        {statisticsAlbum.quantity === 0 ? (
           <div className="statistics__box">
             <Star className="star-icon-stats star-icon-stats--fsz" />
-            <p className="statistics__mean statistics__mean--fsz">
-              {parseFloat(statisticsAlbum.mean)}
+            <p className="statistics__item statistics__item--margin">
+              Brak ocen
             </p>
           </div>
-          <div className="statistics__box statistics__box--flexDirection">
-            <p className="statistics__item statistics__item--marginChange statistics__item--fsz">
-              liczba ocen
-            </p>
-            <p className="statistics__item statistics__item--fsz statistics__item--margin">
-              {statisticsAlbum.quantity}
-            </p>
+        ) : (
+          <div className="statistics__container">
+            <div className="statistics__box">
+              <Star className="star-icon-stats star-icon-stats--fsz" />
+              <p className="statistics__mean statistics__mean--fsz">
+                {parseFloat(statisticsAlbum.mean)}
+              </p>
+            </div>
+            <div className="statistics__box statistics__box--flexDirection">
+              <p className="statistics__item statistics__item--marginChange statistics__item--fsz">
+                liczba ocen
+              </p>
+              <p className="statistics__item statistics__item--fsz statistics__item--margin">
+                {statisticsAlbum.quantity}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </>
     );
   }
@@ -60,6 +101,8 @@ const ArtistPage = () => {
   let content;
   let discography;
   let img_path = "http://localhost:8000/images/";
+
+  const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
 
   const { status: isArtist, data: artist } = useQuery(
     ["artist-data", id_artist],
@@ -146,6 +189,7 @@ const ArtistPage = () => {
                       alt="cover"
                       className="discography__cover"
                     />
+                    {isLogged === "success" ? <Rated props={{ album }} /> : ""}
                   </div>
                 </NavLink>
                 <div className="discography__info-box">
