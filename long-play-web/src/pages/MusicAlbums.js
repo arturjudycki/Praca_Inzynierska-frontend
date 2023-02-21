@@ -6,15 +6,34 @@ import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
 import { Favorite, Star } from "@material-ui/icons";
+import { getCountOfAlbums } from "../API-utils/endpointsManageMusic";
 import { getAllRatesAlbumsByUserQuery } from "../API-utils/endpointsManageRates";
 import { img_path } from "../API-utils/links";
 
 const MusicAlbums = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
+  let numberOfAlbums;
+
+  const { status: isNumberAlbums, data: albums_amount } = useQuery(
+    "albums_amount",
+    getCountOfAlbums,
+    { retry: 0 }
+  );
+
+  if (isNumberAlbums === "success") {
+    numberOfAlbums = (
+      <div className="db-amount">
+        {" "}
+        Liczba albumów w bazie:
+        <p className="db-amount__value">{albums_amount.amount}</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <div>Baza albumów</div>
+      {numberOfAlbums}
       {/* <section className="user-page__options">
         <div className="user-page__sorters">
           <div className="user-page__sortBy">

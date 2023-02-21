@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { getAllArtistsOrderBy } from "../API-utils/endpointsManageArtists";
+import {
+  getAllArtistsOrderBy,
+  getCountOfArtists,
+} from "../API-utils/endpointsManageArtists";
 import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
 
 const Artists = () => {
   let contentArtists;
+  let numberOfArtists;
   const [firstLetter, setFirstLetter] = useState("");
   const [artistSearch, setArtistsSearch] = useState([]);
 
@@ -13,6 +17,22 @@ const Artists = () => {
     getAllArtistsOrderBy,
     { retry: 0 }
   );
+
+  const { status: isNumberArtists, data: artists_amount } = useQuery(
+    "artists_amount",
+    getCountOfArtists,
+    { retry: 0 }
+  );
+
+  if (isNumberArtists === "success") {
+    numberOfArtists = (
+      <div className="db-amount">
+        {" "}
+        Liczba wykonawców w bazie:
+        <p className="db-amount__value">{artists_amount.amount}</p>
+      </div>
+    );
+  }
 
   const handleSearchChange = (arg) => {
     if (isAllArtists === "success") {
@@ -51,7 +71,7 @@ const Artists = () => {
     if (artistSearch.length === 0) {
       contentArtists = (
         <div className="list-artists__nope">
-          Brak w bazie wykonawców na tę literę
+          Brak w bazie wykonawców zaczynających się na tę literę
         </div>
       );
     } else {
@@ -72,6 +92,7 @@ const Artists = () => {
 
   return (
     <div className="list-artists">
+      {numberOfArtists}
       <div className="list-artists__title">Lista wykonawców</div>
       <div className="list-artists__line"></div>
       <div className="list-artists__choose-letter">
