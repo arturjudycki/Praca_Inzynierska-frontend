@@ -64,6 +64,26 @@ export const getAllArtists = async () => {
   }
 };
 
+export const getAllArtistsOrderBy = async () => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/artist/getAllArtistsOrderBy"),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
 export const editArtist = async (values) => {
   const response = await fetch("".concat(`${base_url}`, "/artist/editArtist"), {
     method: "PUT",

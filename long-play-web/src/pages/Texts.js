@@ -165,19 +165,25 @@ const Texts = () => {
   return (
     <div>
       <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">artykuły</h1>
+        <h1 className="textSlogan textSlogan--margin-left">
+          najnowsze artykuły
+        </h1>
         <div className="textContainer">{contentArticles}</div>
       </div>
       <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">newsy</h1>
+        <h1 className="textSlogan textSlogan--margin-left">najnowsze newsy</h1>
         <div className="textContainer">{contentNews}</div>
       </div>
       <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">rankingi</h1>
+        <h1 className="textSlogan textSlogan--margin-left">
+          najnowsze rankingi
+        </h1>
         <div className="textContainer">{contentRankings}</div>
       </div>
       <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">wywiady</h1>
+        <h1 className="textSlogan textSlogan--margin-left">
+          najnowsze wywiady
+        </h1>
         <div className="textContainer">{contentInterviews}</div>
       </div>
     </div>
