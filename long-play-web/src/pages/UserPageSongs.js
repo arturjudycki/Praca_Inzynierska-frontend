@@ -6,7 +6,52 @@ import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import { useQuery } from "react-query";
 import { Favorite, Star } from "@material-ui/icons";
 import { getAllRatesSongsByUserQuery } from "../API-utils/endpointsManageRates";
+import { getStatisticsOfSong } from "../API-utils/endpointsManageRates";
 import { img_path } from "../API-utils/links";
+
+const RatesByCommunity = ({ props }) => {
+  const song_id = props.rate.id;
+
+  const { status, data: statisticsSong } = useQuery(
+    ["statistics-song", song_id],
+    () => getStatisticsOfSong(song_id),
+    {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  let contentStatistics;
+
+  if (status === "success") {
+    contentStatistics = (
+      <>
+        <div className="statistics__container">
+          <div className="statistics__box">
+            <Star className="star-icon-stats star-icon-stats--fsz" />
+            <p className="statistics__mean statistics__mean--fsz">
+              {parseFloat(statisticsSong.mean)}
+            </p>
+          </div>
+          <div className="statistics__box statistics__box--flexDirection">
+            <p className="statistics__item statistics__item--marginChange statistics__item--fsz">
+              liczba ocen
+            </p>
+            <p className="statistics__item statistics__item--fsz statistics__item--margin">
+              {statisticsSong.quantity}
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <section className="statistics statistics--marginTop">
+      {contentStatistics}
+    </section>
+  );
+};
 
 const UserPageAlbums = () => {
   const { username } = useParams();
@@ -123,6 +168,7 @@ const UserPageAlbums = () => {
                   <p className="rated-music__info-date">
                     {displayPublicationDate(rate.release_date)}
                   </p>
+                  <RatesByCommunity props={{ rate }} />
                 </div>
               </div>
               <div className="rated-music__rate">

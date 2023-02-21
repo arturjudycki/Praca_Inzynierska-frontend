@@ -5,7 +5,53 @@ import {
   getArtistById,
   getAlbumsByArtistId,
 } from "../API-utils/endpointsManageArtists";
+import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
+import { Star } from "@material-ui/icons";
+
+const RatesByCommunity = ({ props }) => {
+  const album_id = props.album.id_music_album;
+
+  const { status, data: statisticsAlbum } = useQuery(
+    ["statistics-album", album_id],
+    () => getStatisticsOfAlbum(album_id),
+    {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  let contentStatistics;
+
+  if (status === "success") {
+    contentStatistics = (
+      <>
+        <div className="statistics__container">
+          <div className="statistics__box">
+            <Star className="star-icon-stats star-icon-stats--fsz" />
+            <p className="statistics__mean statistics__mean--fsz">
+              {parseFloat(statisticsAlbum.mean)}
+            </p>
+          </div>
+          <div className="statistics__box statistics__box--flexDirection">
+            <p className="statistics__item statistics__item--marginChange statistics__item--fsz">
+              liczba ocen
+            </p>
+            <p className="statistics__item statistics__item--fsz statistics__item--margin">
+              {statisticsAlbum.quantity}
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <section className="statistics statistics--marginTop">
+      {contentStatistics}
+    </section>
+  );
+};
 
 const ArtistPage = () => {
   const { id_artist } = useParams();
@@ -116,6 +162,7 @@ const ArtistPage = () => {
                   >
                     <p className="discography__name-album">{album.title}</p>
                   </NavLink>
+                  <RatesByCommunity props={{ album }} />
                 </div>
               </div>
               <div className="discography__line"></div>
