@@ -138,41 +138,40 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
   } else {
     sortValue = "";
   }
+
   let favouriteValue;
-  {
-    if (fav) {
-      favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
-    } else {
-      favouriteValue = "";
-    }
+  if (fav) {
+    favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
+  } else {
+    favouriteValue = "";
+  }
 
-    const response = await fetch(
-      "".concat(
-        `${base_url}`,
-        "/rate/".concat(
-          `${username}`,
-          "/getAllRatesAlbumsByUserQuery",
-          `${qmark}`,
-          `${sortValue}`,
-          `${ampersand}`,
-          `${favouriteValue}`
-        )
-      ),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      return Promise.reject({
-        msg: response.statusText,
-        status: response.status,
-      });
-    } else {
-      return response.json();
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/rate/".concat(
+        `${username}`,
+        "/getAllRatesAlbumsByUserQuery",
+        `${qmark}`,
+        `${sortValue}`,
+        `${ampersand}`,
+        `${favouriteValue}`
+      )
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
   }
 };
 
@@ -234,40 +233,39 @@ export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
     sortValue = "";
   }
   let favouriteValue;
-  {
-    if (fav) {
-      favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
-    } else {
-      favouriteValue = "";
-    }
 
-    const response = await fetch(
-      "".concat(
-        `${base_url}`,
-        "/rate/".concat(
-          `${username}`,
-          "/getAllRatesSongsByUserQuery",
-          `${qmark}`,
-          `${sortValue}`,
-          `${ampersand}`,
-          `${favouriteValue}`
-        )
-      ),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  if (fav) {
+    favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
+  } else {
+    favouriteValue = "";
+  }
 
-    if (!response.ok) {
-      return Promise.reject({
-        msg: response.statusText,
-        status: response.status,
-      });
-    } else {
-      return response.json();
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/rate/".concat(
+        `${username}`,
+        "/getAllRatesSongsByUserQuery",
+        `${qmark}`,
+        `${sortValue}`,
+        `${ampersand}`,
+        `${favouriteValue}`
+      )
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
   }
 };
 

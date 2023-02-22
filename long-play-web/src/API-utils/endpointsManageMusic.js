@@ -165,9 +165,59 @@ export const getCountOfAlbums = async () => {
   }
 };
 
-export const getTop100ListOfAlbums = async () => {
+export const getTop100ListOfAlbums = async (searchParams) => {
+  let type;
+  let release;
+  let qmark;
+  let ampersand;
+
+  if (searchParams.has("typeOfAlbum")) {
+    type = true;
+  } else {
+    type = false;
+  }
+
+  if (searchParams.has("releaseDate")) {
+    release = true;
+  } else {
+    release = false;
+  }
+
+  if (type || release) {
+    qmark = "?";
+  } else {
+    qmark = "";
+  }
+
+  if (type && release) {
+    ampersand = "&";
+  } else {
+    ampersand = "";
+  }
+
+  let typeValue;
+  if (type) {
+    typeValue = "typeOfAlbum=".concat(`${searchParams.get("typeOfAlbum")}`);
+  } else {
+    typeValue = "";
+  }
+
+  let releaseValue;
+  if (release) {
+    releaseValue = "releaseDate=".concat(`${searchParams.get("releaseDate")}`);
+  } else {
+    releaseValue = "";
+  }
+
   const response = await fetch(
-    "".concat(`${base_url}`, "/album/getTop100ListOfAlbums"),
+    "".concat(
+      `${base_url}`,
+      "/album/getTop100ListOfAlbums",
+      `${qmark}`,
+      `${typeValue}`,
+      `${ampersand}`,
+      `${releaseValue}`
+    ),
     {
       method: "GET",
       headers: {
