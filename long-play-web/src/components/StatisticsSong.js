@@ -35,8 +35,10 @@ const StatisticsAlbum = () => {
               </p>
             </div>
             <div className="statistics__box statistics__box--flexDirection">
-              <p className="statistics__item">Liczba ocen</p>
-              <p className="statistics__item statistics__item--margin">
+              <p className="statistics__item statistics__item--textAlign">
+                Liczba ocen
+              </p>
+              <p className="statistics__item statistics__item--textAlign">
                 {statisticsSong.quantity}
               </p>
             </div>

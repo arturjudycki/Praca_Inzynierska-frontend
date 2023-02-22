@@ -34,6 +34,7 @@ const MusicAlbums = () => {
   return (
     <div>
       {numberOfAlbums}
+      <div className="title-ranking">Ranking top 100 - albumy</div>
       {/* <section className="user-page__options">
         <div className="user-page__sorters">
           <div className="user-page__sortBy">

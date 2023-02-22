@@ -102,6 +102,27 @@ export const getCountOfSongs = async () => {
   }
 };
 
+export const getTop100ListOfSongs = async () => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/song/getTop100ListOfSongs"),
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
 export const editSong = async (values) => {
   const response = await fetch("".concat(`${base_url}`, "/song/editSong"), {
     method: "PUT",

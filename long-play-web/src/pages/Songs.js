@@ -1,9 +1,23 @@
+import { Star } from "@material-ui/icons";
 import React from "react";
 import { useQuery } from "react-query";
-import { getCountOfSongs } from "../API-utils/endpointsManageSongs";
+import { NavLink } from "react-router-dom";
+import {
+  getCountOfSongs,
+  getTop100ListOfSongs,
+} from "../API-utils/endpointsManageSongs";
+import { img_path } from "../API-utils/links";
 
 const Songs = () => {
   let numberOfSongs;
+  let top100Songs;
+
+  const displayReleaseYear = (releaseDate) => {
+    let time = new Date(releaseDate);
+    let year = time.getFullYear();
+
+    return year;
+  };
 
   const { status: isNumberSongs, data: songs_amount } = useQuery(
     "songs_amount",
@@ -21,7 +35,60 @@ const Songs = () => {
     );
   }
 
-  return <div>{numberOfSongs}</div>;
+  const { status: isTop100, data: songs_top } = useQuery(
+    "songs_top",
+    getTop100ListOfSongs,
+    { retry: 0 }
+  );
+
+  if (isTop100 === "success") {
+    let number = 0;
+    top100Songs = songs_top.map((song) => (
+      <div key={song.id_song} className="top__box">
+        <div className="top__number">{++number}</div>
+        <div className="top__cover">
+          <NavLink
+            to={"/song/".concat(`${song.id_song}`)}
+            className="link-to-artist"
+          >
+            <img src={img_path + song.cover} alt="cover" className="top__img" />
+          </NavLink>
+        </div>
+        <div className="top__info">
+          <NavLink
+            to={"/song/".concat(`${song.id_song}`)}
+            className="link-to-artist"
+          >
+            <p className="top__item-title">{song.title}</p>
+          </NavLink>
+          <NavLink
+            to={"/music-album/".concat(`${song.id_music_album}`)}
+            className="link-to-artist"
+          >
+            <p className="top__item-ma-title">{song.ma_title}</p>
+          </NavLink>
+          <p className="top__item-year">
+            {displayReleaseYear(song.release_date)}
+          </p>
+        </div>
+        <div className="top__rates">
+          <p className="top__rates-mean">
+            <Star className="top-icon" /> {parseFloat(song.mean)}
+          </p>
+          <p className="top__rates-counts">Liczba ocen</p>
+          <p>{song.counts}</p>
+        </div>
+      </div>
+    ));
+  }
+
+  return (
+    <div>
+      {numberOfSongs}
+      <div className="title-ranking">Ranking top 100 - utwory</div>
+      <div className="top">{top100Songs}</div>
+    </div>
+  );
 };
 
 export default Songs;
