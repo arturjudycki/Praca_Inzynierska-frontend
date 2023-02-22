@@ -219,232 +219,228 @@ const MusicAlbums = () => {
     <div>
       {numberOfAlbums}
       <div className="title-ranking">Ranking top 100 - albumy</div>
-      <section className="user-page__options">
-        <div className="user-page__sorters">
-          <div className="user-page__sortBy">
-            <div className="user-page__sortBy-title">typ albumu:</div>
-            <div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "all";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  !searchParams.has("typeOfAlbum")
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                wszystkie
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "studio_album";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  searchParams.get("typeOfAlbum") === "studio_album"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                albumy studyjne
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "live_album";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  searchParams.get("typeOfAlbum") === "live_album"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                albumy koncertowe
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "compilation_album";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  searchParams.get("typeOfAlbum") === "compilation_album"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                albumy kompilacyjne
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "EP";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  searchParams.get("typeOfAlbum") === "EP"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                ep
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "OST";
-                  handleSearchParamsType(option);
-                }}
-                style={
-                  searchParams.get("typeOfAlbum") === "OST"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                ost
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="top-filters">
+        <label className="top-filters__box">
+          <span className="top-filters__title">typ albumu</span>
+          <select className="top-filters__container">
+            <option
+              className=""
+              onClick={() => {
+                option = "all";
+                handleSearchParamsType(option);
+              }}
+              style={
+                !searchParams.has("typeOfAlbum")
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              WSZYSTKIE
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "studio_album";
+                handleSearchParamsType(option);
+              }}
+              style={
+                searchParams.get("typeOfAlbum") === "studio_album"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              ALBUMY STUDYJNE
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "live_album";
+                handleSearchParamsType(option);
+              }}
+              style={
+                searchParams.get("typeOfAlbum") === "live_album"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              ALBUMY KONCERTOWE
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "compilation_album";
+                handleSearchParamsType(option);
+              }}
+              style={
+                searchParams.get("typeOfAlbum") === "compilation_album"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              ALBUMY KOMPILACYJNE
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "EP";
+                handleSearchParamsType(option);
+              }}
+              style={
+                searchParams.get("typeOfAlbum") === "EP"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              EP
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "OST";
+                handleSearchParamsType(option);
+              }}
+              style={
+                searchParams.get("typeOfAlbum") === "OST"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              OST
+            </option>
+          </select>
+        </label>
 
-        <div className="user-page__sorters">
-          <div className="user-page__sortBy">
-            <div className="user-page__sortBy-title">okres wydania albumu:</div>
-            <div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "all";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  !searchParams.has("releaseDate")
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                wszystkie
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "1950s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "1950s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                1950 - 1959
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "1960s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "1960s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                1960 - 1969
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "1970s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "1970s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                1970 - 1979
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "1980s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "1980s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                1980 - 1989
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "1990s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "1990s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                1990 - 1999
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "2000s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "2000s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                2000 - 2009
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "2010s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "2010s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                2010 - 2019
-              </div>
-              <div
-                className="user-page__sortBy-item"
-                onClick={() => {
-                  option = "2020s";
-                  handleSearchParamsRelease(option);
-                }}
-                style={
-                  searchParams.get("releaseDate") === "2020s"
-                    ? { fontWeight: 700 }
-                    : { fontWeight: 400 }
-                }
-              >
-                2020 - 2029
-              </div>
-            </div>
-          </div>
-        </div>
+        <label className="top-filters__box">
+          <span className="top-filters__title">okres wydania albumu</span>
+          <select className="top-filters__container">
+            <option
+              className=""
+              onClick={() => {
+                option = "all";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                !searchParams.has("releaseDate")
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              wszystkie
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "1950s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "1950s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              1950 - 1959
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "1960s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "1960s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              1960 - 1969
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "1970s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "1970s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              1970 - 1979
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "1980s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "1980s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              1980 - 1989
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "1990s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "1990s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              1990 - 1999
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "2000s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "2000s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              2000 - 2009
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "2010s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "2010s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              2010 - 2019
+            </option>
+            <option
+              className=""
+              onClick={() => {
+                option = "2020s";
+                handleSearchParamsRelease(option);
+              }}
+              style={
+                searchParams.get("releaseDate") === "2020s"
+                  ? { fontWeight: 700 }
+                  : { fontWeight: 400 }
+              }
+            >
+              2020 - 2029
+            </option>
+          </select>
+        </label>
       </section>
       <div className="top">{top100Albums}</div>
     </div>
