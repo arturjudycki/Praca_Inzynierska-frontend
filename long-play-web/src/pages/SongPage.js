@@ -82,7 +82,6 @@ const ErrorPage = () => {
           </div>
         </div>
         <RateSong />
-        {/* <div className="song-page__rate">ocenienie utworu</div> */}
       </div>
     );
   }

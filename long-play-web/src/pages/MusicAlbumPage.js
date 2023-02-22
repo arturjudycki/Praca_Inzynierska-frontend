@@ -49,9 +49,6 @@ const MusicAlbumPage = () => {
           <p className="tracklist__song-item tracklist__song-item--duration">
             {song.duration}
           </p>
-          {/* <p className="rate-song">
-            <Star className="star-icon-listing" />
-          </p> */}
         </div>
       ));
   }

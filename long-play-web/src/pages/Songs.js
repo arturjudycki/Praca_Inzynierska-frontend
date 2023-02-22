@@ -73,7 +73,7 @@ const Songs = () => {
         </div>
         <div className="top__rates">
           <p className="top__rates-mean">
-            <Star className="top-icon" /> {parseFloat(song.mean)}
+            <Star className="top-icon" /> {parseFloat(song.mean).toFixed(2)}
           </p>
           <p className="top__rates-counts">Liczba ocen</p>
           <p>{song.counts}</p>

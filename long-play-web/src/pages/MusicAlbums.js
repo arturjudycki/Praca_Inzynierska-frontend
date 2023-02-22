@@ -6,7 +6,10 @@ import { userAuth, userData } from "../API-utils/endpointsAuthUser";
 import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
 import { useQuery } from "react-query";
 import { Favorite, Star } from "@material-ui/icons";
-import { getCountOfAlbums } from "../API-utils/endpointsManageMusic";
+import {
+  getCountOfAlbums,
+  getTop100ListOfAlbums,
+} from "../API-utils/endpointsManageMusic";
 import { getAllRatesAlbumsByUserQuery } from "../API-utils/endpointsManageRates";
 import { img_path } from "../API-utils/links";
 
@@ -14,6 +17,22 @@ const MusicAlbums = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   let numberOfAlbums;
+  let top100Albums;
+
+  const displayReleaseYear = (releaseDate) => {
+    let time = new Date(releaseDate);
+    let year = time.getFullYear();
+
+    return year;
+  };
+
+  const displayTypeOfAlbum = (typeOfAlbum) => {
+    if (typeOfAlbum === "studio_album") return "album studyjny";
+    else if (typeOfAlbum === "live_album") return "album koncertowy";
+    else if (typeOfAlbum === "compilation_album") return "album kompilacyjny";
+    else if (typeOfAlbum === "EP") return "EP";
+    else if (typeOfAlbum === "OST") return "OST";
+  };
 
   const { status: isNumberAlbums, data: albums_amount } = useQuery(
     "albums_amount",
@@ -31,10 +50,64 @@ const MusicAlbums = () => {
     );
   }
 
+  const { status: isTop100, data: albums_top } = useQuery(
+    "albums_top",
+    getTop100ListOfAlbums,
+    { retry: 0 }
+  );
+
+  if (isTop100 === "success") {
+    let number = 0;
+    top100Albums = albums_top.map((album) => (
+      <div key={album.id_music_album} className="top__box">
+        <div className="top__number">{++number}</div>
+        <div className="top__cover">
+          <NavLink
+            to={"/music-album/".concat(`${album.id_music_album}`)}
+            className="link-to-artist"
+          >
+            <img
+              src={img_path + album.cover}
+              alt="cover"
+              className="top__img"
+            />
+          </NavLink>
+        </div>
+        <div className="top__info">
+          <p className="top__item-type">
+            {displayTypeOfAlbum(album.type_of_album)}
+          </p>
+          <NavLink
+            to={"/music-album/".concat(`${album.id_music_album}`)}
+            className="link-to-artist"
+          >
+            <p className="top__item-title">{album.title}</p>
+          </NavLink>
+          <NavLink
+            to={"/music-album/".concat(`${album.id_music_album}`)}
+            className="link-to-artist"
+          ></NavLink>
+          <p className="top__item-year">
+            {displayReleaseYear(album.release_date)}
+          </p>
+        </div>
+        <div className="top__rates">
+          <p className="top__rates-mean">
+            <Star className="top-icon" /> {parseFloat(album.mean).toFixed(2)}
+          </p>
+          <p className="top__rates-counts">Liczba ocen</p>
+          <p>{album.counts}</p>
+        </div>
+      </div>
+    ));
+  }
+
   return (
     <div>
       {numberOfAlbums}
       <div className="title-ranking">Ranking top 100 - albumy</div>
+      <div className="top">{top100Albums}</div>
+
       {/* <section className="user-page__options">
         <div className="user-page__sorters">
           <div className="user-page__sortBy">

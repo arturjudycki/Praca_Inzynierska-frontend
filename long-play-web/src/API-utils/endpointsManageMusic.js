@@ -165,6 +165,27 @@ export const getCountOfAlbums = async () => {
   }
 };
 
+export const getTop100ListOfAlbums = async () => {
+  const response = await fetch(
+    "".concat(`${base_url}`, "/album/getTop100ListOfAlbums"),
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
 export const assignArtistToAlbum = async (values) => {
   const response = await fetch(
     "".concat(`${base_url}`, "/album/assignArtistToAlbum"),

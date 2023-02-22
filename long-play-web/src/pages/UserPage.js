@@ -94,7 +94,7 @@ const UserPage = () => {
               <p className="stats__item-value">
                 <Star className="icon-user-page" />
                 {stats.avg_rates !== null
-                  ? parseFloat(stats.avg_rates)
+                  ? parseFloat(stats.avg_rates).toFixed(2)
                   : "BRAK"}
               </p>
             </div>
@@ -121,7 +121,9 @@ const UserPage = () => {
               <h3 className="stats__item-title">Średnia ocen</h3>
               <p className="stats__item-value">
                 <Star className="icon-user-page" />
-                {stats.avg_ma !== null ? parseFloat(stats.avg_ma) : "BRAK"}
+                {stats.avg_ma !== null
+                  ? parseFloat(stats.avg_ma).toFixed(2)
+                  : "BRAK"}
               </p>
             </div>
           </div>
@@ -148,7 +150,9 @@ const UserPage = () => {
               <h3 className="stats__item-title">Średnia ocen</h3>
               <p className="stats__item-value">
                 <Star className="icon-user-page" />
-                {stats.avg_s !== null ? parseFloat(stats.avg_s) : "BRAK"}
+                {stats.avg_s !== null
+                  ? parseFloat(stats.avg_s).toFixed(2)
+                  : "BRAK"}
               </p>
             </div>
           </div>

@@ -30,7 +30,7 @@ const RatesByCommunity = ({ props }) => {
           <div className="statistics__box">
             <Star className="star-icon-stats star-icon-stats--fsz" />
             <p className="statistics__mean statistics__mean--fsz">
-              {parseFloat(statisticsSong.mean)}
+              {parseFloat(statisticsSong.mean).toFixed(2)}
             </p>
           </div>
           <div className="statistics__box statistics__box--flexDirection">
