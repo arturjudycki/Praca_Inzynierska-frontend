@@ -1,23 +1,53 @@
 import React, { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useNavigate, NavLink } from "react-router-dom";
-import InfoAccount from "../components/InfoAccount";
-import { userAuth, userData } from "../API-utils/endpointsAuthUser";
-import { getStatisticsOfAlbum } from "../API-utils/endpointsManageRates";
+import { useSearchParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { userAuth } from "../API-utils/endpointsAuthUser";
 import { useQuery } from "react-query";
-import { Favorite, Star } from "@material-ui/icons";
+import { Star } from "@material-ui/icons";
 import {
   getCountOfAlbums,
   getTop100ListOfAlbums,
 } from "../API-utils/endpointsManageMusic";
-import { getAllRatesAlbumsByUserQuery } from "../API-utils/endpointsManageRates";
+import { getRateAlbumByUser } from "../API-utils/endpointsManageRates";
 import { img_path } from "../API-utils/links";
+
+const Rated = ({ props }) => {
+  const album_id = props.album.id_music_album;
+  const { status, data: rated_value } = useQuery(
+    ["rated_value", album_id],
+    () => getRateAlbumByUser(album_id),
+    {
+      retry: 0,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  let contentRateValue;
+
+  if (status === "success") {
+    contentRateValue = (
+      <div className="rated-value__content">{rated_value.numerical_rating}</div>
+    );
+  } else {
+    contentRateValue = (
+      <div className="rated-value__content">
+        <Star />
+      </div>
+    );
+  }
+
+  return (
+    <div className="rated-value rated-value--topRight">{contentRateValue}</div>
+  );
+};
 
 const MusicAlbums = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   let numberOfAlbums;
   let top100Albums;
+
+  const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
 
   const displayReleaseYear = (releaseDate) => {
     let time = new Date(releaseDate);
@@ -71,6 +101,7 @@ const MusicAlbums = () => {
               alt="cover"
               className="top__img"
             />
+            {isLogged === "success" ? <Rated props={{ album }} /> : ""}
           </NavLink>
         </div>
         <div className="top__info">
