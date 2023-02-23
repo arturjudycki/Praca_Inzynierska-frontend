@@ -163,11 +163,11 @@ const UserPage = () => {
 
   if (isRatesAlbums === "success" && isRatesSongs === "success") {
     const resultArray = ratesAlbums.concat(ratesSongs);
-
+    const resultSliceArray = resultArray.slice(0, 8);
     contentLastRates = (
       <div className="last-rates">
-        {resultArray.length !== 0 ? (
-          resultArray
+        {resultSliceArray.length !== 0 ? (
+          resultSliceArray
             .sort((a, b) => new Date(b.rating_date) - new Date(a.rating_date))
             .map((rate) => (
               <NavLink
