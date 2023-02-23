@@ -107,8 +107,11 @@ export const getAllRatesAlbumsByUser = async (username) => {
 export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
   let sort;
   let fav;
+  let page;
   let qmark;
   let ampersand;
+  let ampersand2;
+
   if (searchParams.has("sortBy")) {
     sort = true;
   } else {
@@ -120,16 +123,28 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
     fav = false;
   }
 
-  if (sort || fav) {
+  if (searchParams.has("page")) {
+    page = true;
+  } else {
+    page = false;
+  }
+
+  if (sort || fav || page) {
     qmark = "?";
   } else {
     qmark = "";
   }
 
-  if (sort && fav) {
+  if ((sort && fav) || (sort && page) || (fav && page)) {
     ampersand = "&";
   } else {
     ampersand = "";
+  }
+
+  if (sort && fav && page) {
+    ampersand2 = "&";
+  } else {
+    ampersand2 = "";
   }
 
   let sortValue;
@@ -146,6 +161,13 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
     favouriteValue = "";
   }
 
+  let pageValue;
+  if (page) {
+    pageValue = "page=".concat(`${searchParams.get("page")}`);
+  } else {
+    pageValue = "";
+  }
+
   const response = await fetch(
     "".concat(
       `${base_url}`,
@@ -155,7 +177,9 @@ export const getAllRatesAlbumsByUserQuery = async (username, searchParams) => {
         `${qmark}`,
         `${sortValue}`,
         `${ampersand}`,
-        `${favouriteValue}`
+        `${favouriteValue}`,
+        `${ampersand2}`,
+        `${pageValue}`
       )
     ),
     {
@@ -201,8 +225,11 @@ export const getAllRatesSongsByUser = async (username) => {
 export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
   let sort;
   let fav;
+  let page;
   let qmark;
   let ampersand;
+  let ampersand2;
+
   if (searchParams.has("sortBy")) {
     sort = true;
   } else {
@@ -214,16 +241,28 @@ export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
     fav = false;
   }
 
-  if (sort || fav) {
+  if (searchParams.has("page")) {
+    page = true;
+  } else {
+    page = false;
+  }
+
+  if (sort || fav || page) {
     qmark = "?";
   } else {
     qmark = "";
   }
 
-  if (sort && fav) {
+  if ((sort && fav) || (sort && page) || (fav && page)) {
     ampersand = "&";
   } else {
     ampersand = "";
+  }
+
+  if (sort && fav && page) {
+    ampersand2 = "&";
+  } else {
+    ampersand2 = "";
   }
 
   let sortValue;
@@ -232,12 +271,19 @@ export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
   } else {
     sortValue = "";
   }
-  let favouriteValue;
 
+  let favouriteValue;
   if (fav) {
     favouriteValue = "favourite=".concat(`${searchParams.get("favourite")}`);
   } else {
     favouriteValue = "";
+  }
+
+  let pageValue;
+  if (page) {
+    pageValue = "page=".concat(`${searchParams.get("page")}`);
+  } else {
+    pageValue = "";
   }
 
   const response = await fetch(
@@ -249,7 +295,9 @@ export const getAllRatesSongsByUserQuery = async (username, searchParams) => {
         `${qmark}`,
         `${sortValue}`,
         `${ampersand}`,
-        `${favouriteValue}`
+        `${favouriteValue}`,
+        `${ampersand2}`,
+        `${pageValue}`
       )
     ),
     {

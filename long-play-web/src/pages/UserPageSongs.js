@@ -8,6 +8,107 @@ import { Favorite, Star } from "@material-ui/icons";
 import { getAllRatesSongsByUserQuery } from "../API-utils/endpointsManageRates";
 import { getStatisticsOfSong } from "../API-utils/endpointsManageRates";
 import { img_path } from "../API-utils/links";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+
+const Pagination = ({ props }) => {
+  const { username } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  let page_boxes = props.lengthTable / 5;
+  page_boxes = Math.ceil(page_boxes);
+  let array = [];
+  for (let i = 1; i <= page_boxes; i++) {
+    array.push(i);
+  }
+
+  const {
+    status: isRates,
+    data: rates,
+    refetch,
+  } = useQuery(
+    ["rates-query-data", username, searchParams],
+    () => getAllRatesSongsByUserQuery(username, searchParams),
+    { retry: 0 }
+  );
+
+  const handleSearchParamsPagination = (arg) => {
+    if (arg === 1) {
+      searchParams.delete("page");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else {
+      searchParams.set("page", arg);
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    }
+  };
+
+  const pages = (
+    <>
+      <div
+        className={
+          !searchParams.has("page")
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement = searchParams.get("page");
+          decrement = parseInt(decrement);
+          decrement -= 1;
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </div>
+
+      {array.map((item, index) => {
+        const value_index = index + 1;
+
+        return (
+          <div
+            className={
+              searchParams.get("page") === "" + value_index + "" ||
+              (!searchParams.has("page") && value_index === 1)
+                ? "pagination__item pagination__item-selected"
+                : "pagination__item"
+            }
+            key={value_index}
+            onClick={() => {
+              handleSearchParamsPagination(value_index);
+            }}
+          >
+            {value_index}
+          </div>
+        );
+      })}
+
+      <div
+        className={
+          searchParams.get("page") === "" + page_boxes + "" ||
+          parseInt(searchParams.get("page")) >= page_boxes ||
+          (!searchParams.get("page") && 1 === page_boxes)
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement;
+          if (!searchParams.has("page")) {
+            decrement = 2;
+          } else {
+            decrement = searchParams.get("page");
+            decrement = parseInt(decrement);
+            decrement += 1;
+          }
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleRight} />
+      </div>
+    </>
+  );
+  return <div className="pagination">{pages}</div>;
+};
 
 const RatesByCommunity = ({ props }) => {
   const song_id = props.rate.id;
@@ -125,11 +226,16 @@ const UserPageAlbums = () => {
     { retry: 0 }
   );
 
+  let lengthTable;
+
   if (isRates === "success") {
+    let ratesTable = rates.rates;
+    lengthTable = rates.length[0].counts;
+
     contentSongs = (
       <>
-        {rates.length !== 0 ? (
-          rates.map((rate) => (
+        {ratesTable.length !== 0 ? (
+          ratesTable.map((rate) => (
             <div key={rate.id_rate} className="rated-music__box">
               <div className="rated-music__container">
                 <NavLink
@@ -382,6 +488,7 @@ const UserPageAlbums = () => {
         </div>
       </section>
       {contentSongs}
+      {lengthTable !== undefined ? <Pagination props={{ lengthTable }} /> : ""}
     </>
   );
 };
