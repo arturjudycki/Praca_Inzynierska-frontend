@@ -6,10 +6,52 @@ import {
   getArtistsByAlbumId,
 } from "../API-utils/endpointsManageMusic";
 import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
+import { getRateSongByUser } from "../API-utils/endpointsManageRates";
 import RateAlbum from "../components/RateAlbum";
 import StatisticsAlbum from "../components/StatisticsAlbum";
+import { Star } from "@material-ui/icons";
 import { img_path } from "../API-utils/links";
 import { useQuery } from "react-query";
+
+const RateSongByUser = (props) => {
+  const id_song = props.props;
+  let contentRateSong;
+
+  const { status: isSong, data: song } = useQuery(
+    ["song-info-data", id_song],
+    () => getRateSongByUser(id_song),
+    { retry: 0, refetchOnWindowFocus: false }
+  );
+
+  if (isSong === "loading") {
+    contentRateSong = "";
+  }
+
+  if (isSong === "error") {
+    contentRateSong = (
+      <NavLink
+        to={{
+          pathname: "/song/".concat(`${id_song}`),
+        }}
+        className="tracklist__song-item tracklist__song-item--rate tracklist__song-item--no-rate"
+      >
+        <p>
+          <Star className="tracklist__star" /> Oceń
+        </p>
+      </NavLink>
+    );
+  }
+
+  if (isSong === "success") {
+    contentRateSong = (
+      <p className="tracklist__song-item tracklist__song-item--rate">
+        <Star className="tracklist__star" /> {song.numerical_rating}
+      </p>
+    );
+  }
+
+  return contentRateSong;
+};
 
 const MusicAlbumPage = () => {
   const { id_music_album } = useParams();
@@ -49,6 +91,7 @@ const MusicAlbumPage = () => {
           <p className="tracklist__song-item tracklist__song-item--duration">
             {song.duration}
           </p>
+          <RateSongByUser props={song.id_song} />
         </div>
       ));
   }
