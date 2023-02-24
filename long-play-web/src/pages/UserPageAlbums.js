@@ -85,6 +85,7 @@ const Pagination = ({ props }) => {
 
       <div
         className={
+          (isRates === "success" && rates.length[0].counts === 0) ||
           searchParams.get("page") === "" + page_boxes + "" ||
           parseInt(searchParams.get("page")) >= page_boxes ||
           (!searchParams.get("page") && 1 === page_boxes)

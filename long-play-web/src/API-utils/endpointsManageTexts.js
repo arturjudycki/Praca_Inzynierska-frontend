@@ -36,9 +36,44 @@ export const updateText = async (values) => {
   }
 };
 
-export const getTextsByIdUser = async () => {
+export const getTextsByIdUserSearch = async () => {
   const response = await fetch(
-    "".concat(`${base_url}`, "/text/getTextsByIdUser"),
+    "".concat(`${base_url}`, "/text/getTextsByIdUserSearch"),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (response.ok) {
+    return response.json();
+  }
+  return Promise.reject({
+    msg: response.statusText,
+    status: response.status,
+  });
+};
+
+export const getTextsByIdUser = async (searchParams) => {
+  let qmark;
+  let pageValue;
+  if (searchParams.has("page")) {
+    qmark = "?";
+    pageValue = "page=".concat(`${searchParams.get("page")}`);
+  } else {
+    qmark = "";
+    pageValue = "";
+  }
+
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/text/getTextsByIdUser",
+      `${qmark}`,
+      `${pageValue}`
+    ),
     {
       headers: {
         "Content-Type": "application/json",

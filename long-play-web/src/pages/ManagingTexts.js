@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import {
   createText,
   updateText,
   getTextsByIdUser,
+  getTextsByIdUserSearch,
 } from "../API-utils/endpointsManageTexts";
 import { userAuth } from "../API-utils/endpointsAuthUser";
 import { useQuery, useMutation } from "react-query";
@@ -17,6 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPenToSquare,
   faMagnifyingGlass,
+  faAngleLeft,
+  faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import * as Yup from "yup";
@@ -27,6 +30,103 @@ const LoginSchemat = Yup.object().shape({
   content: Yup.string().required("Treść tekstu jest wymagana!"),
 });
 
+const Pagination = ({ props }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  let page_boxes = props.lengthTable / 5;
+  page_boxes = Math.ceil(page_boxes);
+  let array = [];
+  for (let i = 1; i <= page_boxes; i++) {
+    array.push(i);
+  }
+
+  const {
+    status: isTexts,
+    data: userTexts,
+    refetch,
+  } = useQuery(["texts", searchParams], () => getTextsByIdUser(searchParams), {
+    retry: 0,
+  });
+
+  const handleSearchParamsPagination = (arg) => {
+    if (arg === 1) {
+      searchParams.delete("page");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else {
+      searchParams.set("page", arg);
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    }
+  };
+
+  const pages = (
+    <>
+      <div
+        className={
+          !searchParams.has("page")
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement = searchParams.get("page");
+          decrement = parseInt(decrement);
+          decrement -= 1;
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </div>
+
+      {array.map((item, index) => {
+        const value_index = index + 1;
+
+        return (
+          <div
+            className={
+              searchParams.get("page") === "" + value_index + "" ||
+              (!searchParams.has("page") && value_index === 1)
+                ? "pagination__item pagination__item-selected"
+                : "pagination__item"
+            }
+            key={value_index}
+            onClick={() => {
+              handleSearchParamsPagination(value_index);
+            }}
+          >
+            {value_index}
+          </div>
+        );
+      })}
+
+      <div
+        className={
+          (isTexts === "success" && userTexts.length[0].counts === 0) ||
+          searchParams.get("page") === "" + page_boxes + "" ||
+          parseInt(searchParams.get("page")) >= page_boxes ||
+          (!searchParams.get("page") && 1 === page_boxes)
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement;
+          if (!searchParams.has("page")) {
+            decrement = 2;
+          } else {
+            decrement = searchParams.get("page");
+            decrement = parseInt(decrement);
+            decrement += 1;
+          }
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleRight} />
+      </div>
+    </>
+  );
+  return <div className="pagination">{pages}</div>;
+};
+
 const ManagingTexts = () => {
   const navigate = useNavigate();
   let contentCreateText;
@@ -34,14 +134,23 @@ const ManagingTexts = () => {
   let contentUserTexts;
   const [idClick, setIdClick] = useState();
   const [textsSearch, setTextsSearch] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { status: isLogged, data } = useQuery("user", userAuth, {
     retry: 0,
   });
 
   const { status: isTexts, data: userTexts } = useQuery(
+    ["texts", searchParams],
+    () => getTextsByIdUser(searchParams),
+    {
+      retry: 0,
+    }
+  );
+
+  const { status: isTextsSearch, data: userTextsSearch } = useQuery(
     "texts",
-    getTextsByIdUser,
+    getTextsByIdUserSearch,
     {
       retry: 0,
     }
@@ -109,8 +218,8 @@ const ManagingTexts = () => {
   const handleSubmitSearch = (e) => e.preventDefault();
 
   const handleSearchChange = (e) => {
-    if (isTexts === "success") {
-      const resultsArray = userTexts.filter(
+    if (isTextsSearch === "success") {
+      const resultsArray = userTextsSearch.filter(
         (text) =>
           e.target.value !== "" &&
           text.title
@@ -249,110 +358,121 @@ const ManagingTexts = () => {
     );
   };
 
+  let lengthTable;
+
   if (isTexts === "success") {
-    contentUserTexts = userTexts
-      .sort((a, b) => b.id_text - a.id_text)
-      .map((userText) => (
-        <div key={userText.id_text} className="textBoxEdit">
-          <div className="textBox__edit">
-            <NavLink
-              to={{
-                pathname: "/text/".concat(`${userText.id_text}`),
-              }}
-              className="link-to-text"
-            >
-              <div className="textBox__item-imgBox">
-                <div className="textBox__item-imgContainer">
-                  <img
-                    src={displayCorrectImage(userText.type_of_text)}
-                    alt="text"
-                    className="textBox__item-img"
-                  />
-                </div>
-                <p className="textBox__item-type-of-text">
-                  {displayCorrectTypeOfText(userText.type_of_text)}
+    let textsTable = userTexts.texts;
+    lengthTable = userTexts.length[0].counts;
+
+    contentUserTexts = (
+      <>
+        {textsTable.length !== 0 ? (
+          textsTable.map((userText) => (
+            <div key={userText.id_text} className="textBoxEdit">
+              <div className="textBox__edit">
+                <NavLink
+                  to={{
+                    pathname: "/text/".concat(`${userText.id_text}`),
+                  }}
+                  className="link-to-text"
+                >
+                  <div className="textBox__item-imgBox">
+                    <div className="textBox__item-imgContainer">
+                      <img
+                        src={displayCorrectImage(userText.type_of_text)}
+                        alt="text"
+                        className="textBox__item-img"
+                      />
+                    </div>
+                    <p className="textBox__item-type-of-text">
+                      {displayCorrectTypeOfText(userText.type_of_text)}
+                    </p>
+                  </div>
+                  <p className="textBox__item-title">{userText.title}</p>
+                </NavLink>
+                <p
+                  className="textBox__item-icon"
+                  onClick={() => {
+                    if (idClick === userText.id_text) {
+                      setIdClick(-1);
+                    } else {
+                      setIdClick(userText.id_text);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} className="iconEdit" />
+                  <span>Wprowadź zmiany w tekście</span>
                 </p>
               </div>
-              <p className="textBox__item-title">{userText.title}</p>
-            </NavLink>
-            <p
-              className="textBox__item-icon"
-              onClick={() => {
-                if (idClick === userText.id_text) {
-                  setIdClick(-1);
-                } else {
-                  setIdClick(userText.id_text);
-                }
-              }}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} className="iconEdit" />
-              <span>Wprowadź zmiany w tekście</span>
-            </p>
-          </div>
-          {idClick === userText.id_text ? (
-            <section className="editText">
-              {contentUpdateText}
-              <Formik
-                initialValues={{
-                  title: userText.title,
-                  content: userText.content,
-                  id_text: userText.id_text,
-                }}
-                validationSchema={LoginSchemat}
-                onSubmit={(values) => {
-                  update_text(values);
-                }}
-              >
-                {({ handleSubmit }) => (
-                  <Form
-                    onSubmit={handleSubmit}
-                    className="sign-change sign-change__editText"
+              {idClick === userText.id_text ? (
+                <section className="editText">
+                  {contentUpdateText}
+                  <Formik
+                    initialValues={{
+                      title: userText.title,
+                      content: userText.content,
+                      id_text: userText.id_text,
+                    }}
+                    validationSchema={LoginSchemat}
+                    onSubmit={(values) => {
+                      update_text(values);
+                    }}
                   >
-                    <Field
-                      id="title"
-                      name="title"
-                      type="text"
-                      className="sign-change__input sign-change__input-text"
-                    />
+                    {({ handleSubmit }) => (
+                      <Form
+                        onSubmit={handleSubmit}
+                        className="sign-change sign-change__editText"
+                      >
+                        <Field
+                          id="title"
+                          name="title"
+                          type="text"
+                          className="sign-change__input sign-change__input-text"
+                        />
 
-                    <div className="errors">
-                      <ErrorMessage name="title" />
-                    </div>
+                        <div className="errors">
+                          <ErrorMessage name="title" />
+                        </div>
 
-                    <Field
-                      as="textarea"
-                      id="content"
-                      name="content"
-                      type="textarea"
-                      className="sign-change__input sign-change__input-text-area"
-                    />
+                        <Field
+                          as="textarea"
+                          id="content"
+                          name="content"
+                          type="textarea"
+                          className="sign-change__input sign-change__input-text-area"
+                        />
 
-                    <div className="errors">
-                      <ErrorMessage name="content" />
-                    </div>
+                        <div className="errors">
+                          <ErrorMessage name="content" />
+                        </div>
 
-                    <button
-                      className="sign-change__button sign-change__button--cancel"
-                      onClick={() => {
-                        setIdClick(-1);
-                      }}
-                      type="button"
-                    >
-                      Anuluj
-                    </button>
+                        <button
+                          className="sign-change__button sign-change__button--cancel"
+                          onClick={() => {
+                            setIdClick(-1);
+                          }}
+                          type="button"
+                        >
+                          Anuluj
+                        </button>
 
-                    <button type="submit" className="sign-change__button">
-                      Edytuj
-                    </button>
-                  </Form>
-                )}
-              </Formik>
-            </section>
-          ) : (
-            ""
-          )}
-        </div>
-      ));
+                        <button type="submit" className="sign-change__button">
+                          Edytuj
+                        </button>
+                      </Form>
+                    )}
+                  </Formik>
+                </section>
+              ) : (
+                ""
+              )}
+            </div>
+          ))
+        ) : (
+          <p className="nope-rates">brak tekstów</p>
+        )}
+      </>
+    );
   }
 
   const {
@@ -530,6 +650,11 @@ const ManagingTexts = () => {
               Twoje ostatnio opublikowane teksty
             </h2>
             <section className="textContainer">{contentUserTexts}</section>
+            {lengthTable !== undefined ? (
+              <Pagination props={{ lengthTable }} />
+            ) : (
+              ""
+            )}
           </div>
         </section>
       );
