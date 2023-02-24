@@ -81,6 +81,30 @@ export const getRateSongByUser = async (song) => {
   }
 };
 
+export const getRateSongByUserTracklist = async (song) => {
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/rate/".concat(`${song}`, "/getRateSongByUserTracklist")
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    return Promise.reject({
+      msg: response.statusText,
+      status: response.status,
+    });
+  } else {
+    return response.json();
+  }
+};
+
 export const getAllRatesAlbumsByUser = async (username) => {
   const response = await fetch(
     "".concat(

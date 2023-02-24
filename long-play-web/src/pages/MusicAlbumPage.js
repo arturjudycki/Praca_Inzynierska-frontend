@@ -6,7 +6,7 @@ import {
   getArtistsByAlbumId,
 } from "../API-utils/endpointsManageMusic";
 import { getSongsOfAlbum } from "../API-utils/endpointsManageSongs";
-import { getRateSongByUser } from "../API-utils/endpointsManageRates";
+import { getRateSongByUserTracklist } from "../API-utils/endpointsManageRates";
 import RateAlbum from "../components/RateAlbum";
 import StatisticsAlbum from "../components/StatisticsAlbum";
 import { Star } from "@material-ui/icons";
@@ -19,7 +19,7 @@ const RateSongByUser = (props) => {
 
   const { status: isSong, data: song } = useQuery(
     ["song-info-data", id_song],
-    () => getRateSongByUser(id_song),
+    () => getRateSongByUserTracklist(id_song),
     { retry: 0, refetchOnWindowFocus: false }
   );
 
@@ -27,27 +27,42 @@ const RateSongByUser = (props) => {
     contentRateSong = "";
   }
 
-  if (isSong === "error") {
-    contentRateSong = (
-      <NavLink
-        to={{
-          pathname: "/song/".concat(`${id_song}`),
-        }}
-        className="tracklist__song-item tracklist__song-item--rate tracklist__song-item--no-rate"
-      >
-        <p>
-          <Star className="tracklist__star" /> Oceń
-        </p>
-      </NavLink>
-    );
-  }
+  // if (isSong === null) {
+  //   contentRateSong = (
+  //     <NavLink
+  //       to={{
+  //         pathname: "/song/".concat(`${id_song}`),
+  //       }}
+  //       className="tracklist__song-item tracklist__song-item--rate tracklist__song-item--no-rate"
+  //     >
+  //       <p>
+  //         <Star className="tracklist__star" /> Oceń
+  //       </p>
+  //     </NavLink>
+  //   );
+  // }
 
   if (isSong === "success") {
-    contentRateSong = (
-      <p className="tracklist__song-item tracklist__song-item--rate">
-        <Star className="tracklist__star" /> {song.numerical_rating}
-      </p>
-    );
+    if (song === null) {
+      contentRateSong = (
+        <NavLink
+          to={{
+            pathname: "/song/".concat(`${id_song}`),
+          }}
+          className="tracklist__song-item tracklist__song-item--rate tracklist__song-item--no-rate"
+        >
+          <p>
+            <Star className="tracklist__star" /> Oceń
+          </p>
+        </NavLink>
+      );
+    } else {
+      contentRateSong = (
+        <p className="tracklist__song-item tracklist__song-item--rate">
+          <Star className="tracklist__star" /> {song.numerical_rating}
+        </p>
+      );
+    }
   }
 
   return contentRateSong;
