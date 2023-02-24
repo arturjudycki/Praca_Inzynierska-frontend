@@ -110,8 +110,8 @@ export const getTextByIdText = async (id_text) => {
   });
 };
 
-export const getAllTexts = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/text/allTexts"), {
+export const getNewestTexts = async () => {
+  const response = await fetch("".concat(`${base_url}`, "/text/newestTexts"), {
     headers: {
       "Content-Type": "application/json",
     },

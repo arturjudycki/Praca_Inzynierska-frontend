@@ -1,5 +1,5 @@
 import React from "react";
-import { getAllTexts } from "../API-utils/endpointsManageTexts";
+import { getNewestTexts } from "../API-utils/endpointsManageTexts";
 import { getLastAlbums } from "../API-utils/endpointsManageMusic";
 import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
@@ -20,7 +20,7 @@ const HomePage = () => {
     return year;
   };
 
-  const { status: isTexts, data: texts } = useQuery("texts", getAllTexts, {
+  const { status: isTexts, data: texts } = useQuery("texts", getNewestTexts, {
     retry: 0,
   });
 
@@ -136,6 +136,14 @@ const HomePage = () => {
     <div>
       <h1 className="textSlogan">Najnowsze teksty</h1>
       <section className="newest_texts">{contentTexts}</section>
+      <div className="more-content">
+        <NavLink to="/texts" className="">
+          <button type="button" className="more-content__button">
+            Zobacz więcej
+          </button>
+        </NavLink>
+      </div>
+
       <hr />
       <h1 className="textSlogan">Ostatnio dodane pozycje do bazy albumów</h1>
       <section className="newest_texts">{contentAlbums}</section>

@@ -27,21 +27,6 @@ const RateSongByUser = (props) => {
     contentRateSong = "";
   }
 
-  // if (isSong === null) {
-  //   contentRateSong = (
-  //     <NavLink
-  //       to={{
-  //         pathname: "/song/".concat(`${id_song}`),
-  //       }}
-  //       className="tracklist__song-item tracklist__song-item--rate tracklist__song-item--no-rate"
-  //     >
-  //       <p>
-  //         <Star className="tracklist__star" /> Oceń
-  //       </p>
-  //     </NavLink>
-  //   );
-  // }
-
   if (isSong === "success") {
     if (song === null) {
       contentRateSong = (
