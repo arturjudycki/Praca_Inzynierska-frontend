@@ -126,60 +126,48 @@ export const getNewestTexts = async () => {
   });
 };
 
-export const getTextsByArticle = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/text/article"), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const getTexts = async (searchParams) => {
+  let qmark = "";
+  let ampersand = "";
+  let typeOfTextValue = "";
+  let pageValue = "";
 
-  if (response.ok) {
-    return response.json();
+  if (searchParams.has("typeOfText")) {
+    typeOfTextValue = "type_of_text=".concat(
+      `${searchParams.get("typeOfText")}`
+    );
+  } else {
+    typeOfTextValue = "";
   }
-  return Promise.reject({
-    msg: response.statusText,
-    status: response.status,
-  });
-};
 
-export const getTextsByNews = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/text/news"), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (response.ok) {
-    return response.json();
+  if (searchParams.has("page")) {
+    pageValue = "page=".concat(`${searchParams.get("page")}`);
+  } else {
+    pageValue = "";
   }
-  return Promise.reject({
-    msg: response.statusText,
-    status: response.status,
-  });
-};
 
-export const getTextsByRanking = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/text/ranking"), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (response.ok) {
-    return response.json();
+  if (typeOfTextValue !== "" || pageValue !== "") {
+    qmark = "?";
   }
-  return Promise.reject({
-    msg: response.statusText,
-    status: response.status,
-  });
-};
+  if (typeOfTextValue !== "" && pageValue !== "") {
+    ampersand = "&";
+  }
 
-export const getTextsByInterview = async () => {
-  const response = await fetch("".concat(`${base_url}`, "/text/interview"), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await fetch(
+    "".concat(
+      `${base_url}`,
+      "/text/getTexts",
+      `${qmark}`,
+      `${typeOfTextValue}`,
+      `${ampersand}`,
+      `${pageValue}`
+    ),
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (response.ok) {
     return response.json();

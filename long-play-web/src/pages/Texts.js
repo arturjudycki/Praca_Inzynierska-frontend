@@ -1,22 +1,114 @@
 import React from "react";
-import {
-  getTextsByArticle,
-  getTextsByNews,
-  getTextsByRanking,
-  getTextsByInterview,
-} from "../API-utils/endpointsManageTexts";
+import { getTexts } from "../API-utils/endpointsManageTexts";
 import { useQuery } from "react-query";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import articleImg from "../images/article.jpg";
 import newsImg from "../images/news.png";
 import rankingImg from "../images/ranking.jpg";
 import interviewImg from "../images/interview.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+
+const Pagination = ({ props }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  let page_boxes = props.lengthTable / 9;
+  page_boxes = Math.ceil(page_boxes);
+  let array = [];
+  for (let i = 1; i <= page_boxes; i++) {
+    array.push(i);
+  }
+
+  const {
+    status: isTexts,
+    data: texts,
+    refetch,
+  } = useQuery(["all-texts", searchParams], () => getTexts(searchParams), {
+    retry: 0,
+  });
+
+  const handleSearchParamsPagination = (arg) => {
+    if (arg === 1) {
+      searchParams.delete("page");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else {
+      searchParams.set("page", arg);
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    }
+  };
+
+  const pages = (
+    <>
+      <div
+        className={
+          !searchParams.has("page")
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement = searchParams.get("page");
+          decrement = parseInt(decrement);
+          decrement -= 1;
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </div>
+
+      {array.map((item, index) => {
+        const value_index = index + 1;
+
+        return (
+          <div
+            className={
+              searchParams.get("page") === "" + value_index + "" ||
+              (!searchParams.has("page") && value_index === 1)
+                ? "pagination__item pagination__item-selected"
+                : "pagination__item"
+            }
+            key={value_index}
+            onClick={() => {
+              handleSearchParamsPagination(value_index);
+            }}
+          >
+            {value_index}
+          </div>
+        );
+      })}
+
+      <div
+        className={
+          (isTexts === "success" && texts.length[0].counts === 0) ||
+          searchParams.get("page") === "" + page_boxes + "" ||
+          parseInt(searchParams.get("page")) >= page_boxes ||
+          (!searchParams.get("page") && 1 === page_boxes)
+            ? "pagination__arrow pagination__arrow-none"
+            : "pagination__arrow"
+        }
+        onClick={() => {
+          let decrement;
+          if (!searchParams.has("page")) {
+            decrement = 2;
+          } else {
+            decrement = searchParams.get("page");
+            decrement = parseInt(decrement);
+            decrement += 1;
+          }
+          handleSearchParamsPagination(decrement);
+        }}
+      >
+        <FontAwesomeIcon icon={faAngleRight} />
+      </div>
+    </>
+  );
+  return <div className="pagination">{pages}</div>;
+};
 
 const Texts = () => {
-  let contentArticles;
-  let contentNews;
-  let contentRankings;
-  let contentInterviews;
+  let contentTexts;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const displayCorrectTypeOfText = (type) => {
     if (type === "article") {
@@ -26,166 +118,157 @@ const Texts = () => {
     } else return type;
   };
 
-  const { status: isArticles, data: articles } = useQuery(
-    "articles",
-    getTextsByArticle,
-    {
-      retry: 0,
+  const displayCorrectImage = (type) => {
+    if (type === "article") {
+      return articleImg;
+    } else if (type === "news") {
+      return newsImg;
+    } else if (type === "ranking") {
+      return rankingImg;
+    } else {
+      return interviewImg;
     }
-  );
+  };
 
-  const { status: isNews, data: news } = useQuery("news", getTextsByNews, {
+  const handleSearchParams = (arg) => {
+    if (arg === "article") {
+      searchParams.set("typeOfText", "article");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else if (arg === "news") {
+      searchParams.set("typeOfText", "news");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else if (arg === "ranking") {
+      searchParams.set("typeOfText", "ranking");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else if (arg === "interview") {
+      searchParams.set("typeOfText", "interview");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    } else {
+      searchParams.delete("typeOfText");
+      setSearchParams(searchParams, { replace: true });
+      refetch();
+    }
+  };
+
+  const {
+    status: isTexts,
+    data: texts,
+    refetch,
+  } = useQuery(["all-texts", searchParams], () => getTexts(searchParams), {
     retry: 0,
   });
 
-  const { status: isRankings, data: rankings } = useQuery(
-    "rankings",
-    getTextsByRanking,
-    {
-      retry: 0,
-    }
-  );
+  let lengthTable;
 
-  const { status: isInterviews, data: interviews } = useQuery(
-    "interviews",
-    getTextsByInterview,
-    {
-      retry: 0,
-    }
-  );
+  if (isTexts === "success") {
+    let textsTable = texts.texts;
+    lengthTable = texts.length[0].counts;
 
-  if (isArticles === "success") {
-    contentArticles = articles
-      .sort((a, b) => b.id_text - a.id_text)
-      .map((article) => (
-        <div className="textBox" key={article.id_text}>
-          <NavLink
-            to={{
-              pathname: "/text/".concat(`${article.id_text}`),
-            }}
-            className="link-to-text"
-          >
-            <div className="textBox__item-imgBox">
-              <div className="textBox__item-imgContainer">
-                <img
-                  src={articleImg}
-                  alt="text"
-                  className="textBox__item-img"
-                />
-              </div>
-              <p className="textBox__item-type-of-text">
-                {displayCorrectTypeOfText(article.type_of_text)}
-              </p>
+    contentTexts = (
+      <>
+        {textsTable.length !== 0 ? (
+          textsTable.map((text) => (
+            <div className="textBox" key={text.id_text}>
+              <NavLink
+                to={{
+                  pathname: "/text/".concat(`${text.id_text}`),
+                }}
+                className="link-to-text"
+              >
+                <div className="textBox__item-imgBox">
+                  <div className="textBox__item-imgContainer">
+                    <img
+                      src={displayCorrectImage(text.type_of_text)}
+                      alt="text"
+                      className="textBox__item-img"
+                    />
+                  </div>
+                  <p className="textBox__item-type-of-text">
+                    {displayCorrectTypeOfText(text.type_of_text)}
+                  </p>
+                </div>
+
+                <p className="textBox__item-title">{text.title}</p>
+              </NavLink>
             </div>
-
-            <p className="textBox__item-title">{article.title}</p>
-          </NavLink>
-        </div>
-      ));
-  }
-
-  if (isNews === "success") {
-    contentNews = news
-      .sort((a, b) => b.id_text - a.id_text)
-      .map((news) => (
-        <div className="textBox" key={news.id_text}>
-          <NavLink
-            to={{
-              pathname: "/text/".concat(`${news.id_text}`),
-            }}
-            className="link-to-text"
-          >
-            <div className="textBox__item-imgBox">
-              <div className="textBox__item-imgContainer">
-                <img src={newsImg} alt="text" className="textBox__item-img" />
-              </div>
-              <p className="textBox__item-type-of-text">
-                {displayCorrectTypeOfText(news.type_of_text)}
-              </p>
-            </div>
-
-            <p className="textBox__item-title">{news.title}</p>
-          </NavLink>
-        </div>
-      ));
-  }
-
-  if (isRankings === "success") {
-    contentRankings = rankings
-      .sort((a, b) => b.id_text - a.id_text)
-      .map((ranking) => (
-        <div className="textBox" key={ranking.id_text}>
-          <NavLink
-            to={{
-              pathname: "/text/".concat(`${ranking.id_text}`),
-            }}
-            className="link-to-text"
-          >
-            <div className="textBox__item-imgBox">
-              <div className="textBox__item-imgContainer">
-                <img src={rankingImg} alt="text" className="textBox__item-img" />
-              </div>
-              <p className="textBox__item-type-of-text">
-                {displayCorrectTypeOfText(ranking.type_of_text)}
-              </p>
-            </div>
-
-            <p className="textBox__item-title">{ranking.title}</p>
-          </NavLink>
-        </div>
-      ));
-  }
-
-  if (isInterviews === "success") {
-    contentInterviews = interviews
-      .sort((a, b) => b.id_text - a.id_text)
-      .map((interview) => (
-        <div className="textBox" key={interview.id_text}>
-          <NavLink
-            to={{
-              pathname: "/text/".concat(`${interview.id_text}`),
-            }}
-            className="link-to-text"
-          >
-            <div className="textBox__item-imgBox">
-              <div className="textBox__item-imgContainer">
-                <img src={interviewImg} alt="text" className="textBox__item-img" />
-              </div>
-              <p className="textBox__item-type-of-text">
-                {displayCorrectTypeOfText(interview.type_of_text)}
-              </p>
-            </div>
-
-            <p className="textBox__item-title">{interview.title}</p>
-          </NavLink>
-        </div>
-      ));
+          ))
+        ) : (
+          <p className="nope-rates">brak tekstów</p>
+        )}
+      </>
+    );
   }
 
   return (
     <div>
-      <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">
-          najnowsze artykuły
-        </h1>
-        <div className="textContainer">{contentArticles}</div>
-      </div>
-      <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">najnowsze newsy</h1>
-        <div className="textContainer">{contentNews}</div>
-      </div>
-      <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">
-          najnowsze rankingi
-        </h1>
-        <div className="textContainer">{contentRankings}</div>
-      </div>
-      <div className="sectionTypeOfText">
-        <h1 className="textSlogan textSlogan--margin-left">
-          najnowsze wywiady
-        </h1>
-        <div className="textContainer">{contentInterviews}</div>
-      </div>
+      <nav className="submenu-texts">
+        <div
+          onClick={() => {
+            handleSearchParams("all");
+          }}
+          className={
+            !searchParams.has("typeOfText")
+              ? "submenu-texts__item submenu-texts__item-selected"
+              : "submenu-texts__item"
+          }
+        >
+          <p>wszystkie</p>
+        </div>
+        <div
+          onClick={() => {
+            handleSearchParams("article");
+          }}
+          className={
+            searchParams.get("typeOfText") === "article"
+              ? "submenu-texts__item submenu-texts__item-selected"
+              : "submenu-texts__item"
+          }
+        >
+          <p>artykuły</p>
+        </div>
+        <div
+          onClick={() => {
+            handleSearchParams("news");
+          }}
+          className={
+            searchParams.get("typeOfText") === "news"
+              ? "submenu-texts__item submenu-texts__item-selected"
+              : "submenu-texts__item"
+          }
+        >
+          <p>newsy</p>
+        </div>
+        <div
+          onClick={() => {
+            handleSearchParams("ranking");
+          }}
+          className={
+            searchParams.get("typeOfText") === "ranking"
+              ? "submenu-texts__item submenu-texts__item-selected"
+              : "submenu-texts__item"
+          }
+        >
+          <p>rankingi</p>
+        </div>
+        <div
+          onClick={() => {
+            handleSearchParams("interview");
+          }}
+          className={
+            searchParams.get("typeOfText") === "interview"
+              ? "submenu-texts__item submenu-texts__item-selected"
+              : "submenu-texts__item"
+          }
+        >
+          <p>wywiady</p>
+        </div>
+      </nav>
+      <div className="textContainer">{contentTexts}</div>
+      {lengthTable !== undefined ? <Pagination props={{ lengthTable }} /> : ""}
     </div>
   );
 };
