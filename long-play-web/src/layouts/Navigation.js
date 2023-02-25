@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import img from "../images/lpw-logo.png";
 import Logged from "../components/Logged";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { img_path } from "../API-utils/links";
 import { getAllArtists } from "../API-utils/endpointsManageArtists";
 import { getAllAlbums } from "../API-utils/endpointsManageMusic";
