@@ -222,13 +222,14 @@ const MusicAlbums = () => {
       <section className="top-filters">
         <label className="top-filters__box">
           <span className="top-filters__title">typ albumu</span>
-          <select className="top-filters__container">
+          <select
+            className="top-filters__container"
+            onChange={(e) => {
+              handleSearchParamsType(e.target.value);
+            }}
+          >
             <option
-              className=""
-              onClick={() => {
-                option = "all";
-                handleSearchParamsType(option);
-              }}
+              value="all"
               style={
                 !searchParams.has("typeOfAlbum")
                   ? { fontWeight: 700 }
@@ -238,11 +239,7 @@ const MusicAlbums = () => {
               WSZYSTKIE
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "studio_album";
-                handleSearchParamsType(option);
-              }}
+              value="studio_album"
               style={
                 searchParams.get("typeOfAlbum") === "studio_album"
                   ? { fontWeight: 700 }
@@ -252,11 +249,7 @@ const MusicAlbums = () => {
               ALBUMY STUDYJNE
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "live_album";
-                handleSearchParamsType(option);
-              }}
+              value="live_album"
               style={
                 searchParams.get("typeOfAlbum") === "live_album"
                   ? { fontWeight: 700 }
@@ -266,11 +259,7 @@ const MusicAlbums = () => {
               ALBUMY KONCERTOWE
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "compilation_album";
-                handleSearchParamsType(option);
-              }}
+              value="compilation_album"
               style={
                 searchParams.get("typeOfAlbum") === "compilation_album"
                   ? { fontWeight: 700 }
@@ -280,11 +269,7 @@ const MusicAlbums = () => {
               ALBUMY KOMPILACYJNE
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "EP";
-                handleSearchParamsType(option);
-              }}
+              value="EP"
               style={
                 searchParams.get("typeOfAlbum") === "EP"
                   ? { fontWeight: 700 }
@@ -294,11 +279,7 @@ const MusicAlbums = () => {
               EP
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "OST";
-                handleSearchParamsType(option);
-              }}
+              value="OST"
               style={
                 searchParams.get("typeOfAlbum") === "OST"
                   ? { fontWeight: 700 }
@@ -312,13 +293,14 @@ const MusicAlbums = () => {
 
         <label className="top-filters__box">
           <span className="top-filters__title">okres wydania albumu</span>
-          <select className="top-filters__container">
+          <select
+            className="top-filters__container"
+            onChange={(e) => {
+              handleSearchParamsRelease(e.target.value);
+            }}
+          >
             <option
-              className=""
-              onClick={() => {
-                option = "all";
-                handleSearchParamsRelease(option);
-              }}
+              value="all"
               style={
                 !searchParams.has("releaseDate")
                   ? { fontWeight: 700 }
@@ -328,11 +310,7 @@ const MusicAlbums = () => {
               wszystkie
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "1950s";
-                handleSearchParamsRelease(option);
-              }}
+              value="1950s"
               style={
                 searchParams.get("releaseDate") === "1950s"
                   ? { fontWeight: 700 }
@@ -342,11 +320,7 @@ const MusicAlbums = () => {
               1950 - 1959
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "1960s";
-                handleSearchParamsRelease(option);
-              }}
+              value="1960s"
               style={
                 searchParams.get("releaseDate") === "1960s"
                   ? { fontWeight: 700 }
@@ -356,11 +330,7 @@ const MusicAlbums = () => {
               1960 - 1969
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "1970s";
-                handleSearchParamsRelease(option);
-              }}
+              value="1970s"
               style={
                 searchParams.get("releaseDate") === "1970s"
                   ? { fontWeight: 700 }
@@ -370,11 +340,7 @@ const MusicAlbums = () => {
               1970 - 1979
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "1980s";
-                handleSearchParamsRelease(option);
-              }}
+              value="1980s"
               style={
                 searchParams.get("releaseDate") === "1980s"
                   ? { fontWeight: 700 }
@@ -384,11 +350,7 @@ const MusicAlbums = () => {
               1980 - 1989
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "1990s";
-                handleSearchParamsRelease(option);
-              }}
+              value="1990s"
               style={
                 searchParams.get("releaseDate") === "1990s"
                   ? { fontWeight: 700 }
@@ -398,11 +360,7 @@ const MusicAlbums = () => {
               1990 - 1999
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "2000s";
-                handleSearchParamsRelease(option);
-              }}
+              value="2000s"
               style={
                 searchParams.get("releaseDate") === "2000s"
                   ? { fontWeight: 700 }
@@ -412,11 +370,7 @@ const MusicAlbums = () => {
               2000 - 2009
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "2010s";
-                handleSearchParamsRelease(option);
-              }}
+              value="2010s"
               style={
                 searchParams.get("releaseDate") === "2010s"
                   ? { fontWeight: 700 }
@@ -426,11 +380,7 @@ const MusicAlbums = () => {
               2010 - 2019
             </option>
             <option
-              className=""
-              onClick={() => {
-                option = "2020s";
-                handleSearchParamsRelease(option);
-              }}
+              value="2020s"
               style={
                 searchParams.get("releaseDate") === "2020s"
                   ? { fontWeight: 700 }

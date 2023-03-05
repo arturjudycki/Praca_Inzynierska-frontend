@@ -128,7 +128,7 @@ const Register = () => {
                 <Field
                   id="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="E-mail"
                   type="email"
                   className="sign-form__input"
                 />

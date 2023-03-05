@@ -89,7 +89,7 @@ const SettingPage = () => {
         <section className="settings__changeData">
           <h2 className="settings__changeData-title">Dane</h2>
           <div className="settings__box">
-            <p className="settings__text settings__text--bold">Email</p>
+            <p className="settings__text settings__text--bold">E-mail</p>
             <p className="settings__text">{data.user.email}</p>
             <FontAwesomeIcon
               icon={faPen}
@@ -126,7 +126,7 @@ const SettingPage = () => {
                     <Field
                       id="email"
                       name="email"
-                      placeholder="Wprowadź nowy adres email"
+                      placeholder="Wprowadź nowy adres e-mail"
                       type="email"
                       className="sign-change__input"
                     />
