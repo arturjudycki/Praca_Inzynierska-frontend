@@ -237,7 +237,9 @@ const Comments = ({ info }) => {
               ) : (
                 ""
               )}
-              {isLogged === "success" && data.user.user_type === "admin" ? (
+              {(isLogged === "success" && data.user.user_type === "admin") ||
+              (isLogged === "success" &&
+                data.user.username === comment.username) ? (
                 <DeleteComment commentInfo={{ comment }} />
               ) : (
                 ""
