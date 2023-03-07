@@ -1,5 +1,5 @@
-# Frontend (część użytkowa/interfejsowa) pracy inżynierskiej pt.
-Projekt i implementacja systemu do opiniowania albumów muzycznych w postaci wortalu internetowego
+# Frontend (część użytkowa/interfejsowa) pracy inżynierskiej
+Wortal internetowy, którego to najważniejszą funkcjonalnością jest opiniowanie albumów muzycznych
 
 Stack technologiczny:
 * React
