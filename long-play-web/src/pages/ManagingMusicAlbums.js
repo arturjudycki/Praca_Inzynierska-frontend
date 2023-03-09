@@ -609,7 +609,7 @@ const ManagingMusicAlbums = () => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj album, aby go zedytować lub przypisać do niego wykonawcę"
+              placeholder="Wyszukaj album, aby go edytować lub przypisać do niego wykonawcę"
               className="search-artist__input"
               onChange={handleSearchChange}
             />

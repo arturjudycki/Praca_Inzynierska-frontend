@@ -238,7 +238,7 @@ const ManagingTexts = () => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj tekst po tytule, aby go zedytować"
+              placeholder="Wyszukaj tekst po tytule, aby go edytować"
               className="search-artist__input"
               onChange={handleSearchChange}
             />

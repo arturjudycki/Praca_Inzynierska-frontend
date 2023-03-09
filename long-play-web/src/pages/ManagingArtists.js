@@ -259,7 +259,7 @@ const ManagingArtists = () => {
           <div className="search-artist__box">
             <input
               type="text"
-              placeholder="Wyszukaj wykonawcę, aby go zedytować"
+              placeholder="Wyszukaj wykonawcę, aby go edytować"
               className="search-artist__input"
               onChange={handleSearchChange}
             />
