@@ -23,8 +23,8 @@ const EmailReset = () => {
     infoResetEmail = (
       <section className="popUpEmail">
         <div className="popUpEmail__200">
-          <p>Sprawdź swój adres email.</p>
-          <p>Tam powinien znajdować się link do zmiany hasła.</p>
+          <p>Sprawdź swój adres e-mail.</p>
+          <p>Tam powinien znaleźć się link do zmiany hasła.</p>
         </div>
       </section>
     );
@@ -60,7 +60,7 @@ const EmailReset = () => {
       content = (
         <div className="sign-wrapper sign-wrapper--wider">
           <p className="sign-change-password">
-            Na podany adres email zostanie przesłany link do zmiany hasła.
+            Na podany adres e-mail zostanie przesłany link do zmiany hasła.
           </p>
           {infoResetEmail}
           <Formik
@@ -77,7 +77,7 @@ const EmailReset = () => {
                 <Field
                   id="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="E-mail"
                   type="email"
                   className="sign-form__input"
                 />

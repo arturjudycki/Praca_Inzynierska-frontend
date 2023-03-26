@@ -85,8 +85,8 @@ const LoginSchematCoverAlbum = Yup.object().shape({
     )
     .test(
       "FILE_SIZE",
-      "Rozmiar zdjęcia za duży - max 50kB",
-      (value) => value && value.size < 51200
+      "Rozmiar zdjęcia za duży - max 100kB",
+      (value) => value && value.size < 102400
     ),
 });
 

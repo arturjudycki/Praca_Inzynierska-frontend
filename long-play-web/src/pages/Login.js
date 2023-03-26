@@ -16,7 +16,10 @@ const Login = () => {
   let infoLogin;
   let content;
 
-  const { status: isLogged, data } = useQuery("user", userAuth, { retry: 0 });
+  const { status: isLogged, data } = useQuery("user", userAuth, {
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
 
   const { isError, mutate } = useMutation(loginAuth, {
     onSuccess: () => {

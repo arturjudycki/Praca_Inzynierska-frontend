@@ -202,7 +202,7 @@ const MusicAlbumPage = () => {
             <div className="album-page__box-details">
               <div className="album-page__box-details-item">
                 <p className="album-page__box-details-item-text">
-                  Długość albumu
+                  Czas trwania albumu
                 </p>
                 <p>{music_album.duration}</p>
               </div>

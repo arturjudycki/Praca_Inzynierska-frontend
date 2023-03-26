@@ -307,7 +307,7 @@ const MusicAlbums = () => {
                   : { fontWeight: 400 }
               }
             >
-              wszystkie
+              WSZYSTKIE
             </option>
             <option
               value="1950s"

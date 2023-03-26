@@ -181,7 +181,7 @@ const Navigation = () => {
               <div className="header__form-box">
                 <input
                   className="header__search-input"
-                  placeholder="Szukaj albumów muzycznych, piosenek, wykonawców"
+                  placeholder="Szukaj albumów muzycznych, utworów, wykonawców"
                   type="text"
                   onChange={handleSearchChange}
                 />
