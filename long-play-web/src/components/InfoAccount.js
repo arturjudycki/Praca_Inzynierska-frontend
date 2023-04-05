@@ -51,7 +51,7 @@ const InfoAccount = ({ person }) => {
           >
             <FontAwesomeIcon icon={faNewspaper} className="faNewspaper" />
             <p className="heroUser__settings-link">
-              Panel do administrowania tekstów
+              Panel do administrowania tekstami
             </p>
           </NavLink>
           <NavLink
@@ -76,7 +76,7 @@ const InfoAccount = ({ person }) => {
           >
             <FontAwesomeIcon icon={faNewspaper} className="faNewspaper" />
             <p className="heroUser__settings-link">
-              Panel do administrowania tekstów
+              Panel do administrowania tekstami
             </p>
           </NavLink>
         </div>
