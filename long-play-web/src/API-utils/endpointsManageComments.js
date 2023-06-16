@@ -1,4 +1,4 @@
-export const base_url = "http://localhost:8000";
+import { base_url } from "./baseUrl";
 
 export const addComment = async (values) => {
   const response = await fetch(

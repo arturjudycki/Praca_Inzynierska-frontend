@@ -1,4 +1,4 @@
-export const base_url = "http://localhost:8000";
+import { base_url } from "./baseUrl";
 
 export const addArtist = async (values) => {
   const response = await fetch("".concat(`${base_url}`, "/artist/addArtist"), {
